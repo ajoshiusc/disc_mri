@@ -3,6 +3,9 @@ clc; close all; clear;
 restoredefaultpath;      % To remove conflicting libraries. May remove this line.
 addpath(genpath('/home/ajoshi/projects/lowfieldmri/src/register_files_affine_v12'))
 
+% t1_mov is file that will be warped
+% t1_tar i sthe files that will be used as a target
+
 t1_mov = '/home/ajoshi/projects/lowfieldmri/data/3T_alignment/V1_3T_1st_scan_MPRAGE.nii.gz';
 t1_tar = '/home/ajoshi/projects/lowfieldmri/data/3T_alignment/V1_3T_2nd_scan_MPRAGE.nii.gz';
 
