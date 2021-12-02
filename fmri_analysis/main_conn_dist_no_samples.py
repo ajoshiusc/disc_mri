@@ -1,4 +1,6 @@
 # ||AUM||
+# Shree Ganeshaya Namaha
+
 import scipy.io
 import scipy as sp
 import numpy as np
@@ -46,30 +48,31 @@ temp = temp - m[:, None]
 s = np.std(temp, 1)+1e-116
 temp = temp/s[:, None]
 d1 = temp  # [cc_msk, :]
-win_lengths = sp.arange(5, d1.shape[1], 20)
-nboot = 200
-nbootiter = sp.arange(nboot)
+win_lengths = np.arange(5, d1.shape[1], 20)
+nboot = 20
+nbootiter = np.arange(nboot)
+step_sizes = [5,6,7,8,9,10]#[1,2,3,4]
 
-cfull = sp.dot(d1, d1.T)/d1.shape[1]
+cfull = np.dot(d1, d1.T)/d1.shape[1]
 cnt = 0
-sz = sp.arange(2, d1.shape[1], 20)
-err = sp.zeros((len(win_lengths), nboot))
+sz = np.arange(2, d1.shape[1], 20)
+err = np.zeros((len(win_lengths), nboot, len(step_sizes)))
 
-for nb, iWinL in itertools.product(nbootiter, sp.arange(len(win_lengths))):
+for nb, iWinL, step in itertools.product(nbootiter, np.arange(len(win_lengths)), step_sizes):
     WinL = win_lengths[iWinL]
     startpt = randint(0, data.shape[1])
-    t = sp.arange(startpt, startpt + WinL)
-    t = sp.mod(t, data.shape[1])
+    t = np.arange(startpt, startpt + WinL, step)
+    t = np.mod(t, data.shape[1])
     temp = data[LR_flag, :]
     temp = temp[:, t]
     m = np.mean(temp, 1)
     temp = temp - m[:, None]
-    s = sp.std(temp, axis=1)+1e-116
+    s = np.std(temp, axis=1)+1e-116
     temp = temp/s[:, None]
     d1 = temp
 
-    c = sp.dot(d1, d1.T)/WinL
-    err[iWinL, nb] = sp.linalg.norm(cfull-c)
-    print(WinL, nb, err[iWinL, nb])
+    c = np.dot(d1, d1.T)/WinL
+    err[iWinL, nb, step-5] = sp.linalg.norm(cfull-c)
+    print(step, WinL, nb, err[iWinL, nb, step-5])
 
-sp.savez_compressed('corr_samples.npz', err=err, win_lengths=win_lengths)
+np.savez_compressed('corr_samples_step5_10.npz', err=err, win_lengths=win_lengths)
