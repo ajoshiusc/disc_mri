@@ -1,7 +1,7 @@
 %% Intra-modal rigid registration example
 clc; close all; clear;
 restoredefaultpath;      % To remove conflicting libraries. May remove this line.
-addpath(genpath('/home/ajoshi/projects/lowfieldmri/src/register_files_affine_v12'))
+addpath(genpath('/home/ajoshi/projects/lowfieldmri/t12t1_brain_reg/src/register_files_affine_v12'))
 
 % t1_mov is file that will be warped
 % t1_tar i sthe files that will be used as a target
