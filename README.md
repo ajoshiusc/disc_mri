@@ -1,4 +1,4 @@
-# low field mri
+# DISC MRI
 ## T1 to T1 registration
 Please try main_t12t1_brain_reg.m
 There are comments in the code that can help you run it on different scans.
@@ -9,3 +9,5 @@ Now starting from the two pvc frac files I ran rigid registration with sum of sq
 Then the generated rigid registration is applied on the original T1 MRI. 
 
 There are multiple ways to do this but given that the first few steps in BrainSuite are very fast, I think this is the easiest way to get accurate and reliable results.
+
+## Super resolution 2D to 3D
