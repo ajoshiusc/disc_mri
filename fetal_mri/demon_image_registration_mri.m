@@ -1,7 +1,7 @@
 
 %% Set static and moving image
 
-function [Iw,Xw,Yw]=demon_image_registration_mri(I1,I2)
+function [Iw,Xw,Yw,Tx,Ty]=demon_image_registration_mri(I1,I2)
 
 %clear all;close all;clc;
 alpha=15;
