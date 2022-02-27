@@ -6,12 +6,12 @@ function [Iw,Xw,Yw]=demon_image_registration_mri(I1,I2)
 %clear all;close all;clc;
 alpha=15;
 
-figure; imagesc(I1(:,:,1)); colormap gray;
-figure; imagesc(I1(:,:,2)); colormap gray;
-figure; imagesc(I2(:,:,1));colormap gray;
+%figure; imagesc(I1(:,:,1)); colormap gray;
+%figure; imagesc(I1(:,:,2)); colormap gray;
+%figure; imagesc(I2(:,:,1));colormap gray;
 NIT=500;
 S=I1; M=I2;
-figure; imagesc(I2(:,:,1)); colormap gray;hold on;
+%figure; imagesc(I2(:,:,1)); colormap gray;hold on;
 
 costiter=zeros(NIT,1);
 res1=[128,256];
@@ -82,5 +82,5 @@ end
 Xw=max(min(X+Tx,size(X,1)),1);
 Yw=max(min(Y+Ty,size(Y,1)),1);
 Iw=M;
-clf;imagesc(Iw(:,:,1));drawnow;
+%clf;imagesc(Iw(:,:,1));drawnow;
 end
