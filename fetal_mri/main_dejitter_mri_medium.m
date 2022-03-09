@@ -35,11 +35,11 @@ for dejitter=1:10
         Tx_full{j} = imresize(interp2(Tx_full{j},Tx,Ty),size(v1.img,1:2));
         Ty_full{j} = imresize(interp2(Ty_full{j},Tx,Ty),size(v1.img,1:2));
 
-        IW=interp2(squeeze(v1.img(j,:,:)),Tx_full{j},Ty_full{j},'cubic');
+        IW=interp2(squeeze(v1.img(:,:,j)),Tx_full{j},Ty_full{j},'cubic');
         vout.img(:,:,j)=IW;
 
 
-        fprintf('=====================%d/%d==%d/%d======================',j,size(v1.img,1),dejitter,10);
+        fprintf('=====================%d/%d==%d/%d======================',j,size(v1.img,3),dejitter,10);
         close all;
     end
 
