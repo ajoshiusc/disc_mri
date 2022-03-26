@@ -3,7 +3,9 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'));
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-v1=load_untouch_nii('/home/ajoshi/Downloads/MEDIUM_MOTION/MEDIUM_MOTION_t2_trufi_cor_FA120_FOV352_256_5.7mm3_20210915181625_22.nii');%('/home/ajoshi/Desktop/tmp/haste.nii.gz');
+v1=load_untouch_nii('/home/ajoshi/Downloads/MEDIUM_MOTION/MEDIUM_MOTION_t2_trufi_cor_FA120_FOV352_256_5.7mm3_20210915181625_22_masked.nii.gz');%('/home/ajoshi/Desktop/tmp/haste.nii.gz');
+
+%v1=load_untouch_nii('/home/ajoshi/Downloads/MEDIUM_MOTION/MEDIUM_MOTION_t2_trufi_cor_FA120_FOV352_256_5.7mm3_20210915181625_22.nii');%('/home/ajoshi/Desktop/tmp/haste.nii.gz');
 
 v1.img = double(v1.img);
 
@@ -17,7 +19,7 @@ for j = 1:size(v1.img,1)
     Tx_full{j} = Tx;Ty_full{j}=Ty;
 end
 
-for dejitter=1:10
+for dejitter=1:50
     %v1=vout;
     v1_rescaled=255*(vout.img/max(vout.img(:)));
 
@@ -43,7 +45,7 @@ for dejitter=1:10
         close all;
     end
 
-    save_untouch_nii_gz(vout,sprintf('medium_motion_dejitter_%d.nii.gz',dejitter));
+    save_untouch_nii_gz(vout,sprintf('medium3_motion_dejitter_%d.nii.gz',dejitter));
 
 end
 

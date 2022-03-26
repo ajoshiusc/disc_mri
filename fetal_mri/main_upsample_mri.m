@@ -3,7 +3,7 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'));
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-v1=load_untouch_nii('out2_2.nii.gz');
+v1=load_untouch_nii('/home/ajoshi/projects/disc_mri/fetal_mri/high_motion3_dejitter_10_masked.nii.gz');
 
 v1.img = double(v1.img);
 vout=v1;
@@ -42,6 +42,6 @@ for j = 1:size(v1.img,1)-1
 j
 end
 
-save_untouch_nii_gz(vout,'out2_up.nii.gz');
+save_untouch_nii_gz(vout,'/home/ajoshi/projects/disc_mri/fetal_mri/high_motion3_dejitter_10_masked_up.nii.gz');
 
 

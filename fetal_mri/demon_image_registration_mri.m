@@ -44,7 +44,7 @@ for r1=1:length(res1)
         
 
         
-        SMPARA=round(((NIT-itt)/(NIT-1))*7+3);
+        SMPARA=11*round(((NIT-itt)/(NIT-1))*7+3);
         ks=SMPARA*(NPTS/256);
         %ks=2;
         Hsmooth=fspecial('gaussian',round([6*ks 6*ks]),ks);
