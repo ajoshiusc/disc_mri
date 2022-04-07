@@ -1,4 +1,10 @@
-data/*
+*.gif
+*.pth
+*.nii*
+events*
+log.txt
+TU_pretrain*
+launch.json*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -129,4 +135,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-fetal_mri/.vscode/launch.json
