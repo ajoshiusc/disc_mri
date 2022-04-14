@@ -10,7 +10,7 @@ from skimage.measure import block_reduce
 from skimage.transform import resize
 mode = 'train'
 
-num_samp = 30000
+num_samp = 150000
 
 patch_size = [256, 256]
 X = list()
@@ -35,7 +35,7 @@ for sub1 in tqdm(range(num_samp)):
         im2 = gaussian_filter(im2,2)
         im2 = im2-np.min(im2)
         im2 = im2/np.max(im2)
-        im2 = np.minimum(im2,.8)/.8
+        im2 = np.minimum(im2,.5)/.5
 
         
         im = np.maximum(im1,im2)
@@ -60,10 +60,10 @@ for sub1 in tqdm(range(num_samp)):
 
 
         X.append(np.uint8(255.0*im/im.max()))
-        Y.append(np.uint8(im_orig))
+        Y.append(np.uint8(255.0*im_orig/im_orig.max()))
 
 
-hf = h5py.File('sim_noise_'+mode+'.h5', 'w')
+hf = h5py.File('sim_noise_150'+mode+'.h5', 'w')
 hf.create_dataset('X', data=X)
 hf.create_dataset('Y', data=Y)
 hf.close()

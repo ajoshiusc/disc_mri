@@ -16,9 +16,9 @@ parser = argparse.ArgumentParser()
 #                    default='/deneb_disk/headreco_out/train.h5', help='root dir for data')
 
 parser.add_argument('--dataset', type=str,
-                    default='SkullScalp', help='experiment_name')
+                    default='SuperRes', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
-                    default=9, help='output channel of network')
+                    default=1, help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
                     default=30000, help='maximum epoch number to train')
 parser.add_argument('--max_epochs', type=int,
@@ -57,12 +57,10 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(args.seed)
     dataset_name = args.dataset
     dataset_config = {
-        'SkullScalp': {
-            'root_path': '/ImagePTE1/ajoshi/data/headreco_out/train.h5',
-            'num_classes': 9,
+        'SuperRes': {
+            'root_path': 'sim_noise_150train.h5',
         },
     }
-    args.num_classes = dataset_config[dataset_name]['num_classes']
     args.root_path = dataset_config[dataset_name]['root_path']
     args.is_pretrain = False
     args.exp = 'TU_' + dataset_name + str(args.img_size)
@@ -89,5 +87,5 @@ if __name__ == "__main__":
     
     #net.load_from(weights=np.load(config_vit.pretrained_path))
 
-    trainer = {'SkullScalp': trainer_synapse,}
+    trainer = {'SuperRes': trainer_synapse,}
     trainer[dataset_name](args, net, snapshot_path)

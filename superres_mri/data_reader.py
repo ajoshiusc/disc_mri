@@ -38,9 +38,9 @@ class H5DataLoader(object):
 
         #print(len(np.unique(outy.flatten())))
 
-        if 0: #len(np.unique(outy.flatten()))<3:
-            outy = np.uint8(outy>128)
-        else:
-            outy = to_categorical(outy, num_classes=9)
+        #if len(np.unique(outy.flatten()))<10:
+        #    outy = np.uint8(outy>128)
+        #else:
+        #    outy = to_categorical(outy, num_classes=9)
         
         return outx, outy

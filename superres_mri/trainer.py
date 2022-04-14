@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from tensorboardX import SummaryWriter
-from torch.nn.modules.loss import CrossEntropyLoss
+from torch.nn.modules.loss import MSELoss
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from utils import DiceLoss
@@ -44,10 +44,9 @@ def trainer_synapse(args, model, snapshot_path):
     if args.n_gpu > 1:
         model = nn.DataParallel(model)
     model.train()
-    ce_loss = CrossEntropyLoss()
-    dice_loss = DiceLoss(num_classes)
-    optimizer = optim.SGD(model.parameters(), lr=base_lr,
-                          momentum=0.9, weight_decay=0.0001)
+    mse_loss = MSELoss()
+    optimizer = optim.Adam(model.parameters(), lr=base_lr)#,
+                          #momentum=0.9, weight_decay=0.0001)
     writer = SummaryWriter(snapshot_path + '/log')
     iter_num = 0
     max_epoch = args.max_epochs
@@ -62,17 +61,20 @@ def trainer_synapse(args, model, snapshot_path):
             image_batch, label_batch = trainloader.next_batch(args.batch_size)
             image_batch = image_batch[:,:,:,None]
             image_batch = torch.from_numpy(
-                image_batch).permute([0, 3, 1, 2]).to(torch.float)
-            label_batch = torch.from_numpy(label_batch).permute([0, 3, 1, 2]).to(torch.float)
+                image_batch).permute([0, 3, 1, 2]).to(torch.float)/255.0
+            label_batch = torch.from_numpy(label_batch[:,:,:,None]).permute([0, 3, 1, 2]).to(torch.float)/255.0
             #label_batch = label_batch[:,:,:,4]
 
             #image_batch, label_batch = sampled_batch['image'], sampled_batch['label']
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
             outputs = model(image_batch)
-            labs = torch.argmax(label_batch, dim=1, keepdim=False)
-            loss_ce = ce_loss(outputs, labs)
-            loss_dice = dice_loss(outputs, labs, softmax=True)
-            loss = 0.5 * loss_ce + 0.5 * loss_dice
+
+            print(image_batch.min(),image_batch.max(),label_batch.min(),label_batch.max())
+            #labs = torch.argmax(label_batch, dim=1, keepdim=False)
+            loss_mse = mse_loss(outputs, label_batch)
+            #loss_dice = dice_loss(outputs, labs, softmax=True)
+            #loss = 0.5 * loss_ce + 0.5 * loss_dice
+            loss = loss_mse
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -83,20 +85,20 @@ def trainer_synapse(args, model, snapshot_path):
             iter_num = iter_num + 1
             writer.add_scalar('info/lr', lr_, iter_num)
             writer.add_scalar('info/total_loss', loss, iter_num)
-            writer.add_scalar('info/loss_ce', loss_ce, iter_num)
+            writer.add_scalar('info/loss_ce', loss_mse, iter_num)
 
             logging.info('iteration %d : loss : %f, loss_ce: %f' %
-                         (iter_num, loss.item(), loss_ce.item()))
+                         (iter_num, loss.item(), loss_mse.item()))
 
             if iter_num % 20 == 0:
                 image = image_batch[1, 0:1, :, :]
-                image = (image - image.min()) / (image.max() - image.min())
+                #image = (image - image.min()) / (image.max() - image.min())
                 writer.add_image('train/Image', image, iter_num)
-                outputs = torch.argmax(torch.softmax(
-                    outputs, dim=1), dim=1, keepdim=True)
+                #outputs = torch.argmax(torch.softmax(
+                #    outputs, dim=1), dim=1, keepdim=True)
                 writer.add_image('train/Prediction1',
-                                 outputs[1, ...] * 30, iter_num)
-                labs1 = labs[1, ...].unsqueeze(0) * 30
+                                 outputs[1,0:1,:,:], iter_num)
+                labs1 = label_batch[1, 0:1, :,:]
                 writer.add_image('train/GroundTruth1', labs1, iter_num)
 
         #save_interval = 50  # int(max_epoch/6)
