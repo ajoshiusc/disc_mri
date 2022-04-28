@@ -3,7 +3,7 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'));
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-v1=load_untouch_nii('merged.nii.gz');
+v1=load_untouch_nii('interlaced_dejitter_10.nii.gz');
 
 v1.img = double(v1.img);
 vout=v1;
@@ -13,7 +13,7 @@ size_y = size(v1.img,2);
 
 
 vout.hdr.dime.pixdim(4)=vout.hdr.dime.pixdim(4)/2.0;
-vout.hdr.dime.dim(4)=2*size(v1.img,4);
+vout.hdr.dime.dim(4)=2*size(v1.img,3);
 vout.img=zeros(size(v1.img,1),size(v1.img,2),size(v1.img,3)*2);
 vout.img(:,:,2:2:end)=v1.img;
 save_untouch_nii_gz(vout,'temp.nii.gz');
@@ -43,7 +43,7 @@ j
 end
 save tmp1
 
-save_untouch_nii_gz(vout,'merged_up.nii.gz');
+save_untouch_nii_gz(vout,'interlaced_dejitter_up.nii.gz');
 
 fprintf('done\n');
 

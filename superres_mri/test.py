@@ -18,9 +18,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--volume_path', type=str,
                     default='../data/Synapse/test_vol_h5', help='root dir for validation volume data')  # for acdc volume_path=root_dir
 parser.add_argument('--dataset', type=str,
-                    default='SkullScalp', help='experiment_name')
+                    default='SuperRes', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
-                    default=9, help='output channel of network')
+                    default=1, help='output channel of network')
 
 parser.add_argument('--max_iterations', type=int,default=20000, help='maximum epoch number to train')
 parser.add_argument('--max_epochs', type=int, default=30, help='maximum epoch number to train')
@@ -49,9 +49,9 @@ def inference(args, model, test_save_path=None):
     maskImage = sitk.OtsuThreshold(inputImage, 0, 1, 200)
     corrector = sitk.N4BiasFieldCorrectionImageFilter()
     numberFittingLevels = 4
-    corrected_image = corrector.Execute(image, maskImage)
-    log_bias_field = corrector.GetLogBiasFieldAsImage(inputImage)
-    corrected_image_full_resolution = inputImage / sitk.Exp( log_bias_field )
+    corrected_image = image #corrector.Execute(image, maskImage)
+    #log_bias_field = corrector.GetLogBiasFieldAsImage(inputImage)
+    #corrected_image_full_resolution = inputImage / sitk.Exp( log_bias_field )
     sitk.WriteImage(corrected_image, 'input.bfc.nii.gz')
 
 
@@ -73,20 +73,12 @@ if __name__ == "__main__":
     #torch.cuda.manual_seed(args.seed)
 
     dataset_config = {
-        'SkullScalp': {
-            'Dataset': 'SkullScalp',
-            #'volume_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/118528/T1w/T1w_acpc_dc_restore.nii.gz', #
-            #'volume_path': '/home/ajoshi/Downloads/Fontan/sub-FP019/sub-FP019_ses-1_acq-acquired_T1w.nii.gz', #'/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/115320/T1w/T1w_acpc_dc_restore.nii.gz',
-            'volume_path': '/home/ajoshi/Downloads/Low_field/3ttop55t/3T_0.55T_MPRAGE/V1_LF_2nd_MPRAGE.nii.gz',
-            'num_classes': 9,
-            'z_spacing': 1,
+        'SuperRes': {
+            'volume_path': '/home/ajoshi/projects/disc_mri/fetal_mri//haste.nii.gz',
         },
     }
     dataset_name = args.dataset
-    args.num_classes = dataset_config[dataset_name]['num_classes']
     args.volume_path = dataset_config[dataset_name]['volume_path']
-    args.Dataset = dataset_config[dataset_name]['Dataset']
-    args.z_spacing = dataset_config[dataset_name]['z_spacing']
     args.is_pretrain = True
 
     # name the same snapshot defined in train script!
@@ -112,7 +104,7 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes)#.cuda()
 
-    snapshot = '/ImagePTE1/ajoshi/code_farm/brainseg/model/TU_SkullScalp256/TU_R50-ViT-B_16_skip3_epo150_bs16_256/epoch_11.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    snapshot = '/home/ajoshi/projects/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_5.pth' #os.path.join(snapshot_path, 'best_model.pth')
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
     net.load_state_dict(torch.load(snapshot,map_location=torch.device('cpu')))
     snapshot_name = snapshot_path.split('/')[-1]

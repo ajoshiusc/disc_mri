@@ -131,9 +131,10 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
             net.eval()
             with torch.no_grad():
                 outputs = net(input)
-                out = torch.argmax(torch.softmax(
-                    outputs, dim=1), dim=1).squeeze(0)
+                out = outputs.squeeze() #torch.argmax(torch.softmax(
+                    # outputs, dim=1), dim=1).squeeze(0)
                 out = out.cpu().detach().numpy()
+                out = 255.0*out/np.max(out)
                 if x != patch_size[0] or y != patch_size[1]:
                     pred = zoom(
                         out, (x / patch_size[0], y / patch_size[1]), order=0)
