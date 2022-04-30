@@ -1,11 +1,13 @@
 
 %% Set static and moving image
 
-function [Iw,Xw,Yw,Tx,Ty]=demon_image_registration_mri(I1,I2)
+function [Iw,Xw,Yw,Tx,Ty]=demon_image_registration_mri(I1,I2,alpha)
 
 %clear all;close all;clc;
-alpha=15;
 
+if ~exist('alpha','var')
+    alpha=15;
+end
 %figure; imagesc(I1(:,:,1)); colormap gray;
 %figure; imagesc(I1(:,:,2)); colormap gray;
 %figure; imagesc(I2(:,:,1));colormap gray;

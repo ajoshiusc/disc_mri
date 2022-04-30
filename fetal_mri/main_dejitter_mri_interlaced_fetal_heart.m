@@ -29,7 +29,7 @@ for dejitter=1:10
         I1r(:,:,1)=imresize(I1(:,:,1),[256,256]);I1r(:,:,2)=imresize(I1(:,:,2),[256,256]);
         I2r(:,:,1)=imresize(I2(:,:,1),[256,256]);I2r(:,:,2)=I2r(:,:,1);
         tic;
-        [Iw,Tx,Ty] = demon_image_registration_mri(I1r,I2r);
+        [Iw,Tx,Ty] = demon_image_registration_mri(I1r,I2r,3);
         toc;
         Tx = im_sz_x*Tx/256;Ty = im_sz_y*Ty/256;
         Tx_full{j} = imresize(interp2(Tx_full{j},Tx,Ty),size(v1.img,1:2));
@@ -43,7 +43,7 @@ for dejitter=1:10
         close all;
     end
 
-    save_untouch_nii_gz(vout,sprintf('fetal_heart_interlaced_dejitter_%d.nii.gz',dejitter));
+    save_untouch_nii_gz(vout,sprintf('fetal_heart_alpha3_interlaced_dejitter_%d.nii.gz',dejitter));
 
 end
 
