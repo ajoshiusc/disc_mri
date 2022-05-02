@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from skimage.measure import block_reduce
 from skimage.transform import resize
-mode = 'train'
+mode = 'valid'
 
-num_samp = 150000
+num_samp = int(150000 *.2)
 
 patch_size = [256, 256]
 X = list()
