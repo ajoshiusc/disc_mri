@@ -18,9 +18,8 @@ Y = list()
 
 for sub1 in tqdm(range(num_samp)):
 
-
-        im1 = np.random.rand(patch_size[0],patch_size[1])
-        im2 = np.random.rand(patch_size[0],patch_size[1])
+    im1 = np.random.rand(patch_size[0], patch_size[1])
+    '''im2 = np.random.rand(patch_size[0],patch_size[1])
         im3 = np.random.rand(patch_size[0],patch_size[1])
         im4 = np.random.rand(patch_size[0],patch_size[1])
         im5 = np.random.rand(patch_size[0],patch_size[1])
@@ -38,32 +37,36 @@ for sub1 in tqdm(range(num_samp)):
         im2 = np.minimum(im2,.5)/.5
 
         
-        im = np.maximum(im1,im2)
+        #im = np.maximum(im1,im2)
+        '''
 
-        im = im/np.max(im)
+    im = im1
 
-        im_orig = im.copy()
+    im = im/np.max(im)
 
-        imsize = im.shape
-        im = block_reduce(im,block_size=(4,1))
+    im_orig = im.copy()
 
-        im = resize(im,imsize)
+    imsize = im.shape
+    im = block_reduce(im, block_size=(4, 1))
 
-        '''plt.imshow(im,cmap='gray')
-        plt.colorbar()
+    im = resize(im, imsize)
+
+    '''fig2, (ax2, ax3) = plt.subplots(nrows=1, ncols=2) # two axes on figure
+
+        fim1 = ax2.imshow(im,cmap='gray')
+        plt.colorbar(fim1, ax=ax2)
+        #plt.show()
+
+        fim2 = ax3.imshow(im_orig,cmap='gray')
+        plt.colorbar(fim2, ax=ax3)
         plt.show()
+        '''
 
-        plt.imshow(im_orig,cmap='gray')
-        plt.colorbar()
-        plt.show()'''
-
-
-
-        X.append(np.uint8(255.0*im/im.max()))
-        Y.append(np.uint8(255.0*im_orig/im_orig.max()))
+    X.append(np.uint8(255.0*im/im.max()))
+    Y.append(np.uint8(255.0*im_orig/im_orig.max()))
 
 
-hf = h5py.File('sim_noise_150'+mode+'.h5', 'w')
+hf = h5py.File('sim_noise_150k'+mode+'.h5', 'w')
 hf.create_dataset('X', data=X)
 hf.create_dataset('Y', data=Y)
 hf.close()

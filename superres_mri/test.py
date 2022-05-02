@@ -54,8 +54,7 @@ def inference(args, model, test_save_path=None):
     #corrected_image_full_resolution = inputImage / sitk.Exp( log_bias_field )
     sitk.WriteImage(corrected_image, 'input.bfc.nii.gz')
 
-
-    test_single_nii('input.bfc.nii.gz', net, patch_size=[256, 256], output_fname='V1_2nd_MPRAGE_LF.label.nii.gz')
+    test_single_nii('input.bfc.nii.gz', net, patch_size=[256, 256], output_fname='out.nii.gz')
 
 
 
@@ -74,7 +73,7 @@ if __name__ == "__main__":
 
     dataset_config = {
         'SuperRes': {
-            'volume_path': '/home/ajoshi/projects/disc_mri/fetal_mri//haste.nii.gz',
+            'volume_path': 'BCI256_ds.nii.gz',
         },
     }
     dataset_name = args.dataset
