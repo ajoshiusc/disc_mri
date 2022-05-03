@@ -69,7 +69,7 @@ def trainer_synapse(args, model, snapshot_path):
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
             outputs = model(image_batch)
 
-            print(image_batch.min(),image_batch.max(),label_batch.min(),label_batch.max())
+            #print(image_batch.min(),image_batch.max(),label_batch.min(),label_batch.max())
             #labs = torch.argmax(label_batch, dim=1, keepdim=False)
             loss_mse = mse_loss(outputs, label_batch)
             #loss_dice = dice_loss(outputs, labs, softmax=True)
