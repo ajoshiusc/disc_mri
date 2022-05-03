@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from skimage.measure import block_reduce
 from skimage.transform import resize
-mode = 'valid'
+mode = 'train'
 
-num_samp = int(150000 *.2)
+num_samp = int(300000)
 
 patch_size = [256, 256]
 X = list()
@@ -42,7 +42,7 @@ for sub1 in tqdm(range(num_samp)):
 
     im = im1
 
-    im = im/np.max(im)
+    #im = im/np.max(im)
 
     im_orig = im.copy()
 
@@ -62,11 +62,11 @@ for sub1 in tqdm(range(num_samp)):
         plt.show()
         '''
 
-    X.append(np.uint8(255.0*im/im.max()))
-    Y.append(np.uint8(255.0*im_orig/im_orig.max()))
+    X.append(np.uint8(255.0*im))
+    Y.append(np.uint8(255.0*im_orig))
 
 
-hf = h5py.File('sim_noise_150k'+mode+'.h5', 'w')
+hf = h5py.File('sim_noise_150k_v2'+mode+'.h5', 'w')
 hf.create_dataset('X', data=X)
 hf.create_dataset('Y', data=Y)
 hf.close()

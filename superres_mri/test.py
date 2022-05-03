@@ -103,7 +103,7 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes)#.cuda()
 
-    snapshot = '/home/ajoshi/projects/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_5.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    snapshot = '/project/ajoshi_27/code_farm/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_3.pth'
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
     net.load_state_dict(torch.load(snapshot,map_location=torch.device('cpu')))
     snapshot_name = snapshot_path.split('/')[-1]
