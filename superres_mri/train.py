@@ -58,7 +58,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SuperRes': {
-            'root_path': 'pure_noise.h5',
+            'root_path': 'pure_noise_ds2train.h5',
         },
     }
     args.root_path = dataset_config[dataset_name]['root_path']

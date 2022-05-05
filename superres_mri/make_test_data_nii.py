@@ -21,9 +21,9 @@ for ind in tqdm(range(image.shape[2])):
     slice = 255.0*slice/(np.max(image) + 1e-3)
 
     image_ds[:, :, ind] = resize(block_reduce(
-        slice, block_size=(2, 1), func=np.mean), slice.shape)
+        slice, block_size=(4, 1), func=np.mean), slice.shape)
 
 
 nii = ni.new_img_like(nii_fname, image_ds)
 
-nii.to_filename('BCI256_ds2.nii.gz')
+nii.to_filename('BCI256_ds4.nii.gz')

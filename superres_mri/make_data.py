@@ -37,9 +37,9 @@ for sub1 in tqdm(range(num_samp)):
     #im2 = im2/np.max(im2)
     #im2 = np.minimum(im2,.5)/.5
 
-    #im = np.maximum(im1,im2)
+    im = np.maximum(im1,im2)
 
-    im = im1
+    #im = im1
 
     #im = im/np.max(im)
 
@@ -65,7 +65,7 @@ for sub1 in tqdm(range(num_samp)):
     Y.append(np.uint8(255.0*im_orig))
 
 
-hf = h5py.File('pure_noise_ds2'+mode+'.h5', 'w')
+hf = h5py.File('shapes_noise_ds2'+mode+'.h5', 'w')
 hf.create_dataset('X', data=X)
 hf.create_dataset('Y', data=Y)
 hf.close()
