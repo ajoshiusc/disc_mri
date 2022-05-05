@@ -10,8 +10,7 @@ from skimage.measure import block_reduce
 from skimage.transform import resize
 
 
-
-nii_fname = '/home/ajoshi/BCI256.nii.gz'
+nii_fname = 'BCI256.nii.gz'
 
 image = ni.load_img(nii_fname).get_fdata()
 
@@ -19,13 +18,12 @@ image_ds = np.zeros_like(image)
 
 for ind in tqdm(range(image.shape[2])):
     slice = image[:, :, ind]
-    slice = 255.0*slice/np.max(slice)
+    slice = 255.0*slice/(np.max(image) + 1e-3)
 
-    image_ds[:,:,ind] = resize(block_reduce(slice,block_size=(4,1)),slice.shape)
+    image_ds[:, :, ind] = resize(block_reduce(
+        slice, block_size=(2, 1), func=np.mean), slice.shape)
 
 
 nii = ni.new_img_like(nii_fname, image_ds)
 
-nii.to_filename('BCI256_ds.nii.gz')
-
-
+nii.to_filename('BCI256_ds2.nii.gz')

@@ -40,7 +40,7 @@ parser.add_argument('--vit_patches_size', type=int, default=16, help='vit_patche
 args = parser.parse_args()
 
 
-def inference(args, model, test_save_path=None):
+def inference(args, model, output_fname='out.nii.gz'):
     model.eval()
 
     # run N4 bias field correction
@@ -54,7 +54,7 @@ def inference(args, model, test_save_path=None):
     #corrected_image_full_resolution = inputImage / sitk.Exp( log_bias_field )
     sitk.WriteImage(corrected_image, 'input.bfc.nii.gz')
 
-    test_single_nii('input.bfc.nii.gz', net, patch_size=[256, 256], output_fname='out.nii.gz')
+    test_single_nii('input.bfc.nii.gz', net, patch_size=[256, 256], output_fname=output_fname)
 
 
 
@@ -69,31 +69,8 @@ if __name__ == "__main__":
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
-    #torch.cuda.manual_seed(args.seed)
 
-    dataset_config = {
-        'SuperRes': {
-            'volume_path': 'BCI256_ds.nii.gz',
-        },
-    }
-    dataset_name = args.dataset
-    args.volume_path = dataset_config[dataset_name]['volume_path']
-    args.is_pretrain = True
 
-    # name the same snapshot defined in train script!
-    args.exp = 'TU_' + dataset_name + str(args.img_size)
-    snapshot_path = "./model/{}/{}".format(args.exp, 'TU')
-    snapshot_path = snapshot_path + '_pretrain' if args.is_pretrain else snapshot_path
-    snapshot_path += '_' + args.vit_name
-    snapshot_path = snapshot_path + '_skip' + str(args.n_skip)
-    snapshot_path = snapshot_path + '_vitpatch' + str(args.vit_patches_size) if args.vit_patches_size!=16 else snapshot_path
-    snapshot_path = snapshot_path + '_epo' + str(args.max_epochs) if args.max_epochs != 30 else snapshot_path
-    if dataset_name == 'ACDC':  # using max_epoch instead of iteration to control training duration
-        snapshot_path = snapshot_path + '_' + str(args.max_iterations)[0:2] + 'k' if args.max_iterations != 30000 else snapshot_path
-    snapshot_path = snapshot_path+'_bs'+str(args.batch_size)
-    snapshot_path = snapshot_path + '_lr' + str(args.base_lr) if args.base_lr != 0.01 else snapshot_path
-    snapshot_path = snapshot_path + '_'+str(args.img_size)
-    snapshot_path = snapshot_path + '_s'+str(args.seed) if args.seed!=1234 else snapshot_path
 
     config_vit = CONFIGS_ViT_seg[args.vit_name]
     config_vit.n_classes = args.num_classes
@@ -103,25 +80,11 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes)#.cuda()
 
-    snapshot = '/project/ajoshi_27/code_farm/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_9.pth'
+    snapshot = '/project/ajoshi_27/code_farm/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_3.pth'
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
     net.load_state_dict(torch.load(snapshot,map_location=torch.device('cpu')))
-    snapshot_name = snapshot_path.split('/')[-1]
 
-    log_folder = './test_log/test_log_' + args.exp
-    os.makedirs(log_folder, exist_ok=True)
-    logging.basicConfig(filename=log_folder + '/'+snapshot_name+".txt", level=logging.INFO, format='[%(asctime)s.%(msecs)03d] %(message)s', datefmt='%H:%M:%S')
-    logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-    logging.info(str(args))
-    logging.info(snapshot_name)
-
-    if args.is_savenii:
-        args.test_save_dir = './predictions'
-        test_save_path = os.path.join(args.test_save_dir, args.exp, snapshot_name)
-        os.makedirs(test_save_path, exist_ok=True)
-    else:
-        test_save_path = None
-
-    inference(args, net, test_save_path)
+    args.volume_path = 'BCI256_ds2.nii.gz'
+    inference(args, net, output_fname='out22.nii.gz')
 
 
