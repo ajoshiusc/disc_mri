@@ -12,7 +12,7 @@ VERBOSE = False
 
 mode = 'train'
 
-num_samp = int(300000)
+num_samp = int(30000)
 
 patch_size = [256, 256]
 X = list()
@@ -46,7 +46,7 @@ for sub1 in tqdm(range(num_samp)):
     im_orig = im.copy()
 
     imsize = im.shape
-    im = block_reduce(im, block_size=(2, 1), func=np.mean)
+    #im = block_reduce(im, block_size=(2, 1), func=np.mean)
 
     im = resize(im, imsize)
 
@@ -65,7 +65,7 @@ for sub1 in tqdm(range(num_samp)):
     Y.append(np.uint8(255.0*im_orig))
 
 
-hf = h5py.File('shapes_noise_ds2'+mode+'.h5', 'w')
+hf = h5py.File('shapes_noise_ds0'+mode+'.h5', 'w')
 hf.create_dataset('X', data=X)
 hf.create_dataset('Y', data=Y)
 hf.close()
