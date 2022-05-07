@@ -77,11 +77,11 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(img_size/vit_patches_size), int(img_size/vit_patches_size))
     net = ViT_seg(config_vit, img_size=img_size, num_classes=1)#.cuda()
 
-    snapshot = '/project/ajoshi_27/code_farm/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_1.pth'
+    snapshot = '/project/ajoshi_27/code_farm/disc_mri/superres_mri/model/TU_SuperRes256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_36.pth'
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
     net.load_state_dict(torch.load(snapshot,map_location=torch.device('cpu')))
 
-    args.volume_path = 'BCI256_ds4.nii.gz'
-    inference(args, net, output_fname='out4.nii.gz')
+    args.volume_path = 'BCI256.nii.gz'
+    inference(args, net, output_fname='out.nii.gz')
 
 

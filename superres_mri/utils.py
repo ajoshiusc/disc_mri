@@ -120,7 +120,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
         prediction = np.zeros_like(image)
         for ind in tqdm(range(image.shape[2])):
             slice = image[:, :, ind]
-            slice = slice/np.max(slice)
+            slice = slice/(np.max(slice)+1e-6)
             x, y = slice.shape[0], slice.shape[1]
             if x != patch_size[0] or y != patch_size[1]:
                 # previous using 0
@@ -134,7 +134,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
                 out = outputs.squeeze() #torch.argmax(torch.softmax(
                     # outputs, dim=1), dim=1).squeeze(0)
                 out = out.cpu().detach().numpy()
-                out = 255.0*out/np.max(out)
+                out = 255.0*out#/np.max(out)
                 if x != patch_size[0] or y != patch_size[1]:
                     pred = zoom(
                         out, (x / patch_size[0], y / patch_size[1]), order=0)
@@ -151,6 +151,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
             prediction = out.cpu().detach().numpy()
     metric_list = []
 
+    prediction = np.maximum(prediction,0)
     v = new_img_like(nii_fname,np.uint16(prediction))
     v.to_filename(output_fname)
  
