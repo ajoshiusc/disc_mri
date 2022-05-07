@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from skimage.measure import block_reduce
 from skimage.transform import resize
-VERBOSE = False
+VERBOSE = True
 
 mode = 'train'
 
@@ -41,7 +41,7 @@ for sub1 in tqdm(range(num_samp)):
 
     im = im2
 
-    im = im/np.max(im)
+    #im = im/np.max(im)
 
     im_orig = im.copy()
 
