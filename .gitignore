@@ -3,6 +3,11 @@
 *.gif
 *.pth
 *.nii*
+*.zip
+*.asv
+*/fetal_atlas/*
+*.mat
+
 events*
 log.txt
 TU_pretrain*
