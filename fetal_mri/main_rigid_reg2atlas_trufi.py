@@ -5,12 +5,14 @@ import numpy as np
 import os
 
 
-input_dir = '/home/ajoshi/mydocker/fetal_scan_maria_demo/fetal_mri_datasets/motion_corrupted_sstse_brain_phantom_stacks/stacks/'
+input_dir = '/home/ajoshi/mydocker/fetal_scan_6_8_2022/trufi_head/'
 
-atlas_img = '/home/ajoshi/mydocker/fetal_scan_maria_demo/fetal_mri_datasets/motion_corrupted_sstse_brain_phantom_stacks/stacks/simulated-stack-d2.nii.gz'
+atlas_img = '/home/ajoshi/mydocker/fetal_scan_6_8_2022/trufi_head/20_t2_trufi_sag_head.nii.gz'
 
 #atlas_img = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA32.nii.gz'
-sub_vol = 'simulated-stack-d1.nii.gz'
+sub_vol = '21_t2_trufi_sag_head_rep1.nii.gz'
+
+
 
 sub_img = os.path.join(input_dir,sub_vol)
 
