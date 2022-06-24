@@ -4,11 +4,11 @@ import dicom2nifti
 import glob
 import os
 
-scans_dir = '/ImagePTE1/ajoshi/data/fetal_scan_june_8_2022/Vol368_Fetal/Pediatric_Fetal - 1/'
+scans_dir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand'
 
 
 scans = glob.glob(scans_dir+"/*")
-out_dir = '/home/ajoshi/mydocker/fetal_scan_6_8_2022'
+out_dir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand/nifti/'
 
 if not os.path.isdir(out_dir):
     os.mkdir(out_dir)

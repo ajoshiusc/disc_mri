@@ -1,36 +1,42 @@
-#||AUM||
-#||Shree Ganeshaya Namaha||
-
-
 import nilearn.image as ni
 from sklearn.feature_extraction import img_to_graph
 import numpy as np
 import os
-
-subdir = '/home/ajoshi/masked_trufi'
-sub_file = '18_t2_trufi_tra_head_rep1_mask.nii.gz'
-sub_img = os.path.join(subdir,sub_file)
-out_file = os.path.join(subdir,'p' + sub_file)
-
-
 import SimpleITK as sitk
+import glob
 
-img = sitk.ReadImage(sub_img)
-print (img.GetSpacing())
+subdir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand/nifti/haste'
+outsubdir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand/nifti/haste_rot'
 
-sliceaxis = np.argmax(img.GetSpacing())
+if not os.path.isdir(outsubdir):
+    os.makedirs(outsubdir)
 
-if sliceaxis == 2:
-    img2 = img
+sub_files = glob.glob(subdir+'/*.nii.gz')
 
-if sliceaxis == 1:
-    img2 = sitk.PermuteAxes(img, [0,2,1])
+for s in sub_files:
 
-if sliceaxis == 0:
-    img2 = sitk.PermuteAxes(img, [2,1,0])
+    sub_file=os.path.basename(s)
+
+    sub_img = os.path.join(subdir,sub_file)
+    out_file = os.path.join(outsubdir,'p' + sub_file)
 
 
-print (img2.GetSpacing())
+    img = sitk.ReadImage(sub_img)
+    print (img.GetSpacing())
 
-sitk.WriteImage(img2, out_file)
+    sliceaxis = np.argmax(img.GetSpacing())
+
+    if sliceaxis == 2:
+        img2 = img
+
+    if sliceaxis == 1:
+        img2 = sitk.PermuteAxes(img, [0,2,1])
+
+    if sliceaxis == 0:
+        img2 = sitk.PermuteAxes(img, [2,1,0])
+
+
+    print(img2.GetSpacing())
+
+    sitk.WriteImage(img2, out_file)
 
