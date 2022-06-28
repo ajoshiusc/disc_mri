@@ -41,17 +41,19 @@ label_dilated_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_label
 
 label_file2 = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_labels_int16.nii.gz'
 
-csf_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/csf.nii.gz'
-cortex_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/cortex.dfs'
+gmpial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/gmpial.nii.gz'
+wmin_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/wmin.nii.gz'
 
+pial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/pial.dfs'
+inner_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner.dfs'
+tissue_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_tissue.nii.gz'
 
+# Convert to int16
 v = ni.load_img(label_file)
-
 v2=ni.new_img_like(label_file,np.int16(v.get_fdata()))
 v2.to_filename(label_file2)
 
-
-
+# write dilated label file
 img2=v2.get_fdata()
 img2[img2 == 124]=0
 img2=grey_dilation(img2,[5,5,5])
@@ -61,15 +63,18 @@ label_dilated.to_filename(label_dilated_file)
 
 # Create CSF image
 img = np.int16((v.get_fdata() != 124) & (v.get_fdata() > 0))
-#img=np.int16(binary_fill_holes(img))
-
-
 csf = ni.new_img_like(label_file, img)
 csf = ni.reorder_img(csf)
-csf.to_filename(csf_file)
+csf.to_filename(gmpial_file)
 
+# Create WM file
+v=ni.load_img(tissue_file)
+WM_in = np.int16((v.get_fdata() != 112) & (v.get_fdata() != 113) & (v.get_fdata() != 124) & (v.get_fdata() > 0)) 
+wm= ni.new_img_like(label_file,WM_in)
+wm = ni.reorder_img(wm)
+wm.to_filename(wmin_file)
 
-ff = csf_file
+ff = gmpial_file # THIS FILE DETERMINES WHAT SURFACE IS GENERATED
 reader = vtk.vtkNIFTIImageReader()
 reader.SetFileName(ff)
 reader.Update()
@@ -97,4 +102,4 @@ s.vertices = vertices
 
 s = smooth_patch(s,10)
 
-writedfs(cortex_file,s)
+writedfs(pial_file,s)
