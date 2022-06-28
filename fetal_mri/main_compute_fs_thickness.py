@@ -1,11 +1,12 @@
 from scipy.spatial import cKDTree
 from dfsio import readdfs, writedfs
-from surfproc import patch_color_attrib, view_patch_vtk
+from surfproc import patch_color_attrib, view_patch_vtk, smooth_patch
 
 inner_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner.dfs'
 
 pial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/pial.dfs'
 
+out_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner_depth.dfs'
 
 
 inner = readdfs(inner_file)
@@ -25,9 +26,10 @@ thickness = (d1+d2)/2.0
 
 inner.attributes = thickness
 
-patch_color_attrib(inner,cmap='jet', clim=[0,1])
+patch_color_attrib(inner, cmap='jet', clim=[0, 5])
+
+inner = smooth_patch(inner, 50)
 
 view_patch_vtk(inner)
 
-
-
+writedfs(out_file, inner)
