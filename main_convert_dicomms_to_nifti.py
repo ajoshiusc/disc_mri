@@ -4,11 +4,11 @@ import dicom2nifti
 import glob
 import os
 
-scans_dir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand'
+scans_dir = '/deneb_disk/fetal_scan_8_7_2022/Vol385_Fetal8/Pediatric_Fetal - 1'
 
 
 scans = glob.glob(scans_dir+"/*")
-out_dir = '/deneb_disk/fetal_scan_may_2022/FetalBrainData_forAnand/nifti/'
+out_dir = '/deneb_disk/fetal_scan_8_7_2022/nifti'
 
 if not os.path.isdir(out_dir):
     os.mkdir(out_dir)
