@@ -36,17 +36,17 @@ def MarchingCubes(image,threshold):
 
 
     
-label_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_labels.nii.gz'
-label_dilated_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_labels_dilated.nii.gz'
+label_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//warped_labels.nii.gz'
+label_dilated_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//warped_labels_dilated.nii.gz'
 
-label_file2 = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_labels_int16.nii.gz'
+label_file2 = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//warped_labels_int16.nii.gz'
 
-gmpial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/gmpial.nii.gz'
-wmin_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/wmin.nii.gz'
+gmpial_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//gmpial.nii.gz'
+wmin_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//wmin.nii.gz'
 
-pial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/pial.dfs'
-inner_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner.dfs'
-tissue_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/warped_tissue.nii.gz'
+pial_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//pial.dfs'
+inner_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//inner.dfs'
+tissue_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot//warped_tissue.nii.gz'
 
 # Convert to int16
 v = ni.load_img(label_file)
@@ -74,7 +74,7 @@ wm= ni.new_img_like(label_file,WM_in)
 wm = ni.reorder_img(wm)
 wm.to_filename(wmin_file)
 
-ff = gmpial_file # THIS FILE DETERMINES WHAT SURFACE IS GENERATED
+ff = wmin_file # THIS FILE DETERMINES WHAT SURFACE IS GENERATED
 reader = vtk.vtkNIFTIImageReader()
 reader.SetFileName(ff)
 reader.Update()
@@ -102,4 +102,4 @@ s.vertices = vertices
 
 s = smooth_patch(s,10)
 
-writedfs(pial_file,s)
+writedfs(inner_file,s)

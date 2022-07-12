@@ -2,11 +2,11 @@ from scipy.spatial import cKDTree
 from dfsio import readdfs, writedfs
 from surfproc import patch_color_attrib, view_patch_vtk, smooth_patch
 
-inner_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner.dfs'
+inner_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot/inner.dfs'
 
-pial_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/pial.dfs'
+pial_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot/pial.dfs'
 
-out_file = '/deneb_disk/fetal_scan_6_13_2022/haste_rot_v2/inner_depth.dfs'
+out_file = '/deneb_disk/fetal_scan_8_7_2022/haste_brain_rot/inner_depth.dfs'
 
 
 inner = readdfs(inner_file)
