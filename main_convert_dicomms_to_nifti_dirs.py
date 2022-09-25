@@ -14,10 +14,10 @@ out_dir = '/deneb_disk/fetal_heart_data_svr_ye_tian_9_5_2022/multiple_stacks/21_
 if not os.path.isdir(out_dir):
     os.mkdir(out_dir)
 
-for s in scans:
+for i, s in enumerate(scans):
     print(s)
 
-    dicom2nifti.convert_dir.convert_directory(s, out_dir, compression=True)
+    dicom2nifti.dicom_series_to_nifti(s, os.path.join(out_dir, str(i)+'.nii.gz'))
 
 
 
