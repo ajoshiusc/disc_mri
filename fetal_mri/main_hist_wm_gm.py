@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from numpy import std, mean, sqrt
 
-te='98'
+te='181'
 
 img_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te+'_rot/outsvr_reorient_bst.nii.gz'
 tissue_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te+'_rot/warped_tissue.nii.gz'
