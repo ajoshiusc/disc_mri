@@ -66,23 +66,24 @@ for num_stacks in tqdm(range(1, len(stacks)+1)):
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
 
-    x = EnsureChannelFirst(channel_dim=1)(x[None,None,])
-    y = EnsureChannelFirst(channel_dim=1)(y[None,None,])
+    x = EnsureChannelFirst(channel_dim=1)(x[None, None, ])
+    y = EnsureChannelFirst(channel_dim=1)(y[None, None, ])
 
     data_range = y.max().unsqueeze(0)
     m = SSIMLoss(spatial_dims=3)
-    val_ssim[num_stacks-1] = m.forward(x,y,data_range=data_range)
+    val_ssim[num_stacks-1] = m.forward(x, y, data_range=data_range)
     m = MSELoss()
-    val_ssim[num_stacks-1] = m.forward(x,y)
+    val_ssim[num_stacks-1] = m.forward(x, y)
 
 print(val_ssim)
 
 x = range(1, len(stacks)+1)
 
-plt.plot(x[2:],val_ssim[2:])
+plt.xticks(np.arange(min(x), max(x)+1, 1.0))
 
+plt.plot(x[2:], val_ssim[2:])
 plt.savefig('ssim.png')
 
 
-plt.plot(x[2:],val_mse[2:])
+plt.plot(x[2:], val_mse[2:])
 plt.savefig('mse.png')
