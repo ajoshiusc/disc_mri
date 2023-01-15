@@ -5,13 +5,13 @@ import os
 import SimpleITK as sitk
 import glob
 
-subdir = '/deneb_disk/fetal_scan_12_14_2022/nii_files'
-outsubdir = '/deneb_disk/fetal_scan_12_14_2022/nii_files_rot'
+subdir = '/deneb_disk/fetal_scan_1_9_2023/morning/nii_files'
+outsubdir = '/deneb_disk/fetal_scan_1_9_2023/morning/nii_files_rot'
 
 if not os.path.isdir(outsubdir):
     os.makedirs(outsubdir)
 
-sub_files = glob.glob(subdir+'/*.nii.gz')
+sub_files = glob.glob(subdir+'/*head*.nii.gz')
 
 for s in sub_files:
 

@@ -5,11 +5,11 @@ import glob
 import os
 
 #scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-scans_dir = '/deneb_disk/fetal_scan_12_14_2022'
-scans = glob.glob(scans_dir+"/v*")
+scans_dir = '/deneb_disk/fetal_scan_1_9_2023/morning'
+scans = glob.glob(scans_dir+"/d*")
 
 #out_dir = '/deneb_disk/fetal_scan_8_3_2022/nifti'
-out_dir = '/deneb_disk/fetal_scan_12_14_2022/nii_files'
+out_dir = '/deneb_disk/fetal_scan_1_9_2023/morning/nii_files'
 
 if not os.path.isdir(out_dir):
     os.mkdir(out_dir)
