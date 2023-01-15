@@ -9,6 +9,8 @@ from nilearn.image import load_img
 from monai.transforms import EnsureChannelFirst
 from tqdm import tqdm
 from monai.losses.ssim_loss import SSIMLoss
+from torch.nn import MSELoss
+
 import matplotlib.pyplot as plt
 
 subdir = '/deneb_disk/fetal_scan_1_9_2023/morning/nii_files_rot'
@@ -70,6 +72,8 @@ for num_stacks in tqdm(range(1, len(stacks)+1)):
     data_range = y.max().unsqueeze(0)
     m = SSIMLoss(spatial_dims=3)
     val_ssim[num_stacks-1] = m.forward(x,y,data_range=data_range)
+    m = MSELoss()
+    val_ssim[num_stacks-1] = m.forward(x,y)
 
 print(val_ssim)
 
@@ -78,3 +82,7 @@ x = range(1, len(stacks)+1)
 plt.plot(x[2:],val_ssim[2:])
 
 plt.savefig('ssim.png')
+
+
+plt.plot(x[2:],val_mse[2:])
+plt.savefig('mse.png')
