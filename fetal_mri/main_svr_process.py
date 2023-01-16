@@ -73,9 +73,9 @@ for num_stacks in tqdm(range(1, len(stacks)+1)):
     m = SSIMLoss(spatial_dims=3)
     val_ssim[num_stacks-1] = m.forward(x, y, data_range=data_range)
     m = MSELoss()
-    val_ssim[num_stacks-1] = m.forward(x, y)
+    val_mse[num_stacks-1] = m.forward(x, y)
 
-print(val_ssim)
+print(val_ssim, val_mse)
 
 x = range(1, len(stacks)+1)
 
@@ -84,6 +84,9 @@ plt.xticks(np.arange(min(x), max(x)+1, 1.0))
 plt.plot(x[2:], val_ssim[2:])
 plt.savefig('ssim.png')
 
+plt.close()
+
+plt.xticks(np.arange(min(x), max(x)+1, 1.0))
 
 plt.plot(x[2:], val_mse[2:])
 plt.savefig('mse.png')
