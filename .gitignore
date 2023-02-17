@@ -143,3 +143,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 fetal_mri/*.png
+output-metric-nrmse.txt
+output-metric-ncc.txt
+.gitignore
+.gitignore
+log-registration.txt
+output-metric-average-weight.txt
+output-metric-excluded-ratio.txt
