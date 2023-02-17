@@ -5,19 +5,19 @@ import glob
 import os
 
 #scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-scans_dir = '/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol561'
+scans_dir = '/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol562'
 scans = glob.glob(scans_dir+"/*")
 
 #out_dir = '/deneb_disk/fetal_scan_8_3_2022/nifti'
-out_dir = '/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol561_nii'
+out_dir = '/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol562_nii'
 
 if not os.path.isdir(out_dir):
     os.mkdir(out_dir)
 
-for i, s in enumerate(scans):
+for s in scans:
     print(s)
 
-    dicom2nifti.dicom_series_to_nifti(s, os.path.join(out_dir, str(i)+'.nii.gz'))
+    dicom2nifti.convert_dir.convert_directory(s, out_dir, compression=True)
 
 
 
