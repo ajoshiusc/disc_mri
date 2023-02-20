@@ -6,13 +6,13 @@ addpath(genpath('/home/ajoshi/projects/bfp/src'));
 % Set the input arguments
 configfile='/home/ajoshi/projects/disc_mri/pns_device_fmri/Feb_2023_scans_analysis/config_aaj.ini';
 
-t1='/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol561_nii/6_t1_mprage_sag_11_nd.nii.gz';
-fmri='/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol561_nii/11_ep2d_bold_4mm_tr3000_6min_pns_off_baseline.nii.gz';
+t1='/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol562_nii/6_t1_mprage_sag_11_nd.nii.gz';
+fmri='/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/vol562_nii/10_ep2d_bold_4mm_tr3000_pns_left_off.nii.gz';
 
 %fmri='/home/ajoshi/Downloads/BFP_issues/ACTL005/ACTL005.BOLD.resting.nii.gz';
 studydir='/deneb_disk/PNS_fMRI/PNS_fMRI/PNS_FMRI_20230215/bfpout';
-subid='vol561';
-sessionid='11_ep2d_bold_4mm_tr3000_6min_pns_off_baseline';
+subid='vol562';
+sessionid='10_ep2d_bold_4mm_tr3000_pns_left_off';
 TR='';
  
 % Call the bfp function
