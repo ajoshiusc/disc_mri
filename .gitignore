@@ -150,3 +150,5 @@ output-metric-ncc.txt
 log-registration.txt
 output-metric-average-weight.txt
 output-metric-excluded-ratio.txt
+*.png
+*.dfs

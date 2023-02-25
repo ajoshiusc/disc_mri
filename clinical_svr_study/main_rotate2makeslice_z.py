@@ -5,38 +5,44 @@ import os
 import SimpleITK as sitk
 import glob
 
-subdir = '/deneb_disk/chla_data_2_21_2023/sub_nii/SVR010'
-outsubdir = '/deneb_disk/chla_data_2_21_2023/svr_output/SVR010'
 
-if not os.path.isdir(outsubdir):
-    os.makedirs(outsubdir)
+sublist = glob.glob('/deneb_disk/chla_data_2_21_2023/sub_nii/S*')
 
-sub_files = glob.glob(subdir+'/*BRAIN*TSE*.nii.gz')
+for subdir in sublist:
 
-for s in sub_files:
+    subname = os.path.basename(subdir)
 
-    sub_file=os.path.basename(s)
+    outsubdir = '/deneb_disk/chla_data_2_21_2023/svr_output/' + subname
 
-    sub_img = os.path.join(subdir,sub_file)
-    out_file = os.path.join(outsubdir,'p' + sub_file)
+    if not os.path.isdir(outsubdir):
+        os.makedirs(outsubdir)
 
+    sub_files = glob.glob(subdir+'/*BRAIN*TSE*.nii.gz')
 
-    img = sitk.ReadImage(sub_img)
-    print (img.GetSpacing())
+    for s in sub_files:
 
-    sliceaxis = np.argmax(img.GetSpacing())
+        sub_file=os.path.basename(s)
 
-    if sliceaxis == 2:
-        img2 = img
-
-    if sliceaxis == 1:
-        img2 = sitk.PermuteAxes(img, [0,2,1])
-
-    if sliceaxis == 0:
-        img2 = sitk.PermuteAxes(img, [2,1,0])
+        sub_img = os.path.join(subdir,sub_file)
+        out_file = os.path.join(outsubdir,'p' + sub_file)
 
 
-    print(img2.GetSpacing())
+        img = sitk.ReadImage(sub_img)
+        print (img.GetSpacing())
 
-    sitk.WriteImage(img2, out_file)
+        sliceaxis = np.argmax(img.GetSpacing())
+
+        if sliceaxis == 2:
+            img2 = img
+
+        if sliceaxis == 1:
+            img2 = sitk.PermuteAxes(img, [0,2,1])
+
+        if sliceaxis == 0:
+            img2 = sitk.PermuteAxes(img, [2,1,0])
+
+
+        print(img2.GetSpacing())
+
+        sitk.WriteImage(img2, out_file)
 
