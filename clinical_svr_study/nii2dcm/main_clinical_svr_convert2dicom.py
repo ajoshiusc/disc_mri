@@ -62,13 +62,13 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None):
 def main():
 
     list_svr_files = glob.glob('/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR*SVR.nii.gz')
-    out_dicomms = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_DICOM'
+    out_dicomms = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_DICOM'
 
     for nii_file in list_svr_files:
     
         sub = os.path.basename(nii_file)[:-7]
 
-        output_dcm_path = out_dicomms + '/' + sub + '_dicom'
+        output_dcm_path = out_dicomms + '/' + sub + '_3D'
         os.makedirs(output_dcm_path)
         
         run_nii2dcm(nii_file, output_dcm_path, dicom_type='SVR')
