@@ -36,12 +36,10 @@ for subdir in subdirs:
         str_stacks += ' ' + s
 
         img = sitk.ReadImage(s)
-        print (img.GetSpacing())
+        print(img.GetSpacing())
         th = np.max(img.GetSpacing())
-        
-        str_th += ' ' + str(th)
 
-    outsvr = subdir + '/outsvr'+'_'+str(num_stacks)+'.nii.gz'
+        str_th += ' ' + str(th)
 
     if not os.path.isfile(outsvr):
 
@@ -52,4 +50,3 @@ for subdir in subdirs:
 
         print(cmd)
         os.system(cmd)
-
