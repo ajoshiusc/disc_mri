@@ -9,7 +9,7 @@ import nii2dcm.svr
 import os
 import glob
 
-def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None):
+def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None,patient_name=''):
     """
     Execute NIfTI to DICOM conversion
 
@@ -36,11 +36,15 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None):
     if dicom_type is not None and dicom_type.upper() in ['MR', 'MRI']:
         dicom = nii2dcm.dcm.DicomMRI('nii2dcm_dicom_mri.dcm')
     if dicom_type is not None and dicom_type.upper() in ['SVR']:
-        dicom = nii2dcm.svr.DicomMRISVR('nii2dcm_dicom_mri_svr.dcm')
+
+        example_dicom = ''# '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1701/IM-0274-0044.dcm'
+        dicom = nii2dcm.svr.DicomMRISVR(example_dicom,patient_name=patient_name) #('nii2dcm_dicom_mri_svr.dcm')
         nii_img = nii.get_fdata()
-        nii_img *= 65535.0/nii_img.max()
+        #nii_img *= 65534.0/nii_img.max()
+        nii_img *= 32000.0/nii_img.max()
+
         nii_img[nii_img < 0] = 0  # set background pixels = 0 (negative in SVRTK)
-        nii_img = nii_img.astype("uint16")
+        nii_img = nii_img.astype("int16")
 
     # transfer Series tags
     nii2dcm.dcm_writer.transfer_nii_hdr_series_tags(dicom, nii2dcm_parameters)
@@ -61,8 +65,8 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None):
 
 def main():
 
-    list_svr_files = glob.glob('/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR*SVR.nii.gz')
-    out_dicomms = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_DICOM'
+    list_svr_files = glob.glob('/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI/SVR*SVR.nii.gz')
+    out_dicomms = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_DICOM_test4'
 
     for nii_file in list_svr_files:
     
@@ -71,7 +75,7 @@ def main():
         output_dcm_path = out_dicomms + '/' + sub + '_3D'
         os.makedirs(output_dcm_path)
         
-        run_nii2dcm(nii_file, output_dcm_path, dicom_type='SVR')
+        run_nii2dcm(nii_file, output_dcm_path, dicom_type='SVR', patient_name=sub[:-4])
 
 
 if __name__ == "__main__":

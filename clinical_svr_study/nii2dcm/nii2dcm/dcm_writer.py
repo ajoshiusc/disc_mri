@@ -72,3 +72,4 @@ def transfer_nii_hdr_instance_tags(dcm, nii2dcm_parameters, instance_index):
         str(nii2dcm_parameters['ImagePositionPatient'][instance_index][1]),
         str(nii2dcm_parameters['ImagePositionPatient'][instance_index][2]),
     ]
+    

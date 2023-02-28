@@ -2,8 +2,9 @@ import nibabel
 import pydicom
 import os
 from tqdm import tqdm
-from glob import glob
+import glob
 
+from pydicom.uid import ExplicitVRLittleEndian
 
 def convertNsave(arr,file_dir, index=0):
     """
@@ -13,7 +14,9 @@ def convertNsave(arr,file_dir, index=0):
     the name of each slice while using a for loop to convert all the slices
     """
     
-    dicom_file = pydicom.dcmread('images/dcmimage.dcm')
+    #example_dicom = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1701/IM-0274-0044.dcm'
+    example_dicom = 'images/dcmimage.dcm'
+    dicom_file = pydicom.dcmread(example_dicom) #('images/dcmimage.dcm')
     arr = arr.astype('uint16')
     dicom_file.Rows = arr.shape[0]
     dicom_file.Columns = arr.shape[1]
@@ -24,6 +27,8 @@ def convertNsave(arr,file_dir, index=0):
     dicom_file.HighBit = 15
     dicom_file.PixelRepresentation = 1
     dicom_file.PixelData = arr.tobytes()
+    dicom_file.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian
+
     dicom_file.save_as(os.path.join(file_dir, f'slice{index}.dcm'))
 
 
@@ -45,13 +50,12 @@ def nifti2dicom_1file(nifti_dir, out_dir):
 
 
 
-def main():        
+def main():
 
-
-  list_svr_files = glob.glob('/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR*SVR.nii.gz')
+  list_svr_files = glob.glob('/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI/SVR*SVR.nii.gz')
 
   for nii_file in list_svr_files:
-       
+      
   
     output_dcm_path = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR001_SVR_dicom_my'
 
@@ -59,3 +63,7 @@ def main():
     nifti2dicom_1file(nii_file, output_dcm_path)
 
 
+
+
+if __name__ == "__main__":
+    main()
