@@ -5,7 +5,7 @@ dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal_
 
 nii_file = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI/SVR010_SVR.nii.gz';
 
-write_dir = '/home/ajoshi/projects/disc_mri/clinical_svr_study/outdicom/'
+write_dir = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR010_dcm_output/'
 write_name = 'IM'
 dinfo = dicominfo(dicom_file);
 im_all = niftiread(nii_file);
@@ -45,6 +45,8 @@ ImagePositionPatient0   = dinfo.ImagePositionPatient;
 
 nframe = 1;
 
+dinfo.SeriesNumber = dinfo.SeriesNumber + 10000;
+
 for i = 1:nslice
     for j = 1:nframe
         warning off
@@ -67,7 +69,6 @@ for i = 1:nslice
         dinfo.PixelSpacing = [1,1];
         
         file_name = sprintf('%s%s_slice_%03g.dcm', write_dir, write_name, i);
-        
         dinfo.SeriesDescription = 'SVR Recon';
         dicomwrite(im_all(:, :, i)', file_name, dinfo);
     end
