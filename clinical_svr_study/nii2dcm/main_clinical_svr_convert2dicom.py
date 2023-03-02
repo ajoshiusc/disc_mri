@@ -37,7 +37,7 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type=None,patient_name=''
         dicom = nii2dcm.dcm.DicomMRI('nii2dcm_dicom_mri.dcm')
     if dicom_type is not None and dicom_type.upper() in ['SVR']:
 
-        example_dicom = ''# '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1701/IM-0274-0044.dcm'
+        example_dicom = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1701/IM-0274-0044.dcm'
         dicom = nii2dcm.svr.DicomMRISVR(example_dicom,patient_name=patient_name) #('nii2dcm_dicom_mri_svr.dcm')
         nii_img = nii.get_fdata()
         #nii_img *= 65534.0/nii_img.max()
