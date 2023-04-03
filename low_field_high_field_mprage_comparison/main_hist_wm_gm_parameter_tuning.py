@@ -6,9 +6,30 @@ import matplotlib.pyplot as plt
 from numpy import std, mean, sqrt
 import glob
 import os
-
+import SimpleITK as sitk
+import uuid
 
 tissue_file = '/deneb_disk/3T_vs_low_field/3T_mprage_data_BrainSuite/subj2_vol1/T1.pvc.frac.nii.gz'
+
+
+def load_imgT1(input_nii):
+
+        # run N4 bias field correction
+    inputImage = sitk.ReadImage(input_nii, sitk.sitkFloat32)
+    nii_filename = str(uuid.uuid4())+'.nii.gz'
+
+    maskImage = sitk.OtsuThreshold(inputImage, 0, 1, 200)
+    sitk.WriteImage(maskImage, 'mask.nii.gz')
+
+    corrector = sitk.N4BiasFieldCorrectionImageFilter()
+    corrected_image = corrector.Execute(inputImage, maskImage)
+    sitk.WriteImage(corrected_image, nii_filename)
+
+    return(ni.load_img(nii_filename))
+
+
+
+
 
 
 # correct if the population S.D. is expected to be equal for the two groups.
@@ -29,7 +50,7 @@ for subdir in subdirs:
     img_file1 = '/deneb_disk/3T_vs_low_field/registered_data_param_tuning/T1' + \
         param + 'to_3T.nii.gz'
 
-    img = ni.load_img(img_file1).get_fdata()
+    img = load_imgT1(img_file1).get_fdata()
     # Convert to int16
     lab = ni.load_img(tissue_file).get_fdata()
 
@@ -56,9 +77,11 @@ for subdir in subdirs:
     wmstd = np.std(wm_val)
     
     s.set(title=f'param={param}, ' + f'Cohens d: {d:.2f}, GM std: {gmstd:.2f}, WM std: {wmstd:.2f}')
-    plt.show()
+    #plt.show()
 
     s.figure.savefig(f'{param}.png')
+
+    #plt.close()
 
     print(f'Cohens d: {d}, GM std: {gmstd}, WM std: {wmstd}')
 
@@ -70,7 +93,7 @@ for subdir in subdirs:
 
 img_file1 = '/deneb_disk/3T_vs_low_field/registered_data/sub2_H2_to_H1.nii.gz'
 
-img = ni.load_img(img_file1).get_fdata()
+img = load_imgT1(img_file1).get_fdata()
 # Convert to int16
 lab = ni.load_img(tissue_file).get_fdata()
 
