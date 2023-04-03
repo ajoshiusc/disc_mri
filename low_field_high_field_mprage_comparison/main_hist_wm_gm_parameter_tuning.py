@@ -27,17 +27,14 @@ def load_imgT1(input_nii):
 
     return(ni.load_img(nii_filename))
 
-
-
-
-
-
 # correct if the population S.D. is expected to be equal for the two groups.
 def cohen_d(x, y):
     nx = len(x)
     ny = len(y)
     dof = nx + ny - 2
     return (mean(x) - mean(y)) / sqrt(((nx-1)*std(x, ddof=1) ** 2 + (ny-1)*std(y, ddof=1) ** 2) / dof)
+
+
 
 
 subdirs = glob.glob(
