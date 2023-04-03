@@ -119,7 +119,7 @@ d = cohen_d(wm_val, gm_val)
 gmstd = np.std(gm_val)
 wmstd = np.std(wm_val)
 
-s.set(title='param=3T scan 2' + f'Cohens d: {d:.2f}, GM std: {gmstd:.2f}, WM std: {wmstd:.2f}')
+s.set(title='param=3T scan 2, ' + f'Cohens d: {d:.2f}, GM std: {gmstd:.2f}, WM std: {wmstd:.2f}')
 plt.show()
 
 s.figure.savefig('3Tscan2.png')
