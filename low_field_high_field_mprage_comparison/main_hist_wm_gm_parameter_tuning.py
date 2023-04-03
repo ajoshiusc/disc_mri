@@ -78,7 +78,7 @@ for subdir in subdirs:
 
     s.figure.savefig(f'{param}.png')
 
-    #plt.close()
+    plt.close()
 
     print(f'Cohens d: {d}, GM std: {gmstd}, WM std: {wmstd}')
 
