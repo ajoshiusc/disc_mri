@@ -38,7 +38,7 @@ def cohen_d(x, y):
 
 
 subdirs = glob.glob(
-    '/deneb_disk/3T_vs_low_field/parameter_tuning/parameter_tuning_subj2_vo1_BrainSuite/*')
+    '/deneb_disk/3T_vs_low_field/parameter_tuning/parameter_tuning_subj2_vo1_BrainSuite/ww*')
 
 for subdir in subdirs:
 
