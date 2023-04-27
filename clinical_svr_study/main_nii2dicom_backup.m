@@ -3,11 +3,9 @@ clc;clear all;close all;
 dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1201/IM-0269-0001.dcm'
 %'/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_DICOM/SVR010_SVR_3D/IM_0044';
 
-nii_file = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI_aligned/SVR010_SVR_aligned.nii.gz';
+nii_file = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI_aligned/SVR010_SVR_aligned_bst.nii.gz';
 
 write_dir = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR010_dcm_output/'
-
-mkdir(write_dir)
 write_name = 'IM'
 dinfo = dicominfo(dicom_file);
 im_all = niftiread(nii_file);
