@@ -84,7 +84,7 @@ for i = 1:nslice
         
         file_name = sprintf('%s%s_slice_%03g.dcm', write_dir, write_name, i);
         dinfo.SeriesDescription = 'SVR Recon';
-        dinfo.AnatomicalOrientationType = ''
+        %dinfo.AnatomicalOrientationType = ''
         dicomwrite(im_all(:, :, i)', file_name, dinfo);
     end
 end
