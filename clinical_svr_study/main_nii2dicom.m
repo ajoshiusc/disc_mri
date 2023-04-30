@@ -1,16 +1,23 @@
 clc;clear all;close all;
 
-dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR010/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1201/IM-0269-0001.dcm'
+dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR001/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1001/IM-0237-0001.dcm'
+%dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR002/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1101/IM-0104-0001.dcm'
+%dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR003/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_801/IM-0036-0001.dcm'
+%dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR004/Mri_Fetal__Pelvic - MRIFETAL/BRAIN_SAG_SSh_TSE_esp56_1501/IM-0044-0001.dcm'
+%dicom_file = '/deneb_disk/chla_data_2_21_2023/unzipped_dicomms/SVR005/SVR005/BRAIN_SAG_SSh_TSE_esp56_801/IM-0195-0001.dcm'
+
+
 %'/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_DICOM/SVR010_SVR_3D/IM_0044';
 
-nii_file = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI_aligned/SVR010_SVR_aligned.nii.gz';
+nii_file = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR_3D_NIFTI_aligned/SVR001_SVR_aligned.nii.gz';
 
-write_dir = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR010_dcm_output/'
+write_dir = '/home/ajoshi/projects/disc_mri/clinical_svr_study/SVR001_dcm_output/'
 
 mkdir(write_dir)
 write_name = 'IM'
 dinfo = dicominfo(dicom_file);
 im_all = niftiread(nii_file);
+im_all = flipdim(im_all,2);
 para = niftiinfo(nii_file);
 %% correct some time
 %load(recon_file)
@@ -28,9 +35,9 @@ SeriesTime = str2double(dinfo.SeriesTime);
 
 rot = eye(3);
 
-x0 = dinfo.ImagePositionPatient(1);
-y0 = dinfo.ImagePositionPatient(2);
-z0 = dinfo.ImagePositionPatient(3);
+x0 = para.Transform.T(4,1);% dinfo.ImagePositionPatient(1);
+y0 = para.Transform.T(4,2);%dinfo.ImagePositionPatient(2);
+z0 = para.Transform.T(4,3);%dinfo.ImagePositionPatient(3);
 
 SliceGap = para.PixelDimensions(3); % para.kspace_info.user_SliceGap;
 
@@ -43,7 +50,10 @@ im_all = int16(im_all * 32767 / max(im_all(:)));
 time_per_slice = 1 %TBD para.kspace_info.user_TR * para.Recon.narm / 1000 / 1000; % [sec]
 
 SliceLocation0          = dinfo.SliceLocation;
-ImagePositionPatient0   = dinfo.ImagePositionPatient;
+ImagePositionPatient0   = 0*para.Transform.T(4,1:3)';%dinfo.ImagePositionPatient;
+ImagePositionPatient0(1) = -para.Transform.T(4,1);
+ImagePositionPatient0(2) = para.Transform.T(4,2);
+ImagePositionPatient0(3) = 0*para.Transform.T(4,3);
 
 nframe = 1;
 
@@ -68,10 +78,13 @@ for i = 1:nslice
         dinfo.SliceLocation         = SliceLocation;
         dinfo.ImagePositionPatient  = ImagePositionPatient;
 
-        dinfo.PixelSpacing = [1,1];
+        dinfo.ImageOrientationPatient = [1,0,0,0,-1,0];
+
+        dinfo.PixelSpacing = para.PixelDimensions(1:2);%[1,1];
         
         file_name = sprintf('%s%s_slice_%03g.dcm', write_dir, write_name, i);
         dinfo.SeriesDescription = 'SVR Recon';
+        dinfo.AnatomicalOrientationType = ''
         dicomwrite(im_all(:, :, i)', file_name, dinfo);
     end
 end
