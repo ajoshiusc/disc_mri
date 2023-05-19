@@ -4,47 +4,55 @@ from scipy.ndimage import binary_fill_holes
 import seaborn as sns
 import matplotlib.pyplot as plt
 from numpy import std, mean, sqrt
-
-te='181'
-
-img_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te+'_rot/outsvr_reorient_bst.nii.gz'
-tissue_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te+'_rot/warped_tissue.nii.gz'
-wm_tissue_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te+'_rot/warped_labels.nii.gz'
+import numpy as np
+import nibabel as nib
+import matplotlib.pyplot as plt
 
 
+te1='98'
+te2 = '181'
+te3 = '272'
 
-#correct if the population S.D. is expected to be equal for the two groups.
-def cohen_d(x,y):
-    nx = len(x)
-    ny = len(y)
-    dof = nx + ny - 2
-    return (mean(x) - mean(y)) / sqrt(((nx-1)*std(x, ddof=1) ** 2 + (ny-1)*std(y, ddof=1) ** 2) / dof)
+img_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te1+'_rot/outsvr_reorient_bst.nii.gz'
+tissue_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te1+'_rot/warped_tissue.nii.gz'
+wm_tissue_file1 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te1+'_rot/warped_labels.nii.gz'
 
+img_file2 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te2+'_rot/outsvr_reorient_bst.nii.gz'
 
-img1 = ni.load_img(img_file1).get_fdata()
-# Convert to int16
-lab1 = ni.load_img(tissue_file1).get_fdata()
-lab1_wm = ni.load_img(wm_tissue_file1).get_fdata()
-
-gm_ind = (lab1==112) | (lab1 ==113)
-gm_val = img1[gm_ind]
-
-wm_ind = (lab1_wm==120) | (lab1_wm ==121)
-wm_val = img1[wm_ind]
+img_file3 = '/deneb_disk/fetal_scan_8_3_2022/haste_head_te'+te3+'_rot/outsvr_reorient_bst.nii.gz'
 
 
-print(lab1.shape)
-print(gm_val.shape)
-print(gm_ind)
+# Load nifti images
+img1 = nib.load(img_file1)
+img2 = nib.load(img_file2)
+img3 = nib.load(img_file3)
 
-#plt.hist([gm_val,wm_val],color=['r','b'], bins=30,alpha=.5)
-sns.histplot(data=[gm_val,wm_val],color=['r','b'], bins=30,alpha=.5)
-plt.legend(labels=["GM intensity","WM intensity"])
+# Extract TE values from nifti header
+TE = [98,181,272]
 
-#sns.histplot(data=wm_val, bins=30)
+# Extract 3D image data
+data1 = img1.get_fdata()
+data2 = img2.get_fdata()
+data3 = img3.get_fdata()
 
+
+data = np.stack((data1,data2,data3),axis=3)
+
+
+# Calculate T2 map
+t2_map = np.zeros_like(data1)
+for i in range(data.shape[0]):
+    for j in range(data.shape[1]):
+        for k in range(data.shape[2]):
+
+            signal = data[i,j,k,:]
+            t2_fit = np.polyfit(TE, np.log(signal), 1)
+            t2_map[i,j,k] = -1/t2_fit[0]
+
+
+
+# Display T2 map
+plt.imshow(t2_map, cmap='gray')
+plt.title('T2 map')
+plt.colorbar()
 plt.show()
-
-d = cohen_d(wm_val,gm_val)
-
-print(d)
