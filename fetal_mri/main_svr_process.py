@@ -13,16 +13,16 @@ from torch.nn import MSELoss
 
 import matplotlib.pyplot as plt
 
-subdir = '/deneb_disk/fetal_scan_1_9_2023/morning/nii_files_rot'
-template = subdir + '/p28_t2_haste_sag_head_p.nii.gz'
-mask = subdir + '/p28_t2_haste_sag_head_p_mask.nii.gz'
+subdir = '/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot'
+template = subdir + '/p40_t2_haste_cor_head_te98_p.nii.gz'
+mask = subdir + '/p40_t2_haste_cor_head_te98_p.mask.nii.gz'
 fetal_atlas = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31.nii.gz'
 fetal_atlas_seg = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31_regional.nii.gz'
 fetal_atlas_tissue = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31_tissue.nii.gz'
 
-outsvr = subdir + '/outsvr.nii.gz'
+outsvr = subdir + '/outsvr_te98.nii.gz'
 
-stacks = glob.glob(subdir+'/*head*p.nii.gz')
+stacks = glob.glob(subdir+'/*head*te98*p.nii.gz')
 
 res = 1
 th = 3
@@ -37,8 +37,8 @@ for num_stacks in range(1, len(stacks)+1):
         str_stacks += ' ' + s
         str_th += ' ' + str(th)
 
-    outsvr = subdir + '/outsvr'+'_'+str(num_stacks)+'.nii.gz'
-    outsvr_aligned = subdir + '/outsvr'+'_'+str(num_stacks)+'_aligned.nii.gz'
+    outsvr = subdir + '/outsvr'+'_te98_'+str(num_stacks)+'.nii.gz'
+    outsvr_aligned = subdir + '/outsvr'+'_te98_'+str(num_stacks)+'_aligned.nii.gz'
 
     if os.path.isfile(outsvr_aligned):
         continue
@@ -98,7 +98,7 @@ plt.savefig('mse.png')
 '''
 
 # warp atlas to subject
-
+""" 
 for num_stacks in tqdm(range(1, len(stacks)+1)):
 
     outsvr_aligned = subdir + '/outsvr'+'_'+str(num_stacks)+'_aligned.nii.gz'
@@ -131,4 +131,4 @@ for num_stacks in tqdm(range(1, len(stacks)+1)):
     cmd = 'applywarp -r '+ outsvr_aligned + ' -i ' + fetal_atlas_seg + ' -o ' + warped_labels_reg + ' -w fnirtcoeff.nii.gz --interp=nn'
     os.system(cmd)
 
-  
+   """

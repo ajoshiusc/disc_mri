@@ -7,7 +7,7 @@ from numpy import std, mean, sqrt
 import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
-
+from tqdm import tqdm
 
 te1='98'
 te2 = '181'
@@ -35,13 +35,16 @@ data1 = img1.get_fdata()
 data2 = img2.get_fdata()
 data3 = img3.get_fdata()
 
+data1[data1<0]=0
+data2[data2<0]=0
+data3[data3<0]=0
 
 data = np.stack((data1,data2,data3),axis=3)
 
 
 # Calculate T2 map
 t2_map = np.zeros_like(data1)
-for i in range(data.shape[0]):
+for i in tqdm(range(data.shape[0])):
     for j in range(data.shape[1]):
         for k in range(data.shape[2]):
 
