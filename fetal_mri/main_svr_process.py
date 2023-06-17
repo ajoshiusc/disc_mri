@@ -16,11 +16,9 @@ import matplotlib.pyplot as plt
 subdir = '/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot'
 template = subdir + '/p40_t2_haste_cor_head_te98_p.nii.gz'
 mask = subdir + '/p40_t2_haste_cor_head_te98_p.mask.nii.gz'
-fetal_atlas = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31.nii.gz'
-fetal_atlas_seg = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31_regional.nii.gz'
-fetal_atlas_tissue = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA31_tissue.nii.gz'
-
-outsvr = subdir + '/outsvr_te98.nii.gz'
+fetal_atlas = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33.nii.gz'
+fetal_atlas_seg = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_regional.nii.gz'
+fetal_atlas_tissue = '/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_tissue.nii.gz'
 
 stacks = glob.glob(subdir+'/*head*te98*p.nii.gz')
 
