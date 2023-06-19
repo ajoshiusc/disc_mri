@@ -25,10 +25,14 @@ stacks_all = glob.glob(subdir + "/*head*te98*p.nii.gz")
 
 res = 1
 th = 3
-
+MAX_COMB = 20
 
 for num_stacks in range(1, len(stacks_all) + 1):
     for ns, stacks in enumerate(combinations(stacks_all, num_stacks)):
+
+        if ns > MAX_COMB:
+            continue
+
         str_stacks = ""
         str_th = ""
 
