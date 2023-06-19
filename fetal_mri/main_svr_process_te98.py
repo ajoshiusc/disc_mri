@@ -1,18 +1,19 @@
-import nilearn.image as ni
-from sklearn.feature_extraction import img_to_graph
-import numpy as np
-import os
-import SimpleITK as sitk
-import glob
-from monai.metrics.regression import SSIMMetric, MSEMetric
-from nilearn.image import load_img
-from monai.transforms import EnsureChannelFirst
-from tqdm import tqdm
-from monai.losses.ssim_loss import SSIMLoss
-from torch.nn import MSELoss
-from itertools import combinations
+"""
+SVR reconstructions for different combinations of stacks
+"""
 
-import matplotlib.pyplot as plt
+import os
+import glob
+import random
+
+
+def random_combination(iterable, r):
+    "Random selection from itertools.combinations(iterable, r)"
+    pool = tuple(iterable)
+    n = len(pool)
+    indices = sorted(random.sample(range(n), r))
+    return tuple(pool[i] for i in indices)
+
 
 subdir = "/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
 template = subdir + "/p40_t2_haste_cor_head_te98_p.nii.gz"
@@ -27,8 +28,10 @@ res = 1
 th = 3
 MAX_COMB = 20
 
+
 for num_stacks in range(1, len(stacks_all) + 1):
-    for ns, stacks in enumerate(combinations(stacks_all, num_stacks)):
+    for ns in range(MAX_COMB):
+        stacks = random_combination(stacks_all, num_stacks)
 
         if ns > MAX_COMB:
             continue
