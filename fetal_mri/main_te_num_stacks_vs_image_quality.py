@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 te = 98
 
-subdir = f"/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
+subdir = "/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
 template = subdir + f"/p40_t2_haste_cor_head_te{te}_p.nii.gz"
 mask = subdir + f"/p40_t2_haste_cor_head_te{te}_p.mask.nii.gz"
 fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33.nii.gz"
