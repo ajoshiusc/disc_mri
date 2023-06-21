@@ -10,11 +10,13 @@ from monai.transforms import EnsureChannelFirst
 from tqdm import tqdm
 from monai.losses.ssim_loss import SSIMLoss
 from torch.nn import MSELoss
+from itertools import product
 
 import matplotlib.pyplot as plt
 
 
 te = 98
+MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
 template = subdir + f"/p40_t2_haste_cor_head_te{te}_p.nii.gz"
@@ -31,8 +33,8 @@ th = 3
 
 num_stacks = len(stacks)
 
-outsvr = subdir + "/outsvr" + f"_te{te}_" + str(num_stacks) + ".nii.gz"
-outsvr_aligned = subdir + "/outsvr" + f"_te{te}_" + str(num_stacks) + "_aligned.nii.gz"
+outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{0}.nii.gz"
+outsvr_aligned = f"outsvr/svr_te98_aligned.nii.gz"
 
 cmd = (
     "flirt -in "
@@ -52,11 +54,9 @@ os.system(cmd)
 print("registration of svr to atlas done")
 
 
-for num_stacks in range(1, len(stacks) + 1):
-    outsvr = subdir + "/outsvr" + f"_te{te}_" + str(num_stacks) + ".nii.gz"
-    outsvr_aligned = (
-        subdir + "/outsvr" + f"_te{te}_" + str(num_stacks) + "_aligned.nii.gz"
-    )
+for num_stacks, ns in tqdm(product(range(1, len(stacks) + 1), range(MAX_COMB))):
+    outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+    outsvr_aligned = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
 
     cmd = (
         "flirt -in "
@@ -72,44 +72,56 @@ for num_stacks in range(1, len(stacks) + 1):
     print(cmd)
     os.system(cmd)
 
-'''
-val_ssim = np.zeros(len(stacks))
-val_mse = np.zeros(len(stacks))
 
-for num_stacks in tqdm(range(1, len(stacks)+1)):
+val_ssim = np.zeros((len(stacks), MAX_COMB))
+val_mse = np.zeros((len(stacks), MAX_COMB))
+mse = MSELoss()
+ssim = SSIMLoss(spatial_dims=3)
 
-    outsvr_aligned = subdir + '/outsvr'+'_'+str(num_stacks)+'_aligned.nii.gz'
-    target = subdir + '/outsvr'+'_'+str(len(stacks))+'_aligned.nii.gz'
+for ns, i in product(range(1, len(stacks) + 1), range(MAX_COMB)):
+    outsvr_aligned = f"outsvr/svr_te98_numstacks_{ns}_iter_{i}_aligned.nii.gz"
+    target = f"outsvr/svr_te98_aligned.nii.gz"
 
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
 
-    x = EnsureChannelFirst(channel_dim=1)(x[None, None, ])
-    y = EnsureChannelFirst(channel_dim=1)(y[None, None, ])
+    x = EnsureChannelFirst(channel_dim=1)(
+        x[
+            None,
+            None,
+        ]
+    )
+    y = EnsureChannelFirst(channel_dim=1)(
+        y[
+            None,
+            None,
+        ]
+    )
 
     data_range = y.max().unsqueeze(0)
-    m = SSIMLoss(spatial_dims=3)
-    val_ssim[num_stacks-1] = m.forward(x, y, data_range=data_range)
-    m = MSELoss()
-    val_mse[num_stacks-1] = m.forward(x, y)
+    val_ssim[ns, i] = ssim.forward(x, y, data_range=data_range)
+    val_mse[ns, i] = mse.forward(x, y)
 
 print(val_ssim, val_mse)
 
-x = range(1, len(stacks)+1)
+np.savez("ssim_mse.npz", val_ssim=val_ssim, val_mse=val_mse)
 
-plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+x = range(1, len(stacks) + 1)
+
+plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
 plt.plot(x[2:], val_ssim[2:])
-plt.savefig('ssim.png')
+plt.savefig("ssim.png")
 
 plt.close()
 
-plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
 plt.plot(x[2:], val_mse[2:])
-plt.savefig('mse.png')
+plt.savefig("mse.png")
 
 
+"""
 # warp atlas to subject
 
 for num_stacks in tqdm(range(1, len(stacks)+1)):
@@ -144,4 +156,4 @@ for num_stacks in tqdm(range(1, len(stacks)+1)):
     cmd = 'applywarp -r '+ outsvr_aligned + ' -i ' + fetal_atlas_seg + ' -o ' + warped_labels_reg + ' -w fnirtcoeff.nii.gz --interp=nn'
     os.system(cmd)
 
-'''
+"""

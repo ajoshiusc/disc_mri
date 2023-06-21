@@ -156,3 +156,4 @@ output-metric-excluded-ratio.txt
 clinical_svr_study/SVR_3D_DICOM/*
 clinical_svr_study/SVR_*
 clinical_svr_study/SVR001_SVR_dicom_my/*.dcm
+fetal_mri/.vscode/settings.json
