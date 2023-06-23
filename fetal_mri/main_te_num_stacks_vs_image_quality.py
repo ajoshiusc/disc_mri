@@ -10,7 +10,9 @@ from monai.transforms import EnsureChannelFirst
 from tqdm import tqdm
 from monai.losses.ssim_loss import SSIMLoss
 from torch.nn import MSELoss
-from itertools import product
+
+# from itertools import product
+from tqdm.contrib.itertools import product
 
 import matplotlib.pyplot as plt
 
@@ -34,7 +36,7 @@ th = 3
 num_stacks = len(stacks)
 
 outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{0}.nii.gz"
-outsvr_aligned = f"outsvr/svr_te98_aligned.nii.gz"
+outsvr_aligned = "outsvr/svr_te98_aligned.nii.gz"
 
 cmd = (
     "flirt -in "
@@ -54,9 +56,12 @@ os.system(cmd)
 print("registration of svr to atlas done")
 
 
-for num_stacks, ns in tqdm(product(range(1, len(stacks) + 1), range(MAX_COMB))):
+for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
     outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
     outsvr_aligned = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
+
+    if os.path.exists(outsvr_aligned):
+        continue
 
     cmd = (
         "flirt -in "
@@ -78,9 +83,9 @@ val_mse = np.zeros((len(stacks), MAX_COMB))
 mse = MSELoss()
 ssim = SSIMLoss(spatial_dims=3)
 
-for ns, i in product(range(1, len(stacks) + 1), range(MAX_COMB)):
+for ns, i in product(range(1, 1 + len(stacks)), range(MAX_COMB)):
     outsvr_aligned = f"outsvr/svr_te98_numstacks_{ns}_iter_{i}_aligned.nii.gz"
-    target = f"outsvr/svr_te98_aligned.nii.gz"
+    target = "outsvr/svr_te98_aligned.nii.gz"
 
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
