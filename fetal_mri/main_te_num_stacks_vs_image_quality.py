@@ -38,20 +38,22 @@ num_stacks = len(stacks)
 outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{0}.nii.gz"
 outsvr_aligned = "outsvr/svr_te98_aligned.nii.gz"
 
-cmd = (
-    "flirt -in "
-    + outsvr
-    + " -ref "
-    + fetal_atlas
-    + " -out "
-    + outsvr_aligned
-    + " -dof 6 -omat "
-    + f"reorient_te{te}.mat"
-    + " -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost normmi"
-)
+if os.path.exists(outsvr_aligned):
 
-print(cmd)
-os.system(cmd)
+    cmd = (
+        "flirt -in "
+        + outsvr
+        + " -ref "
+        + fetal_atlas
+        + " -out "
+        + outsvr_aligned
+        + " -dof 6 -omat "
+        + f"reorient_te{te}.mat"
+        + " -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost normmi"
+    )
+
+    print(cmd)
+    os.system(cmd)
 
 print("registration of svr to atlas done")
 
@@ -83,8 +85,8 @@ val_mse = np.zeros((len(stacks), MAX_COMB))
 mse = MSELoss()
 ssim = SSIMLoss(spatial_dims=3)
 
-for ns, i in product(range(1, 1 + len(stacks)), range(MAX_COMB)):
-    outsvr_aligned = f"outsvr/svr_te98_numstacks_{ns}_iter_{i}_aligned.nii.gz"
+for ns, i in product(range(len(stacks)), range(MAX_COMB)):
+    outsvr_aligned = f"outsvr/svr_te98_numstacks_{ns+1}_iter_{i}_aligned.nii.gz"
     target = "outsvr/svr_te98_aligned.nii.gz"
 
     x = load_img(outsvr_aligned).get_fdata()
