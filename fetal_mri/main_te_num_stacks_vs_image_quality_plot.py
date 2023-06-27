@@ -15,6 +15,8 @@ from torch.nn import MSELoss
 from tqdm.contrib.itertools import product
 
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sb
 
 
 te = 98
@@ -40,17 +42,18 @@ a = np.load("ssim_mse.npz")
 val_ssim=a['val_ssim']
 val_mse=a['val_mse']
 
-x = range(1, len(stacks) + 1)
+x = np.arange(1, len(stacks) + 1)
+y = np.arange(MAX_COMB)
 
-plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
-plt.plot(x[2:], val_ssim[2:])
-plt.savefig("ssim.png")
+data =pd.DataFrame(val_mse.T,columns=x)
 
-plt.close()
+m=pd.melt(data,var_name='column',value_name='value')
 
-plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
+sb.lineplot(data=m,x='column',y='value')
 
-plt.plot(x[2:], val_mse[2:])
-plt.savefig("mse.png")
+plt.draw()
+plt.show()
+
+print('done')
 
