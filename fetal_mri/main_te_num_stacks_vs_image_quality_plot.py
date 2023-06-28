@@ -17,7 +17,7 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sb
-
+from nilearn.plotting import plot_anat
 
 te = 98
 MAX_COMB = 20
@@ -50,10 +50,24 @@ data =pd.DataFrame(val_mse.T,columns=x)
 
 m=pd.melt(data,var_name='column',value_name='value')
 
-sb.lineplot(data=m,x='column',y='value')
+m = m.rename(columns={'column':'num_stacks','value':'mse'})
+
+sb.lineplot(data=m,x='num_stacks',y='mse')
 
 plt.draw()
-plt.show()
+#plt.show()
+
+plt.savefig(f'te{te}_mse_vs_num_stacks.png')
+plt.close()
+
 
 print('done')
+
+
+
+for i in range(num_stacks):
+
+    fname = f"/home/ajoshi/projects/disc_mri/fetal_mri/outsvr/svr_te98_numstacks_{i+1}_iter_0_aligned.nii.gz"
+    plot_anat(anat_img=fname,cut_coords=(0,0,0),draw_cross=False,vmin=0,vmax=1100)
+    plt.savefig(f"svr_te98_numstacks_{i}_iter_0_aligned.png")
 
