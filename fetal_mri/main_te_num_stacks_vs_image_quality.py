@@ -17,12 +17,12 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 
 
-te = 98
-MAX_COMB = 20
+te = 140
+MAX_COMB = 1
 
 subdir = "/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
-template = subdir + f"/p40_t2_haste_cor_head_te{te}_p.nii.gz"
-mask = subdir + f"/p40_t2_haste_cor_head_te{te}_p.mask.nii.gz"
+template = subdir + '/p19_t2_haste_cor_head_te140_p.nii.gz'
+mask = subdir + '/p19_t2_haste_cor_head_te140_p.mask.nii.gz'
 fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33.nii.gz"
 fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_regional.nii.gz"
 fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_tissue.nii.gz"
@@ -35,10 +35,10 @@ th = 3
 
 num_stacks = len(stacks)
 
-outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{0}.nii.gz"
-outsvr_aligned = "outsvr/svr_te98_aligned.nii.gz"
+outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}.nii.gz"
+outsvr_aligned = f"outsvr/svr_te{te}_aligned.nii.gz"
 
-if os.path.exists(outsvr_aligned):
+if not os.path.exists(outsvr_aligned):
 
     cmd = (
         "flirt -in "
@@ -59,8 +59,8 @@ print("registration of svr to atlas done")
 
 
 for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
-    outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
-    outsvr_aligned = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
+    outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+    outsvr_aligned = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
 
     if os.path.exists(outsvr_aligned):
         continue
@@ -86,8 +86,8 @@ mse = MSELoss()
 ssim = SSIMLoss(spatial_dims=3)
 
 for ns, i in product(range(len(stacks)), range(MAX_COMB)):
-    outsvr_aligned = f"outsvr/svr_te98_numstacks_{ns+1}_iter_{i}_aligned.nii.gz"
-    target = "outsvr/svr_te98_aligned.nii.gz"
+    outsvr_aligned = f"outsvr/svr_te{te}_numstacks_{ns+1}_iter_{i}_aligned.nii.gz"
+    target = "outsvr/svr_te{te}_aligned.nii.gz"
 
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
