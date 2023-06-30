@@ -27,7 +27,7 @@ stacks_all = glob.glob(subdir + "/*head*te181*p.nii.gz")
 
 res = 1
 th = 3
-MAX_COMB = 1
+MAX_COMB = 20
 
 
 for num_stacks in range(1, len(stacks_all) + 1):
