@@ -6,7 +6,7 @@ import SimpleITK as sitk
 import glob
 
 
-sublist = glob.glob('/deneb_disk/SVR_8_3_2023/nii_data/S*')
+sublist = glob.glob('/deneb_disk/SVR_8_3_2023/nii_data/S*11')
 
 for subdir in sublist:
 
@@ -30,6 +30,11 @@ for subdir in sublist:
         img = sitk.ReadImage(sub_img)
         print (img.GetSpacing())
 
+        if np.min(img.GetSize()) < 10:
+            print('Too few slices in %s \n Skipping....\n'%sub_img)
+            continue
+
+
         sliceaxis = np.argmax(img.GetSpacing())
 
         if sliceaxis == 2:
@@ -41,8 +46,6 @@ for subdir in sublist:
         if sliceaxis == 0:
             img2 = sitk.PermuteAxes(img, [2,1,0])
 
-
         print(img2.GetSpacing())
-
         sitk.WriteImage(img2, out_file)
 
