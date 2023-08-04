@@ -13,7 +13,7 @@ from torch.nn import MSELoss
 
 import matplotlib.pyplot as plt
 
-subdirs = glob.glob("/deneb_disk/SVR_8_3_2023/svr_output_manual_mask/S*011")
+subdirs = glob.glob("/deneb_disk/SVR_8_3_2023/svr_output_manual_mask/S*012")
 
 for subdir in subdirs:
     os.system("cd " + subdir)
