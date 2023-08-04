@@ -6,7 +6,7 @@ import SimpleITK as sitk
 import glob
 
 
-sublist = glob.glob('/deneb_disk/SVR_8_3_2023/nii_data/S*11')
+sublist = glob.glob('/deneb_disk/SVR_8_3_2023/nii_data/S*')
 
 for subdir in sublist:
 
