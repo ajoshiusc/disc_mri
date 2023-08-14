@@ -13,21 +13,25 @@ print(p)
 
 
 
-with open("output.txt", "a") as f:
+with open("output.txt", "w") as fl:
 
+    print(f'Start of file\n',file=fl)
 
     for f in in_files:
         sub_num = int(f[84:87])
         new_sub_num=p[sub_num-11]
         print(sub_num, f)
-        new_f = os.path.join(out_dir,f'RND_{4%new_sub_num}_SVR_aligned.nii.gz')
+        new_f = os.path.join(out_dir,f'RND_{new_sub_num}_SVR_aligned.nii.gz')
 
         path, fname = os.path.split(f)
 
         copyfile(f, new_f)
 
-        print(f'copying {f} \n to {new_f}\n',file=f)
+        print(f'copying {f} \n to {new_f}\n',file=fl)
+        #f.write('copying '+f+' \n to ' +new_f+'\n')
 
+
+    print(f'End of file\n',file=fl)
 
         
 
