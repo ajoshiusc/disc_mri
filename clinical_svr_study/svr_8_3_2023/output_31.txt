@@ -1,0 +1,97 @@
+Start of file
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr013_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0009_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR004_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0002_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr012_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0014_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR008_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0031_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR001_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0026_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr029_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0016_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr025_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0029_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr022_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0005_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr024_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0006_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR005_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0030_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr014_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0021_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr020_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0015_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr031_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0027_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR010_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0017_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR003_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0013_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr018_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0028_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR007_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0018_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr016_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0025_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr023_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0024_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr028_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0023_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr021_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0008_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr030_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0022_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR002_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0007_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr017_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0003_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR009_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0012_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr011_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0001_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr015_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0011_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr026_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0010_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr019_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0019_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/Svr027_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0004_SVR_aligned.nii.gz
+
+copying /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_final/SVR006_SVR_aligned.nii.gz 
+ to /home/ajoshi/projects/disc_mri/clinical_svr_study/svr_8_3_2023/svr_aligned_randomized_31/RND_0020_SVR_aligned.nii.gz
+
+End of file
+
