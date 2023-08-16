@@ -21,6 +21,5 @@ for sub in subdirs:
     subname = os.path.basename(sub)
     sub_aligned = subname[:-7]+'_aligned.nii.gz'
     cmd = 'flirt -in ' + sub + ' -ref '+ atlas +' -out ' + sub_aligned+' -dof 6 -omat reorient.mat -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost corratio'
-
     print(cmd)
     os.system(cmd)
