@@ -46,7 +46,7 @@ for num_stacks in range(1, len(stacks_all) + 1):
         outsvr = f"outsvr/svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
 
         cmd = (
-            "mirtksvr reconstruct "
+            "mirtk reconstruct "
             + outsvr
             + " "
             + str(num_stacks)
