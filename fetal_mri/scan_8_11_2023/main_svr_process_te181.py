@@ -16,10 +16,10 @@ def random_combination(iterable, r):
 
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
-template = subdir + "/p21_t2_haste_tra_head_te98_p.nii.gz"
-mask = subdir + "/p21_t2_haste_tra_head_te98_p.mask.nii.gz"
+template = subdir + "/p34_t2_haste_tra_head_te181_p.nii.gz"
+mask = subdir + "/p34_t2_haste_tra_head_te181_p.mask.nii.gz"
 
-stacks_all = glob.glob(subdir + "/*head*te98*p.nii.gz")
+stacks_all = glob.glob(subdir + "/*head*te181*p.nii.gz")
 
 res = 1
 th = 3
