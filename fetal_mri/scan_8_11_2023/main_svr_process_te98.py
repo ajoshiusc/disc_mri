@@ -42,6 +42,9 @@ for num_stacks in range(1, len(stacks_all) + 1):
 
         outsvr = f"svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
 
+        if os.path.isfile(outsvr):
+            continue
+
         cmd = (
             "cd outsvr; mirtk reconstruct "
             + outsvr
