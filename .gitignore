@@ -159,3 +159,4 @@ clinical_svr_study/SVR001_SVR_dicom_my/*.dcm
 fetal_mri/.vscode/settings.json
 */*.npz
 *.tar.gz
+*.npz
