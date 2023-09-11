@@ -19,8 +19,25 @@ import pandas as pd
 import seaborn as sb
 from nilearn.plotting import plot_anat
 
-te = 272
+te = 140
 MAX_COMB = 20
+
+
+subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
+template = subdir + "/p10_t2_haste_tra_head_te140_p.nii.gz"
+mask = subdir + '/p10_t2_haste_tra_head_te140_p.mask.nii.gz'
+fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
+fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
+fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+
+"""
+subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
+template = subdir + "/p34_t2_haste_tra_head_te181_p.nii.gz"
+mask = subdir + '/p34_t2_haste_tra_head_te181_p.mask.nii.gz'
+
+fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
+fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
+fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
 template = subdir + "/p47_t2_haste_cor_head_te272_p.nii.gz"
@@ -28,6 +45,8 @@ mask = subdir + '/p47_t2_haste_cor_head_te272_p.mask.nii.gz'
 fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
 fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
 fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+
+"""
 
 stacks = glob.glob(subdir + f"/*head*te{te}*p.nii.gz")[:12]
 
@@ -69,8 +88,8 @@ for i in range(num_stacks):
         anat_img=fname,
         cut_coords=[0],
         draw_cross=False,
-        #vmin=0,
-        #vmax=1200,
+        vmin=0,
+        vmax=1200,
         display_mode="y",
         annotate=False,
     )
