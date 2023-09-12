@@ -17,9 +17,18 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 
 
-te = 140
+te = 98
 MAX_COMB = 20
 
+subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
+template = subdir + "/p21_t2_haste_tra_head_te98_p.nii.gz"
+mask = subdir + '/p21_t2_haste_tra_head_te98_p.mask.nii.gz'
+fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
+fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
+fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+
+
+"""
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
 template = subdir + "/p10_t2_haste_tra_head_te140_p.nii.gz"
 mask = subdir + '/p10_t2_haste_tra_head_te140_p.mask.nii.gz'
@@ -27,7 +36,6 @@ fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBra
 fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
 fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
 
-"""
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
 template = subdir + "/p34_t2_haste_tra_head_te181_p.nii.gz"
 mask = subdir + '/p34_t2_haste_tra_head_te181_p.mask.nii.gz'
