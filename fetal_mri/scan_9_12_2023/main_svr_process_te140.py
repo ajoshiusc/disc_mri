@@ -15,9 +15,9 @@ def random_combination(iterable, r):
     return tuple(pool[i] for i in indices)
 
 
-subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
-template = subdir + "/p10_t2_haste_tra_head_te140_p.nii.gz"
-mask = subdir + "/p10_t2_haste_tra_head_te140_p.mask.nii.gz"
+subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
+template = subdir + "/p11_t2_haste_sag_head_te140_p.mask.nii.gz"
+mask = subdir + "/p11_t2_haste_sag_head_te140_p.mask.nii.gz"
 
 stacks_all = glob.glob(subdir + "/*head*te140*p.nii.gz")
 
