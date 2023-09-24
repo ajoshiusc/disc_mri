@@ -20,12 +20,12 @@ import matplotlib.pyplot as plt
 te = 98
 MAX_COMB = 20
 
-subdir = "/deneb_disk/fetal_data_9_12_2023/nifti_data_rot"
+subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
 template = subdir + "/p21_t2_haste_tra_head_te98_p.nii.gz"
 mask = subdir + '/p22_t2_haste_tra_head_te98_p.mask.nii.gz'
-fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
-fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
-fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
+fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
+fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
 
 
 stacks = glob.glob(subdir + f"/*head*te{te}*p.nii.gz")
@@ -39,7 +39,7 @@ num_stacks = len(stacks)
 outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}_masked.nii.gz"
 outsvr_aligned = f"outsvr/svr_te{te}_aligned.nii.gz"
 
-if 1:#not os.path.exists(outsvr_aligned):
+if not os.path.exists(outsvr_aligned):
 
     cmd = (
         "flirt -in "
@@ -63,7 +63,7 @@ for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
     outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
     outsvr_aligned = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
 
-    if 0: #os.path.exists(outsvr_aligned):
+    if os.path.exists(outsvr_aligned):
         continue
 
     cmd = (
