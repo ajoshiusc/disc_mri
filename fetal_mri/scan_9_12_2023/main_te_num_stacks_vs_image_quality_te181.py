@@ -17,12 +17,13 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 
 
-te = 98
+te = 181
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
-template = subdir + "/p22_t2_haste_tra_head_te98_p.nii.gz"
-mask = subdir + '/p22_t2_haste_tra_head_te98_p.mask.nii.gz'
+template = subdir + "/p34_t2_haste_tra_head_te181_p.nii.gz"
+mask = subdir + "/p34_t2_haste_tra_head_te181_p.mask.nii.gz"
+
 fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
 fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
 fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"

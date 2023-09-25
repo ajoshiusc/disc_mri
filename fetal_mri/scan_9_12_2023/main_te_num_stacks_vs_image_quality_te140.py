@@ -17,12 +17,13 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 
 
-te = 98
+te = 140
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
-template = subdir + "/p22_t2_haste_tra_head_te98_p.nii.gz"
-mask = subdir + '/p22_t2_haste_tra_head_te98_p.mask.nii.gz'
+template = subdir + "/p11_t2_haste_sag_head_te140_p.nii.gz"
+mask = subdir + "/p11_t2_haste_sag_head_te140_p.mask.nii.gz"
+
 fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
 fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
 fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
@@ -38,6 +39,8 @@ num_stacks = len(stacks)
 
 outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}_masked.nii.gz"
 outsvr_aligned = f"outsvr/svr_te{te}_aligned.nii.gz"
+
+
 
 if not os.path.exists(outsvr_aligned):
 
