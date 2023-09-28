@@ -47,6 +47,13 @@ def main():
 
         out_file = out_dir + "/T1.nii.gz"
 
+        if os.path.isfile(out_dir + "/T1.roiwise.stats.txt"):
+            continue
+        else:
+            print('Processing files in ' + out_dir)
+            
+
+
         img = nib.load(sub_nii)
         data = img.get_fdata()
 
