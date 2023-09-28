@@ -72,7 +72,7 @@ def main():
         cmd = (
             "sbatch freesurfer_recon_all.job " + out_file + ' ' + fs_subid
         )
-        os.system(cmd)
+        print(cmd)
         #cmds_all.append(cmd)
 
 
