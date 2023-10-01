@@ -33,18 +33,18 @@ label_ids = np.load("brainSuite_3T.npz")["label_ids"]
 # for LF dims of roi_vols_lf is session, subj, param, roino
 # for 3T dims of roi_vols_3t is session, subj, roino
 
-stat = np.zeros(label_data.shape)
+stat_3t_intra = np.zeros(label_data.shape)
 
 param = 0
 for i, idx in enumerate(label_ids):
     if idx == 2000 or idx == 0:
         continue
-    stat[label_data == idx] = np.mean(np.std(roi_vols_3t[:, :, i],axis=0)) # - roi_vols_3t[1, :, i]))
+    stat_3t_intra[label_data == idx] = np.mean(np.std(roi_vols_3t[:, :, i],axis=0)) # - roi_vols_3t[1, :, i]))
 
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat, label_img.affine),
+    nib.Nifti1Image(stat_3t_intra, label_img.affine),
     cmap="hot",
     title="3T Intra-subject std dev",
     vmin=0,
@@ -58,13 +58,13 @@ plotting.plot_anat(
 plt.show()
 
 
-stat = np.zeros(label_data.shape)
+stat_3t_inter = np.zeros(label_data.shape)
 
 param = 0
 for i, idx in enumerate(label_ids):
     if idx == 2000 or idx == 0:
         continue
-    stat[label_data == idx] = np.mean(np.std(roi_vols_3t[:,:,i],axis=1))
+    stat_3t_inter[label_data == idx] = np.mean(np.std(roi_vols_3t[:,:,i],axis=1))
     #0.5 * (
     #    np.std(roi_vols_3t[0, :, i]) + np.std(roi_vols_3t[1, :, i])
     #)
@@ -72,7 +72,7 @@ for i, idx in enumerate(label_ids):
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat, label_img.affine),
+    nib.Nifti1Image(stat_3t_inter, label_img.affine),
     cmap="hot",
     title="3T Inter-subject std dev",
     vmin=0,
@@ -86,19 +86,19 @@ plotting.plot_anat(
 plt.show()
 
 
-stat = np.zeros(label_data.shape)
+stat_lf_intra = np.zeros(label_data.shape)
 
 param = 0
 for i, idx in enumerate(label_ids):
     if idx == 2000 or idx == 0:
         continue
-    stat[label_data == idx] = np.mean(np.std(roi_vols_lf[:, :, 0, i],axis=0))
+    stat_lf_intra[label_data == idx] = np.mean(np.std(roi_vols_lf[:, :, 0, i],axis=0))
 
 
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat, label_img.affine),
+    nib.Nifti1Image(stat_lf_intra, label_img.affine),
     cmap="hot",
     title="0.55T Intra-subject std dev",
     vmin=0,
@@ -112,18 +112,18 @@ plotting.plot_anat(
 plt.show()
 
 
-stat = np.zeros(label_data.shape)
+stat_lf_inter = np.zeros(label_data.shape)
 
 param = 0
 for i, idx in enumerate(label_ids):
     if idx == 2000 or idx == 0:
         continue
-    stat[label_data == idx] = np.mean(np.std(roi_vols_lf[:, :, 0, i],axis=1))
+    stat_lf_inter[label_data == idx] = np.mean(np.std(roi_vols_lf[:, :, 0, i],axis=1))
 
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat, label_img.affine),
+    nib.Nifti1Image(stat_lf_inter, label_img.affine),
     cmap="hot",
     title="0.55T Inter-subject std dev",
     vmin=0,
@@ -137,4 +137,41 @@ plotting.plot_anat(
 plt.show()
 
 
+
+
+
+# Overlay scalar data on top of the ROIs
+plotting.plot_anat(
+    nib.Nifti1Image(stat_lf_inter/stat_lf_intra, label_img.affine),
+    cmap="hot",
+    title="0.55T Inter/intra subject std dev",
+    vmin=0,
+    colorbar=True,
+    draw_cross=False,
+    vmax=30,
+    cut_coords=(91, 75, 85),
+    output_file="0_55T_Inter_div_intra_subject_std_dev.png",
+)
+
+plt.show()
+
+
+
+# Overlay scalar data on top of the ROIs
+plotting.plot_anat(
+    nib.Nifti1Image(stat_3t_inter/stat_3t_intra, label_img.affine),
+    cmap="hot",
+    title="3T Inter/intra subject std dev",
+    vmin=0,
+    colorbar=True,
+    draw_cross=False,
+    vmax=30,
+    cut_coords=(91, 75, 85),
+    output_file="3T_Inter_div_intra_subject_std_dev.png",
+)
+
+plt.show()
+
+
 print("done")
+
