@@ -51,7 +51,7 @@ plotting.plot_anat(
     draw_cross=False,
     colorbar=True,
     cut_coords=(91, 75, 85),
-    vmax=2000,
+    vmax=3000,
     output_file="3T_Intra_subject_std_dev.png",
 )
 
@@ -79,7 +79,7 @@ plotting.plot_anat(
     draw_cross=False,
     colorbar=True,
     cut_coords=(91, 75, 85),
-    vmax=4000,
+    vmax=3000,
     output_file="3T_Inter_subject_std_dev.png",
 )
 
@@ -104,7 +104,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=2000,
+    vmax=3000,
     cut_coords=(91, 75, 85),
     output_file="0_55T_Intra_subject_std_dev.png",
 )
@@ -129,7 +129,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=4000,
+    vmax=3000,
     cut_coords=(91, 75, 85),
     output_file="0_55T_Inter_subject_std_dev.png",
 )
