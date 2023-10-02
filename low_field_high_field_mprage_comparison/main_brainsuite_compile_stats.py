@@ -3,10 +3,9 @@ import glob
 import nibabel as nib
 import numpy as np
 import SimpleITK as sitk
-from itertools import product
+from tqdm.contrib.itertools import product
 
 from multiprocessing import Pool
-
 
 import nibabel as nib
 import numpy as np
@@ -31,17 +30,17 @@ def get_roi_vols(label_file, unique_labels):
     # Initialize an array to store ROI volumes
     roi_volumes = []
 
-    roi_volumes = np.zeros(len(unique_labels))
+    roi_volumes = np.full(len(unique_labels), np.nan)
 
     # Compute the volume for each ROI
     for i, label in enumerate(unique_labels):
         roi_volume = np.sum(roi_data == label) * voxel_size
         roi_volumes[i] = roi_volume
 
-    # Print the ROI volumes (label, volume)
+    """ # Print the ROI volumes (label, volume)
     for i, volume in enumerate(roi_volumes):
         print(f"ROI {unique_labels[i]}: Volume = {volume} cubic units")
-
+    """
     return roi_volumes
 
 
@@ -56,7 +55,7 @@ nsub = 5
 param_list = ("1e-14", "2e-14")
 # param = param_list[0]
 
-roi_vols_lf = np.zeros((2, nsub, 2, len(label_ids)))
+roi_vols_lf = np.full((2, nsub, 2, len(label_ids)), np.nan)
 
 for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     param = param_list[p]
@@ -92,10 +91,9 @@ np.savez(
 print("Done! for LF")
 
 
-roi_vols_3t = np.zeros((2, nsub, len(label_ids)))
+roi_vols_3t = np.full((2, nsub, len(label_ids)), np.nan)
 
 for sess, n in product((1, 2), range(1, nsub + 1)):
-
     out_dir = (
         "/deneb_disk/3T_vs_low_field/3T_mprage_data_BrainSuite/subj"
         + str(n)
@@ -123,5 +121,3 @@ np.savez(
     label_ids=label_ids,
 )
 print("Done! for 3T")
-
-

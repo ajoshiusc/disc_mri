@@ -142,7 +142,7 @@ plt.show()
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat_lf_inter/stat_lf_intra, label_img.affine),
+    nib.Nifti1Image(stat_lf_inter/(stat_lf_intra+1e-6), label_img.affine),
     cmap="hot",
     title="0.55T Inter/intra subject std dev",
     vmin=0,
@@ -159,7 +159,7 @@ plt.show()
 
 # Overlay scalar data on top of the ROIs
 plotting.plot_anat(
-    nib.Nifti1Image(stat_3t_inter/stat_3t_intra, label_img.affine),
+    nib.Nifti1Image(stat_3t_inter/(stat_3t_intra+1e-6), label_img.affine),
     cmap="hot",
     title="3T Inter/intra subject std dev",
     vmin=0,
