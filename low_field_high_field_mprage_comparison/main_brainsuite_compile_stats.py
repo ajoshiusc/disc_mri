@@ -51,6 +51,8 @@ label_ids = np.unique(
 )
 
 
+left_surf = readdfs('/home/ajoshi/BrainSuite23a/svreg/')
+
 nsub = 5
 param_list = ("1e-14", "2e-14")
 # param = param_list[0]
