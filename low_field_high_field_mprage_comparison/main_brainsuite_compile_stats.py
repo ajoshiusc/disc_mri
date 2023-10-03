@@ -4,11 +4,17 @@ import nibabel as nib
 import numpy as np
 import SimpleITK as sitk
 from tqdm.contrib.itertools import product
-
+from dfsio import readdfs, writedfs
 from multiprocessing import Pool
 
 import nibabel as nib
 import numpy as np
+
+
+def get_cortical_thickness(surf_file):
+    s = readdfs(surf_file)
+
+    return s.attributes
 
 
 def get_roi_vols(label_file, unique_labels):
@@ -37,10 +43,6 @@ def get_roi_vols(label_file, unique_labels):
         roi_volume = np.sum(roi_data == label) * voxel_size
         roi_volumes[i] = roi_volume
 
-    """ # Print the ROI volumes (label, volume)
-    for i, volume in enumerate(roi_volumes):
-        print(f"ROI {unique_labels[i]}: Volume = {volume} cubic units")
-    """
     return roi_volumes
 
 
@@ -51,13 +53,24 @@ label_ids = np.unique(
 )
 
 
-left_surf = readdfs('/home/ajoshi/BrainSuite23a/svreg/')
+left_surf = readdfs(
+    "/home/ajoshi/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.left.mid.cortex.dfs"
+)
+
+
+right_surf = readdfs(
+    "/home/ajoshi/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.right.mid.cortex.dfs"
+)
+
 
 nsub = 5
 param_list = ("1e-14", "2e-14")
-# param = param_list[0]
 
 roi_vols_lf = np.full((2, nsub, 2, len(label_ids)), np.nan)
+
+thickness_left_lf = np.full((2, nsub, 2, len(left_surf.vertices)), np.nan)
+thickness_right_lf = np.full((2, nsub, 2, len(right_surf.vertices)), np.nan)
+
 
 for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     param = param_list[p]
@@ -71,12 +84,23 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     )
 
     sub_label_file = out_dir + "/T1.svreg.label.nii.gz"
+    sub_thickness_left_file = out_dir + "/atlas.pvc-thickness_0-6mm.left.mid.cortex.dfs"
+    sub_thickness_right_file = (
+        out_dir + "/atlas.pvc-thickness_0-6mm.right.mid.cortex.dfs"
+    )
 
     # img = nib.load(sub_label_file)
     # data = img.get_fdata()
 
     if os.path.isfile(sub_label_file):
         roi_vols_lf[sess - 1, n - 1, p, :] = get_roi_vols(sub_label_file, label_ids)
+        thickness_left_lf[sess - 1, n - 1, p, :] = get_cortical_thickness(
+            sub_thickness_left_file
+        )
+        thickness_right_lf[sess - 1, n - 1, p, :] = get_cortical_thickness(
+            sub_thickness_right_file
+        )
+
     else:
         print(
             f"The following label file does not exist!! {sub_label_file} Skipping...:"
@@ -85,6 +109,8 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
 np.savez(
     "brainSuite_low_field.npz",
     roi_vols=roi_vols_lf,
+    thickness_left=thickness_left_lf,
+    thickness_right=thickness_right_lf,
     nsub=nsub,
     param_list=param_list,
     label_ids=label_ids,
@@ -94,6 +120,8 @@ print("Done! for LF")
 
 
 roi_vols_3t = np.full((2, nsub, len(label_ids)), np.nan)
+thickness_left_3t = np.full((2, nsub, len(left_surf.vertices)), np.nan)
+thickness_right_3t = np.full((2, nsub, len(right_surf.vertices)), np.nan)
 
 for sess, n in product((1, 2), range(1, nsub + 1)):
     out_dir = (
@@ -104,12 +132,23 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
     )
 
     sub_label_file = out_dir + "/T1.svreg.label.nii.gz"
+    sub_thickness_left_file = out_dir + "/atlas.pvc-thickness_0-6mm.left.mid.cortex.dfs"
+    sub_thickness_right_file = (
+        out_dir + "/atlas.pvc-thickness_0-6mm.right.mid.cortex.dfs"
+    )
 
     # img = nib.load(sub_label_file)
     # data = img.get_fdata()
 
     if os.path.isfile(sub_label_file):
         roi_vols_3t[sess - 1, n - 1, :] = get_roi_vols(sub_label_file, label_ids)
+        thickness_left_3t[sess - 1, n - 1, :] = get_cortical_thickness(
+            sub_thickness_left_file
+        )
+        thickness_right_3t[sess - 1, n - 1, :] = get_cortical_thickness(
+            sub_thickness_right_file
+        )
+
     else:
         print(
             f"The following label file does not exist!! {sub_label_file} Skipping...:"
@@ -118,6 +157,8 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
 np.savez(
     "brainSuite_3T.npz",
     roi_vols=roi_vols_3t,
+    thickness_left=thickness_left_3t,
+    thickness_right=thickness_right_3t,
     nsub=nsub,
     param_list=param_list,
     label_ids=label_ids,
