@@ -9,6 +9,7 @@ from multiprocessing import Pool
 
 import nibabel as nib
 import numpy as np
+from nilearn.plotting import plot_roi
 
 
 def get_cortical_thickness(surf_file):
@@ -84,13 +85,22 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     )
 
     sub_label_file = out_dir + "/T1.svreg.label.nii.gz"
+    anat_img_file = out_dir + "/T1.nii.gz"
     sub_thickness_left_file = out_dir + "/atlas.pvc-thickness_0-6mm.left.mid.cortex.dfs"
     sub_thickness_right_file = (
         out_dir + "/atlas.pvc-thickness_0-6mm.right.mid.cortex.dfs"
     )
 
-    # img = nib.load(sub_label_file)
-    # data = img.get_fdata()
+    # Add the labels as an overlay
+    plot_roi(
+        roi_img=sub_label_file,
+        bg_img=anat_img_file,
+        cmap="rainbow",
+        alpha=0.5,
+        draw_cross=False,
+        colorbar=True,
+        output_file="subj" + str(n) + "_vol" + str(sess) +"_"+param  + "_LF_brainsuite.png",
+    )
 
     if os.path.isfile(sub_label_file):
         roi_vols_lf[sess - 1, n - 1, p, :] = get_roi_vols(sub_label_file, label_ids)
@@ -132,13 +142,22 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
     )
 
     sub_label_file = out_dir + "/T1.svreg.label.nii.gz"
+    anat_img_file = out_dir + "/T1.nii.gz"
     sub_thickness_left_file = out_dir + "/atlas.pvc-thickness_0-6mm.left.mid.cortex.dfs"
     sub_thickness_right_file = (
         out_dir + "/atlas.pvc-thickness_0-6mm.right.mid.cortex.dfs"
     )
 
-    # img = nib.load(sub_label_file)
-    # data = img.get_fdata()
+    # Add the labels as an overlay
+    plot_roi(
+        roi_img=sub_label_file,
+        bg_img=anat_img_file,
+        cmap="rainbow",
+        alpha=0.5,
+        draw_cross=False,
+        colorbar=True,
+        output_file="subj" + str(n) + "_vol" + str(sess) + "_3T_brainsuite.png",
+    )
 
     if os.path.isfile(sub_label_file):
         roi_vols_3t[sess - 1, n - 1, :] = get_roi_vols(sub_label_file, label_ids)

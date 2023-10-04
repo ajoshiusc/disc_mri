@@ -9,7 +9,7 @@ from multiprocessing import Pool
 
 import nibabel as nib
 import numpy as np
-
+from nilearn.plotting import plot_roi
 
 def get_roi_vols(label_file, unique_labels):
 
@@ -70,9 +70,17 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     )
 
     sub_label_file = out_dir + "/mri/aparc+aseg.mgz"
-
-    # img = nib.load(sub_label_file)
-    # data = img.get_fdata()
+    anat_img_file = out_dir + "/mri/T1.mgz"
+    # Add the labels as an overlay
+    plot_roi(
+        roi_img=sub_label_file,
+        bg_img=anat_img_file,
+        cmap="rainbow",
+        alpha=0.5,
+        draw_cross=False,
+        colorbar=True,
+        output_file="subj" + str(n) + "_vol" + str(sess) + "_"+param+ "_LF_freesurfer.png",
+    )
 
     if os.path.isfile(sub_label_file):
         roi_vols_lf[sess - 1, n - 1, p, :] = get_roi_vols(sub_label_file, label_ids)
@@ -104,9 +112,17 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
     )
 
     sub_label_file = out_dir + "/mri/aparc+aseg.mgz"
-
-    # img = nib.load(sub_label_file)
-    # data = img.get_fdata()
+    anat_img_file = out_dir + "/mri/T1.mgz"
+    # Add the labels as an overlay
+    plot_roi(
+        roi_img=sub_label_file,
+        bg_img=anat_img_file,
+        cmap="rainbow",
+        alpha=0.5,
+        draw_cross=False,
+        colorbar=True,
+        output_file="subj" + str(n) + "_vol" + str(sess) + "_3T_freesurfer.png",
+    )
 
     if os.path.isfile(sub_label_file):
         roi_vols_3t[sess - 1, n - 1, :] = get_roi_vols(sub_label_file, label_ids)
