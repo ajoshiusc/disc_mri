@@ -18,10 +18,8 @@ def get_roi_vols(label_file, unique_labels):
     nifti_img = nib.load(label_file)  # Replace with your NIfTI file path
 
     # Get the data array from the NIfTI image
-    sub_lab_data = nifti_img.get_fdata().astype(int)
-    roi_data = np.mod(sub_lab_data, 1000)
-    #roi_data[sub_lab_data == 2000] = 2000
-
+    roi_data = nifti_img.get_fdata().astype(int)
+  
     # Get voxel dimensions (voxel size)
     voxel_size = np.prod(nifti_img.header.get_zooms())
 
@@ -52,7 +50,7 @@ label_ids = np.unique(
     ).get_fdata().astype(int)
 )
 
-label_ids = np.unique(np.mod(label_ids,1000))
+label_ids = np.unique(label_ids)
 
 nsub = 5
 param_list = ("1e-14", "2e-14")
