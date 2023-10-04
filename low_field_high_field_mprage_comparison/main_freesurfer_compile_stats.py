@@ -12,6 +12,7 @@ import numpy as np
 
 
 def get_roi_vols(label_file, unique_labels):
+
     unique_labels = unique_labels.astype(int)
     # Load the NIfTI file
     nifti_img = nib.load(label_file)  # Replace with your NIfTI file path
@@ -19,7 +20,7 @@ def get_roi_vols(label_file, unique_labels):
     # Get the data array from the NIfTI image
     sub_lab_data = nifti_img.get_fdata().astype(int)
     roi_data = np.mod(sub_lab_data, 1000)
-    roi_data[sub_lab_data == 2000] = 2000
+    #roi_data[sub_lab_data == 2000] = 2000
 
     # Get voxel dimensions (voxel size)
     voxel_size = np.prod(nifti_img.header.get_zooms())
@@ -40,17 +41,18 @@ def get_roi_vols(label_file, unique_labels):
     # Print the ROI volumes (label, volume)
     ''' for i, volume in enumerate(roi_volumes):
         print(f"ROI {unique_labels[i]}: Volume = {volume} cubic units")
-    
-    return roi_volumes
     '''
+    return roi_volumes
+    
 
 
 label_ids = np.unique(
     nib.load(
         "/deneb_disk/3T_vs_low_field/freesurfer_processed_subjects/fsaverage/mri/aparc+aseg.mgz"
-    ).get_fdata()
+    ).get_fdata().astype(int)
 )
 
+label_ids = np.unique(np.mod(label_ids,1000))
 
 nsub = 5
 param_list = ("1e-14", "2e-14")

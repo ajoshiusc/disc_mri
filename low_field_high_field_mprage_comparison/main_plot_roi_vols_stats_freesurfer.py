@@ -23,7 +23,8 @@ atlas = "/deneb_disk/3T_vs_low_field/freesurfer_processed_subjects/fsaverage/mri
 nifti_file_path = atlas  # Replace with the path to your NIfTI file
 label_img = nib.load(nifti_file_path)
 label_data = label_img.get_fdata()
-
+label_data = np.mod(label_data, 1000)
+label_data[label_data == 2000] = 2000
 
 # Input array of scalars (assuming it has the same dimensions as the label image)
 roi_vols_3t = np.load("freesurfer_3T.npz")["roi_vols"]
@@ -50,12 +51,15 @@ plotting.plot_anat(
     vmin=0,
     draw_cross=False,
     colorbar=True,
-    cut_coords=(91, 75, 85),
-    vmax=3000,
+    cut_coords=(0, 0, 0),
+    vmax=10,
     output_file="3T_Intra_subject_std_dev_freesurfer.png",
 )
 
 plt.show()
+
+a=nib.Nifti1Image(stat_3t_intra, label_img.affine)
+a.to_filename('fs_intra.nii.gz')
 
 
 stat_3t_inter = np.zeros(label_data.shape)
@@ -78,8 +82,8 @@ plotting.plot_anat(
     vmin=0,
     draw_cross=False,
     colorbar=True,
-    cut_coords=(91, 75, 85),
-    vmax=3000,
+    cut_coords=(100, 127, 100),
+    vmax=1000,
     output_file="3T_Inter_subject_std_dev_freesurfer.png",
 )
 
@@ -104,7 +108,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=3000,
+    vmax=1000,
     cut_coords=(91, 75, 85),
     output_file="0_55T_Intra_subject_std_dev_freesurfer.png",
 )
@@ -129,7 +133,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=3000,
+    vmax=1000,
     cut_coords=(91, 75, 85),
     output_file="0_55T_Inter_subject_std_dev_freesurfer.png",
 )
@@ -148,7 +152,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=30,
+    vmax=1000,
     cut_coords=(91, 75, 85),
     output_file="0_55T_Inter_div_intra_subject_std_dev_freesurfer.png",
 )
@@ -165,7 +169,7 @@ plotting.plot_anat(
     vmin=0,
     colorbar=True,
     draw_cross=False,
-    vmax=30,
+    vmax=1000,
     cut_coords=(91, 75, 85),
     output_file="3T_Inter_div_intra_subject_std_dev_freesurfer.png",
 )
