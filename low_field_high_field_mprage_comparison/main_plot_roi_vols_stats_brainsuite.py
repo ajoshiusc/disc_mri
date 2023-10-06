@@ -16,7 +16,7 @@ import numpy as np
 import nilearn.image as ni
 
 
-atlas = "/home/ajoshi/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+atlas = "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
 
 # Load the NIfTI label file
@@ -52,7 +52,7 @@ plotting.plot_anat(
     colorbar=True,
     cut_coords=(91, 75, 85),
     vmax=3000,
-    output_file="3T_Intra_subject_std_dev.png",
+    output_file="3T_Intra_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
@@ -80,7 +80,7 @@ plotting.plot_anat(
     colorbar=True,
     cut_coords=(91, 75, 85),
     vmax=3000,
-    output_file="3T_Inter_subject_std_dev.png",
+    output_file="3T_Inter_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
@@ -106,7 +106,7 @@ plotting.plot_anat(
     draw_cross=False,
     vmax=3000,
     cut_coords=(91, 75, 85),
-    output_file="0_55T_Intra_subject_std_dev.png",
+    output_file="0_55T_Intra_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
@@ -131,7 +131,7 @@ plotting.plot_anat(
     draw_cross=False,
     vmax=3000,
     cut_coords=(91, 75, 85),
-    output_file="0_55T_Inter_subject_std_dev.png",
+    output_file="0_55T_Inter_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
@@ -150,7 +150,7 @@ plotting.plot_anat(
     draw_cross=False,
     vmax=30,
     cut_coords=(91, 75, 85),
-    output_file="0_55T_Inter_div_intra_subject_std_dev.png",
+    output_file="0_55T_Inter_div_intra_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
@@ -167,7 +167,7 @@ plotting.plot_anat(
     draw_cross=False,
     vmax=30,
     cut_coords=(91, 75, 85),
-    output_file="3T_Inter_div_intra_subject_std_dev.png",
+    output_file="3T_Inter_div_intra_subject_std_dev_brainsuite.png",
 )
 
 plt.show()
