@@ -41,21 +41,21 @@ roi_vols_lf = roi_vols_lf[:,:,0,1:-1]
 stat_3t_intra = np.zeros(label_data.shape)
 
 param = 0
-roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
-roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
+#roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
+#roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
 
-import numpy as np
-import matplotlib.pyplot as plt
+roi_vols_3t = roi_vols_3t.reshape(2,-1)
+roi_vols_lf = roi_vols_lf.reshape(2,-1)
 
 # Sample data for the 1st and 2nd repetitions at 0.55T and 3T
 data_0_55T = {
-    'First Repetition': [value1, value2, ...],  # Replace with your data
-    'Second Repetition': [value1, value2, ...]  # Replace with your data
+    'First Repetition': roi_vols_lf[0],  # Replace with your data
+    'Second Repetition': roi_vols_lf[1]  # Replace with your data
 }
 
 data_3T = {
-    'First Repetition': [value1, value2, ...],  # Replace with your data
-    'Second Repetition': [value1, value2, ...]  # Replace with your data
+    'First Repetition': roi_vols_3t[0],  # Replace with your data
+    'Second Repetition': roi_vols_3t[1] # Replace with your data
 }
 
 # Calculate the differences and means for both datasets
@@ -76,6 +76,7 @@ plt.ylabel('Difference (1st - 2nd Repetition)')
 plt.legend()
 plt.title('Bland-Altman Plot for 0.55T')
 plt.grid(True)
+plt.savefig('Bland-Altman Plot for 0.55T.png')
 
 # Bland-Altman Plot for 3T
 plt.figure(figsize=(8, 6))
@@ -88,5 +89,6 @@ plt.ylabel('Difference (1st - 2nd Repetition)')
 plt.legend()
 plt.title('Bland-Altman Plot for 3T')
 plt.grid(True)
+plt.savefig('Bland-Altman Plot for 3T.png')
 
 plt.show()
