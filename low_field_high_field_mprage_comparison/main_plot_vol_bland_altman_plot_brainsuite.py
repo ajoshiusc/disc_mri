@@ -1,61 +1,42 @@
-import os
-import glob
-import nibabel as nib
-import numpy as np
-import SimpleITK as sitk
-from itertools import product
-
-from multiprocessing import Pool
-
 import nibabel as nib
 import numpy as np
 import matplotlib.pyplot as plt
-from nilearn import plotting
-import nibabel as nib
-import numpy as np
-import nilearn.image as ni
-import matplotlib.pyplot as plt
-from scipy.stats import linregress
 
+# Define the path to the BrainSuite Atlas
 atlas = "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
-
 # Load the NIfTI label file
-nifti_file_path = atlas  # Replace with the path to your NIfTI file
+nifti_file_path = atlas
 label_img = nib.load(nifti_file_path)
 label_data = label_img.get_fdata()
 
-
-# Input array of scalars (assuming it has the same dimensions as the label image)
+# Load input data
 roi_vols_3t = np.load("brainSuite_3T.npz")["roi_vols"]
 roi_vols_lf = np.load("brainSuite_low_field.npz")["roi_vols"]
 label_ids = np.load("brainSuite_3T.npz")["label_ids"]
 
-
-roi_vols_3t = roi_vols_3t[:, :, 1:-1]
+# Remove unnecessary dimensions from roi_vols_lf, and remove 0 and 2000 
 roi_vols_lf = roi_vols_lf[:, :, 0, 1:-1]
 
-# for LF dims of roi_vols_lf is session, subj, param, roino
-# for 3T dims of roi_vols_3t is session, subj, roino
+# remove 0 and 2000 rois from 3t data
+roi_vols_3t = roi_vols_3t[:, :, 1:-1]
 
+# Initialize an array for 3T intra-session statistics
 stat_3t_intra = np.zeros(label_data.shape)
 
-param = 0
-# roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
-# roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
-
+# Reshape roi_vols arrays
 roi_vols_3t = roi_vols_3t.reshape(2, -1)
 roi_vols_lf = roi_vols_lf.reshape(2, -1)
 
 # Sample data for the 1st and 2nd repetitions at 0.55T and 3T
 data_0_55T = {
-    "First Repetition": roi_vols_lf[0],  # Replace with your data
-    "Second Repetition": roi_vols_lf[1],  # Replace with your data
+    "First Repetition": roi_vols_lf[0],
+    "Second Repetition": roi_vols_lf[1],
 }
 
 data_3T = {
-    "First Repetition": roi_vols_3t[0],  # Replace with your data
-    "Second Repetition": roi_vols_3t[1],  # Replace with your data
+    "First Repetition": roi_vols_3t[0],
+    "Second Repetition": roi_vols_3t[1],
 }
 
 # Calculate the differences and means for both datasets
@@ -76,7 +57,7 @@ plt.ylabel('Difference (1st - 2nd Repetition)')
 plt.legend()
 plt.title('Bland-Altman Plot for 0.55T')
 plt.grid(True)
-plt.savefig('Bland-Altman Plot for 0.55T.png')
+plt.savefig('Bland-Altman_Plot_for_0.55T.png')
 
 # Bland-Altman Plot for 3T
 plt.figure(figsize=(8, 6))
@@ -89,8 +70,7 @@ plt.ylabel('Difference (1st - 2nd Repetition)')
 plt.legend()
 plt.title('Bland-Altman Plot for 3T')
 plt.grid(True)
-plt.savefig('Bland-Altman Plot for 3T.png')
-
+plt.savefig('Bland-Altman_Plot_for_3T.png')
 
 # Calculate the means for both datasets
 mean_0_55T = (np.array(data_0_55T['First Repetition']) + np.array(data_0_55T['Second Repetition'])) / 2
@@ -105,11 +85,12 @@ plt.scatter(mean_0_55T, diff_means, c='purple', marker='x', label='0.55T vs. 3T'
 plt.axhline(np.mean(diff_means), color='red', linestyle='--', label='Bias')
 plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means), color='gray', linestyle='--', label='Upper LoA')
 plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means), color='gray', linestyle='--', label='Lower LoA')
-plt.xlabel('Mean of Means of two repititions 0.55T and 3T')
+plt.xlabel('Mean of Means of 0.55T and 3T')
 plt.ylabel('Difference in Means (0.55T - 3T)')
 plt.legend()
 plt.title('Bland-Altman Plot: 0.55T vs. 3T')
 plt.grid(True)
-plt.savefig('Bland-Altman Plot: 0.55T vs. 3T.png')
+plt.savefig('Bland-Altman_Plot_0.55T_vs_3T.png')
 
+# Show the plots
 #plt.show()
