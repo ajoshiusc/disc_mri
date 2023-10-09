@@ -75,7 +75,7 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     plot_roi(
         roi_img=sub_label_file,
         bg_img=anat_img_file,
-        cmap="rainbow",
+        cmap="Paired",
         alpha=0.5,
         draw_cross=False,
         colorbar=True,
@@ -117,7 +117,7 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
     plot_roi(
         roi_img=sub_label_file,
         bg_img=anat_img_file,
-        cmap="rainbow",
+        cmap="Paired",
         alpha=0.5,
         draw_cross=False,
         colorbar=True,
