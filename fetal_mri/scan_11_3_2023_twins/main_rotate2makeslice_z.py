@@ -5,13 +5,13 @@ import os
 import SimpleITK as sitk
 import glob
 
-subdir = '/deneb_disk/fetal_scan_9_12_2023/vol0700_nii' #'/deneb_disk/Lung_Volumes/nifti_files/Svr106/'
-outsubdir = '/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot' #'/deneb_disk/Lung_Volumes/lung_stacks/Svr106_rot'
+subdir = '/deneb_disk/disc_mri/scan_11_3_2023_twins_nii' #'/deneb_disk/Lung_Volumes/nifti_files/Svr106/'
+outsubdir = '/deneb_disk/disc_mri/scan_11_3_2023_twins_nii_rot' #'/deneb_disk/Lung_Volumes/lung_stacks/Svr106_rot'
 
 if not os.path.isdir(outsubdir):
     os.makedirs(outsubdir)
 
-sub_files = glob.glob(subdir+'/*head*.nii.gz')
+sub_files = glob.glob(subdir+'/*head*te*.nii.gz')
 
 for s in sub_files:
 
@@ -22,7 +22,7 @@ for s in sub_files:
 
 
     img = sitk.ReadImage(sub_img)
-    print (img.GetSpacing())
+    #print (img.GetSpacing())
 
     sliceaxis = np.argmax(img.GetSpacing())
 
@@ -36,7 +36,7 @@ for s in sub_files:
         img2 = sitk.PermuteAxes(img, [2,1,0])
 
 
-    print(img2.GetSpacing())
+    print(f'slice thickness is {np.max(img2.GetSpacing())}')
 
     sitk.WriteImage(img2, out_file)
 
