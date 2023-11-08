@@ -49,7 +49,7 @@ def run_svr(subj, te, subdir, res=1, th=3, MAX_COMB=5):
                 continue
 
             cmd = (
-                'docker run --rm --mount type=bind,source=/deneb_disk/disc_mri/scan_11_3_2023_twins_nii_rot,target=/home/data fetalsvrtk/svrtk /bin/bash -c "cd /home/data;ps;ls; mirtk reconstruct '
+                'docker run --rm --mount type=bind,source=/deneb_disk/disc_mri/scan_11_3_2023_twins_nii_rot,target=/home/data fetalsvrtk/svrtk /bin/bash -c "cd /home/data; mirtk reconstruct '
                 + outsvr
                 + " "
                 + str(num_stacks)
