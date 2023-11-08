@@ -41,7 +41,7 @@ def run_svr(subj, te, subdir, res=1, th=3, MAX_COMB=5):
                 str_stacks += " " + os.path.basename(s)
                 str_th += " " + str(th)
 
-            outsvr = f"svr_te{te}_{subj}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+            outsvr = f"outsvr/svr_te{te}_{subj}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
 
             if os.path.isfile(
                 "/deneb_disk/disc_mri/scan_11_3_2023_twins_nii_rot/" + outsvr
