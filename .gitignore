@@ -160,3 +160,4 @@ fetal_mri/.vscode/settings.json
 */*.npz
 *.tar.gz
 *.npz
+*_log.txt
