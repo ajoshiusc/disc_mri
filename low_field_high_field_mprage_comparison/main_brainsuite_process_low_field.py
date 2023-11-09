@@ -70,7 +70,7 @@ def main():
         new_img.to_filename(out_file)
 
         cmd = (
-            "/home/ajoshi/BrainSuite23a/bin/brainsuite_anatomical_pipeline.sh "
+            "/home/ajoshi/Software/BrainSuite23a/bin/brainsuite_anatomical_pipeline.sh "
             + out_file
         )
         # os.system(cmd)

@@ -49,18 +49,18 @@ def get_roi_vols(label_file, unique_labels):
 
 label_ids = np.unique(
     nib.load(
-        "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+        "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
     ).get_fdata()
 )
 
 
 left_surf = readdfs(
-    "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.left.mid.cortex.dfs"
+    "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.left.mid.cortex.dfs"
 )
 
 
 right_surf = readdfs(
-    "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.right.mid.cortex.dfs"
+    "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.right.mid.cortex.dfs"
 )
 
 

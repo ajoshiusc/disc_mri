@@ -47,7 +47,7 @@ def get_roi_vols(label_file, unique_labels):
 
 label_ids = np.unique(
     nib.load(
-        "/home/ajoshi/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+        "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
     ).get_fdata()
 )
 
