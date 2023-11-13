@@ -162,7 +162,7 @@ print("Done! for LF")
 
 
 roi_vols_3t = np.full((2, nsub, len(label_ids)), np.nan)
-roi_thickness_3t = np.full((2, nsub, 2, len(cortical_label_ids)), np.nan)
+roi_thickness_3t = np.full((2, nsub, len(cortical_label_ids)), np.nan)
 
 thickness_left_3t = np.full((2, nsub, len(left_surf.vertices)), np.nan)
 thickness_right_3t = np.full((2, nsub, len(right_surf.vertices)), np.nan)
@@ -202,7 +202,7 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
             sub_thickness_right_file
         )
 
-        roi_thickness_3t[sess - 1, n - 1, p, :] = get_roiwise_thickness(sub_thickness_left_file,sub_thickness_right_file, cortical_label_ids)
+        roi_thickness_3t[sess - 1, n - 1, :] = get_roiwise_thickness(sub_thickness_left_file,sub_thickness_right_file, cortical_label_ids)
 
     else:
         print(
