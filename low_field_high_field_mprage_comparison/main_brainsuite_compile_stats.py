@@ -11,6 +11,29 @@ import nibabel as nib
 import numpy as np
 from nilearn.plotting import plot_roi
 
+def get_roiwise_thickness(left_thickness_file,right_thickness_file,roi_list):
+    
+    left_label_file = left_thickness_file
+    right_label_file = right_thickness_file
+    
+    avg_roiwise_thickness = np.zeros(len(roi_list))
+
+    sl = readdfs(left_thickness_file)
+    sr = readdfs(right_thickness_file)
+    labl = readdfs(left_label_file)
+    labr = readdfs(right_label_file)
+
+
+    for i, r in enumerate(roi_list):
+        if np.sum(labl.labels == r) > 0:
+            avg_roiwise_thickness[i] = np.mean(sl.attributes[labl.labels == r])
+        else:
+            avg_roiwise_thickness[i] = np.mean(sr.attributes[labr.labels == r])
+
+        print(f"avg cortical thickness for roi {r} is {avg_roiwise_thickness[i]}")
+
+    return avg_roiwise_thickness
+
 
 def get_cortical_thickness(surf_file):
     s = readdfs(surf_file)
@@ -54,6 +77,7 @@ label_ids = np.unique(
 )
 
 
+
 left_surf = readdfs(
     "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.left.mid.cortex.dfs"
 )
@@ -63,14 +87,18 @@ right_surf = readdfs(
     "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.right.mid.cortex.dfs"
 )
 
+cortical_label_ids = np.setdiff1d(np.union1d(np.unique(left_surf.labels),np.unique(right_surf.labels)),(0))
 
 nsub = 5
 param_list = ("1e-14", "2e-14")
 
 roi_vols_lf = np.full((2, nsub, 2, len(label_ids)), np.nan)
+roi_thickness_lf = np.full((2, nsub, 2, len(cortical_label_ids)), np.nan)
+
 
 thickness_left_lf = np.full((2, nsub, 2, len(left_surf.vertices)), np.nan)
 thickness_right_lf = np.full((2, nsub, 2, len(right_surf.vertices)), np.nan)
+
 
 
 for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
@@ -111,6 +139,9 @@ for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
             sub_thickness_right_file
         )
 
+        roi_thickness_lf[sess - 1, n - 1, p, :] = get_roiwise_thickness(sub_thickness_left_file,sub_thickness_right_file, cortical_label_ids)
+
+
     else:
         print(
             f"The following label file does not exist!! {sub_label_file} Skipping...:"
@@ -124,12 +155,15 @@ np.savez(
     nsub=nsub,
     param_list=param_list,
     label_ids=label_ids,
+    roi_thickness_lf=roi_thickness_lf,
 )
 
 print("Done! for LF")
 
 
 roi_vols_3t = np.full((2, nsub, len(label_ids)), np.nan)
+roi_thickness_3t = np.full((2, nsub, 2, len(cortical_label_ids)), np.nan)
+
 thickness_left_3t = np.full((2, nsub, len(left_surf.vertices)), np.nan)
 thickness_right_3t = np.full((2, nsub, len(right_surf.vertices)), np.nan)
 
@@ -168,6 +202,8 @@ for sess, n in product((1, 2), range(1, nsub + 1)):
             sub_thickness_right_file
         )
 
+        roi_thickness_3t[sess - 1, n - 1, p, :] = get_roiwise_thickness(sub_thickness_left_file,sub_thickness_right_file, cortical_label_ids)
+
     else:
         print(
             f"The following label file does not exist!! {sub_label_file} Skipping...:"
@@ -181,5 +217,6 @@ np.savez(
     nsub=nsub,
     param_list=param_list,
     label_ids=label_ids,
+    roi_thickness_3t = roi_thickness_3t,
 )
 print("Done! for 3T")
