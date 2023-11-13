@@ -162,6 +162,7 @@ np.savez(
     param_list=param_list,
     label_ids=label_ids,
     roi_thickness_lf=roi_thickness_lf,
+    cortical_label_ids = cortical_label_ids,
 )
 
 print("Done! for LF")
@@ -226,5 +227,6 @@ np.savez(
     param_list=param_list,
     label_ids=label_ids,
     roi_thickness_3t=roi_thickness_3t,
+    cortical_label_ids = cortical_label_ids,
 )
 print("Done! for 3T")
