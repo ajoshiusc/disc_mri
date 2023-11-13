@@ -228,4 +228,3 @@ np.savez(
     roi_thickness_3t=roi_thickness_3t,
 )
 print("Done! for 3T")
-
