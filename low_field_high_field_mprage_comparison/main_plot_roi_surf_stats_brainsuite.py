@@ -176,34 +176,40 @@ f.savefig('right_stat_inter_lf_2.png')
 ratio_3t_left = np.divide(stat_3t_inter_left, stat_3t_intra_left + 1e-6)
 ratio_3t_right = np.divide(stat_3t_inter_right, stat_3t_intra_right + 1e-6)
 
+left_stat = patch_color_attrib(atlas_left, values=ratio_3t_left, cmap=my_cmap, clim=[0,3])
+right_stat = patch_color_attrib(atlas_right, values=ratio_3t_right, cmap=my_cmap, clim=[0,3])
+
 writedfs('left_ratio_3t.dfs', left_stat)
 writedfs('right_ratio_3t.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
 f.savefig('left_ratio_3t_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
 f.savefig('left_ratio_3t_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
 f.savefig('right_ratio_3t_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
 f.savefig('right_ratio_3t_2.png')
 
 
 ratio_lf_left = np.divide(stat_lf_inter_left, stat_lf_intra_left + 1e-6)
 ratio_lf_right = np.divide(stat_lf_inter_right, stat_lf_intra_right + 1e-6)
 
+left_stat = patch_color_attrib(atlas_left, values=ratio_lf_left, cmap=my_cmap, clim=[0,3])
+right_stat = patch_color_attrib(atlas_right, values=ratio_lf_right, cmap=my_cmap, clim=[0,3])
+
 writedfs('left_ratio_lf.dfs', left_stat)
 writedfs('right_ratio_lf.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
 f.savefig('left_ratio_lf_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
 f.savefig('left_ratio_lf_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
 f.savefig('right_ratio_lf_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
 f.savefig('right_ratio_lf_2.png')
 
 
