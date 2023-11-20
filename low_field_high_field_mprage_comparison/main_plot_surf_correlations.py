@@ -32,6 +32,10 @@ label_ids = np.load("brainSuite_3T.npz")["cortical_label_ids"]
 #roi_surf_3t = roi_surf_3t[:,:,:]
 roi_surf_lf = roi_surf_lf[:,:,0,:]
 
+
+
+
+
 # for LF dims of roi_surf_lf is session, subj, param, roino
 # for 3T dims of roi_surf_3t is session, subj, roino
 

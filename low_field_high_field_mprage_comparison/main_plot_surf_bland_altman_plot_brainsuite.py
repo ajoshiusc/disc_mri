@@ -11,7 +11,8 @@ label_ids = np.load("brainSuite_3T.npz")["cortical_label_ids"]
 
 roi_surf_lf = roi_surf_lf[:, :, 0, :]
 
-
+roi_surf_3t = roi_surf_3t[:,(0,4)]
+roi_surf_lf = roi_surf_lf[:,(0,4)]
 
 # Reshape roi_vols arrays
 roi_surf_3t = roi_surf_3t.reshape(2, -1)
