@@ -34,7 +34,7 @@ def main():
             + "/*.nii"
         )[0]
         out_dir = (
-            "/deneb_disk/3T_vs_low_field/justins_recons/low_field_mprage_data_BrainSuite/subj"
+            "/deneb_disk/3T_vs_low_field/justins_recons/low_field_mprage_data_BrainSuite_4bfc/subj"
             + str(n)
             + "_vol"
             + str(sess)
@@ -51,6 +51,7 @@ def main():
             continue
         else:
             print('Processing files in ' + out_dir)
+            #continue
             
 
 
@@ -70,7 +71,7 @@ def main():
         new_img.to_filename(out_file)
 
         cmd = (
-            "/home/ajoshi/Software/BrainSuite23a/bin/brainsuite_anatomical_pipeline.sh "
+            "/home/ajoshi/Software/BrainSuite23a/bin/brainsuite_anatomical_pipeline_4bfc.sh "
             + out_file
         )
         # os.system(cmd)

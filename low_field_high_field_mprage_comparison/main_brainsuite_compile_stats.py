@@ -103,7 +103,7 @@ thickness_right_lf = np.full((2, nsub, 2, len(right_surf.vertices)), np.nan)
 for sess, n, p in product((1, 2), range(1, nsub + 1), range(2)):
     param = param_list[p]
     out_dir = (
-        "/deneb_disk/3T_vs_low_field/justins_recons/low_field_mprage_data_BrainSuite/subj"
+        "/deneb_disk/3T_vs_low_field/justins_recons/low_field_mprage_data_BrainSuite_4bfc/subj"
         + str(n)
         + "_vol"
         + str(sess)
@@ -176,7 +176,7 @@ thickness_right_3t = np.full((2, nsub, len(right_surf.vertices)), np.nan)
 
 for sess, n in product((1, 2), range(1, nsub + 1)):
     out_dir = (
-        "/deneb_disk/3T_vs_low_field/3T_mprage_data_BrainSuite/subj"
+        "/deneb_disk/3T_vs_low_field/3T_mprage_data_BrainSuite_4bfc/subj"
         + str(n)
         + "_vol"
         + str(sess)
