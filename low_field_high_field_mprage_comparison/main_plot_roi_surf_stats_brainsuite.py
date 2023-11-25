@@ -68,14 +68,14 @@ writedfs('left_stat_intra_3t.dfs', left_stat)
 writedfs('right_stat_intra_3t.dfs', right_stat)
 
 # Save pngs of the left and right hemispheres for the intra-subject 3T stats
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('left_stat_intra_3t_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('left_stat_intra_3t_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('right_stat_intra_3t_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('right_stat_intra_3t_2.png')
 
 
@@ -100,14 +100,14 @@ right_stat = patch_color_attrib(atlas_right, values=stat_3t_inter_right, cmap=my
 writedfs('left_stat_inter_3t.dfs', left_stat)
 writedfs('right_stat_inter_3t.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('left_stat_inter_3t_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_3t_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('left_stat_inter_3t_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('right_stat_inter_3t_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_3t_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('right_stat_inter_3t_2.png')
 
 
@@ -123,20 +123,20 @@ for i, idx in enumerate(label_ids):
 
     #stat_lf_intra[label_data == idx] = np.mean(np.std(roi_vols_lf[:, :, 0, i], axis=0))
 
-left_stat = patch_color_attrib(atlas_left, values=stat_lf_intra_left, cmap=my_cmap, clim=[0,1])
-right_stat = patch_color_attrib(atlas_right, values=stat_lf_intra_right, cmap=my_cmap, clim=[0,1])
+left_stat = patch_color_attrib(atlas_left, values=stat_lf_intra_left, cmap=my_cmap, clim=[0,.5])
+right_stat = patch_color_attrib(atlas_right, values=stat_lf_intra_right, cmap=my_cmap, clim=[0,.5])
 
 writedfs('left_stat_intra_lf.dfs', left_stat)
 writedfs('right_stat_intra_lf.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('left_stat_intra_lf_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_intra_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('left_stat_intra_lf_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('right_stat_intra_lf_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_intra_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('right_stat_intra_lf_2.png')
 
 
@@ -153,20 +153,20 @@ for i, idx in enumerate(label_ids):
     stat_lf_inter_right[label_data_right == idx] = np.mean(
         np.std(roi_surf_lf[:, :, 0, i], axis=1))
 
-left_stat = patch_color_attrib(atlas_left, values=stat_lf_inter_left, cmap=my_cmap, clim=[0,1])
-right_stat = patch_color_attrib(atlas_right, values=stat_lf_inter_right, cmap=my_cmap, clim=[0,1])
+left_stat = patch_color_attrib(atlas_left, values=stat_lf_inter_left, cmap=my_cmap, clim=[0,.5])
+right_stat = patch_color_attrib(atlas_right, values=stat_lf_inter_right, cmap=my_cmap, clim=[0,.5])
 
 writedfs('left_stat_inter_lf.dfs', left_stat)
 writedfs('right_stat_inter_lf.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('left_stat_inter_lf_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=stat_lf_inter_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('left_stat_inter_lf_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='lateral',symmetric_cmap=False)
 f.savefig('right_stat_inter_lf_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=1,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=stat_lf_inter_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=.5,view='medial',symmetric_cmap=False)
 f.savefig('right_stat_inter_lf_2.png')
 
 
@@ -176,40 +176,40 @@ f.savefig('right_stat_inter_lf_2.png')
 ratio_3t_left = np.divide(stat_3t_inter_left, stat_3t_intra_left + 1e-6)
 ratio_3t_right = np.divide(stat_3t_inter_right, stat_3t_intra_right + 1e-6)
 
-left_stat = patch_color_attrib(atlas_left, values=ratio_3t_left, cmap=my_cmap, clim=[0,3])
-right_stat = patch_color_attrib(atlas_right, values=ratio_3t_right, cmap=my_cmap, clim=[0,3])
+left_stat = patch_color_attrib(atlas_left, values=ratio_3t_left, cmap=my_cmap, clim=[0,10])
+right_stat = patch_color_attrib(atlas_right, values=ratio_3t_right, cmap=my_cmap, clim=[0,10])
 
 writedfs('left_ratio_3t.dfs', left_stat)
 writedfs('right_ratio_3t.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=10,view='lateral',symmetric_cmap=False)
 f.savefig('left_ratio_3t_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_3t_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=10,view='medial',symmetric_cmap=False)
 f.savefig('left_ratio_3t_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=10,view='lateral',symmetric_cmap=False)
 f.savefig('right_ratio_3t_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_3t_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=10,view='medial',symmetric_cmap=False)
 f.savefig('right_ratio_3t_2.png')
 
 
 ratio_lf_left = np.divide(stat_lf_inter_left, stat_lf_intra_left + 1e-6)
 ratio_lf_right = np.divide(stat_lf_inter_right, stat_lf_intra_right + 1e-6)
 
-left_stat = patch_color_attrib(atlas_left, values=ratio_lf_left, cmap=my_cmap, clim=[0,3])
-right_stat = patch_color_attrib(atlas_right, values=ratio_lf_right, cmap=my_cmap, clim=[0,3])
+left_stat = patch_color_attrib(atlas_left, values=ratio_lf_left, cmap=my_cmap, clim=[0,10])
+right_stat = patch_color_attrib(atlas_right, values=ratio_lf_right, cmap=my_cmap, clim=[0,10])
 
 writedfs('left_ratio_lf.dfs', left_stat)
 writedfs('right_ratio_lf.dfs', right_stat)
 
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=10,view='lateral',symmetric_cmap=False)
 f.savefig('left_ratio_lf_1.png')
-f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
+f=plot_surf([left_stat.vertices, left_stat.faces],surf_map=ratio_lf_left, engine='plotly', colorbar=False,hemi='left', cmap=my_cmap, vmin=0, vmax=10,view='medial',symmetric_cmap=False)
 f.savefig('left_ratio_lf_2.png')
 
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='lateral',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=10,view='lateral',symmetric_cmap=False)
 f.savefig('right_ratio_lf_1.png')
-f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=3,view='medial',symmetric_cmap=False)
+f=plot_surf([right_stat.vertices, right_stat.faces],surf_map=ratio_lf_right, engine='plotly', colorbar=False,hemi='right', cmap=my_cmap, vmin=0, vmax=10,view='medial',symmetric_cmap=False)
 f.savefig('right_ratio_lf_2.png')
 
 

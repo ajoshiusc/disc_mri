@@ -17,7 +17,7 @@ import nilearn.image as ni
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-atlas = "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+atlas = "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
 
 # Load the NIfTI label file
