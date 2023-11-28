@@ -15,8 +15,10 @@ import nibabel as nib
 import numpy as np
 import nilearn.image as ni
 
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-atlas = "/home/ajoshi/software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+
+atlas = "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
 
 # Load the NIfTI label file
