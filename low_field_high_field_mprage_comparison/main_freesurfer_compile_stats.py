@@ -10,6 +10,59 @@ from multiprocessing import Pool
 import nibabel as nib
 import numpy as np
 from nilearn.plotting import plot_roi
+from nilearn import surface
+
+
+def get_roiwise_thickness(left_thickness_file, right_thickness_file, left_label_data, right_label_data):
+
+    # Load the left fsaverage surface
+    #fsaverage_surf_left = surface.load_surf_mesh(f'{FREESURFER_SUB}/fsaverage/surf/lh.white')
+
+    # Load the right fsaverage surface
+    #fsaverage_surf_right = surface.load_surf_mesh(f'{FREESURFER_SUB}/fsaverage/surf/rh.white')
+
+    # Load the left fsaverage label
+    #left_label_file_path = f'{FREESURFER_SUB}/fsaverage/label/lh.aparc.annot'
+    #left_label_data = nib.freesurfer.read_annot(left_label_file_path)
+
+    # Extract left label names and label indices
+    left_label_names, left_label_indices = left_label_data[2], left_label_data[0]
+
+
+    # Load the right fsaverage label
+    #right_label_file_path = f'{FREESURFER_SUB}/fsaverage/label/rh.aparc.annot'
+    #right_label_data = nib.freesurfer.read_annot(right_label_file_path)
+
+    # Extract right label names and label indices
+    right_label_names, right_label_indices = right_label_data[2], right_label_data[0]
+
+    left_avg_thickness = np.zeros(len(left_label_names))
+    right_avg_thickness = np.zeros(len(right_label_names))
+
+
+    left_thickness = nib.load(left_thickness_file).get_fdata()
+    right_thickness = nib.load(right_thickness_file).get_fdata()
+
+
+    for i, r in enumerate(len(left_label_names)):
+
+        left_avg_thickness[i] = np.mean(left_thickness[left_label_indices == i])
+        print(f"avg cortical thickness for roi {r} is {left_avg_thickness[i]}")
+
+    for i, r in enumerate(len(right_label_names)):
+
+        right_avg_thickness[i] = np.mean(right_thickness[right_label_indices == i])
+        print(f"avg cortical thickness for roi {r} is {right_avg_thickness[i]}")
+
+
+    return left_avg_thickness, right_avg_thickness
+
+
+def get_cortical_thickness(surf_thickness_file):
+
+    return nib.load(surf_thickness_file).get_fdata()
+
+
 
 def get_roi_vols(label_file, unique_labels):
 
@@ -51,6 +104,36 @@ label_ids = np.unique(
 )
 
 label_ids = np.unique(label_ids)
+
+
+# Load the left fsaverage surface
+fsaverage_surf_left = surface.load_surf_mesh(f'{FREESURFER_SUB}/fsaverage/surf/lh.white')
+
+# Load the right fsaverage surface
+fsaverage_surf_right = surface.load_surf_mesh(f'{FREESURFER_SUB}/fsaverage/surf/rh.white')
+
+# Load the left fsaverage label
+left_label_file_path = f'{FREESURFER_SUB}/fsaverage/label/lh.aparc.annot'
+left_label_data = nib.freesurfer.read_annot(left_label_file_path)
+
+# Extract left label names and label indices
+left_label_names, left_label_indices = left_label_data[2], left_label_data[0]
+
+
+# Load the right fsaverage label
+right_label_file_path = f'{FREESURFER_SUB}/fsaverage/label/rh.aparc.annot'
+right_label_data = nib.freesurfer.read_annot(right_label_file_path)
+
+# Extract right label names and label indices
+right_label_names, right_label_indices = right_label_data[2], right_label_data[0]
+
+
+
+
+
+
+
+
 
 nsub = 5
 param_list = ("1e-14", "2e-14")
