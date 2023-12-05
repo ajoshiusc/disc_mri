@@ -57,11 +57,11 @@ def get_roiwise_thickness(
 
     for i, r in enumerate(cortical_roi_ids):
         left_avg_thickness[i] = np.mean(left_thickness[left_label_indices == r])
-        print(f"avg cortical thickness for roi {r} is {left_avg_thickness[i]}")
+        #print(f"avg cortical thickness for roi {r} is {left_avg_thickness[i]}")
 
     for i, r in enumerate(cortical_roi_ids):
         right_avg_thickness[i] = np.mean(right_thickness[right_label_indices == r])
-        print(f"avg cortical thickness for roi {r} is {right_avg_thickness[i]}")
+        #print(f"avg cortical thickness for roi {r} is {right_avg_thickness[i]}")
 
     return left_avg_thickness, right_avg_thickness
 
