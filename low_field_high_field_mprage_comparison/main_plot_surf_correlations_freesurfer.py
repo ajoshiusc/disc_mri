@@ -18,10 +18,16 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 
+roi_surf_3t1 = np.load("freesurfer_3T.npz")["left_roi_thickness_3t"]
+roi_surf_3t2 = np.load("freesurfer_3T.npz")["right_roi_thickness_3t"]
+roi_surf_3t=np.concatenate((roi_surf_3t1,roi_surf_3t2),axis=2)
 
-# Load data
-left_roi_surf_3t = np.load("freesurfer_3T.npz")["left_roi_thickness_3t"]
-left_roi_surf_lf = np.load("freesurfer_low_field.npz")["left_roi_thickness_lf"]
+roi_surf_lf1 = np.load("freesurfer_low_field.npz")["left_roi_thickness_lf"]
+roi_surf_lf2 = np.load("freesurfer_low_field.npz")["right_roi_thickness_lf"]
+roi_surf_lf=np.concatenate((roi_surf_lf1,roi_surf_lf2),axis=3)
+
+
+
 label_ids = np.load("freesurfer_3T.npz")["cortical_label_ids"]
 
 # for LF dims of roi_surf_lf is session, subj, param, roino
@@ -30,7 +36,7 @@ label_ids = np.load("freesurfer_3T.npz")["cortical_label_ids"]
 
 
 #roi_surf_3t = roi_surf_3t[:,:,:]
-left_roi_surf_lf = left_roi_surf_lf[:,:,0,:]
+roi_surf_lf = roi_surf_lf[:,:,0,:]
 
 
 
@@ -41,12 +47,12 @@ left_roi_surf_lf = left_roi_surf_lf[:,:,0,:]
 
 
 param = 0
-left_roi_surf_3t_avg = np.mean(left_roi_surf_3t,axis=0).flatten()
-left_roi_surf_lf_avg = np.mean(left_roi_surf_lf,axis=0).flatten()
+surf_3t_avg = np.mean(roi_surf_3t,axis=0).flatten()
+surf_lf_avg = np.mean(roi_surf_lf,axis=0).flatten()
 
 
-x= left_roi_surf_3t_avg
-y = left_roi_surf_lf_avg
+x= surf_3t_avg
+y = surf_lf_avg
 # Calculate correlation coefficient (Pearson's r)
 correlation = np.corrcoef(x, y)[0, 1]
 
@@ -70,12 +76,12 @@ plt.show()
 
 
 
-left_roi_surf_3t = left_roi_surf_3t[0].flatten()
-left_roi_surf_lf = left_roi_surf_lf[0].flatten()
+roi_surf_3t = roi_surf_3t[0].flatten()
+roi_surf_lf = roi_surf_lf[0].flatten()
 
 
-x = left_roi_surf_3t
-y = left_roi_surf_lf
+x = roi_surf_3t
+y = roi_surf_lf
 # Calculate correlation coefficient (Pearson's r)
 correlation = np.corrcoef(x, y)[0, 1]
 
@@ -95,3 +101,4 @@ plt.savefig('3t_vs_lf_roi_avg_cortical_thickness_freesurfer_noavg.png')
 
 # Show the plot
 plt.show()
+
