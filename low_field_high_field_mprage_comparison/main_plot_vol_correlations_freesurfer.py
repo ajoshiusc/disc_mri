@@ -17,19 +17,19 @@ import nilearn.image as ni
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-atlas = "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
+#atlas = "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
 
 # Load the NIfTI label file
-nifti_file_path = atlas  # Replace with the path to your NIfTI file
-label_img = nib.load(nifti_file_path)
-label_data = label_img.get_fdata()
+#nifti_file_path = atlas  # Replace with the path to your NIfTI file
+#label_img = nib.load(nifti_file_path)
+#label_data = label_img.get_fdata()
 
 
 # Input array of scalars (assuming it has the same dimensions as the label image)
-roi_vols_3t = np.load("brainSuite_3T.npz")["roi_vols"]
-roi_vols_lf = np.load("brainSuite_low_field.npz")["roi_vols"]
-label_ids = np.load("brainSuite_3T.npz")["label_ids"]
+roi_vols_3t = np.load("freesurfer_3T.npz")["roi_vols"]
+roi_vols_lf = np.load("freesurfer_low_field.npz")["roi_vols"]
+label_ids = np.load("freesurfer_3T.npz")["label_ids"]
 
 
 roi_vols_3t = roi_vols_3t[:,:,1:-1]
@@ -38,11 +38,14 @@ roi_vols_lf = roi_vols_lf[:,:,0,1:-1]
 # for LF dims of roi_vols_lf is session, subj, param, roino
 # for 3T dims of roi_vols_3t is session, subj, roino
 
-stat_3t_intra = np.zeros(label_data.shape)
+#stat_3t_intra = np.zeros(label_data.shape)
 
 param = 0
 roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
 roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
+
+#roi_vols_3t = roi_vols_3t[0].flatten()
+#roi_vols_lf = roi_vols_lf[0].flatten()
 
 
 x= roi_vols_3t
@@ -62,7 +65,7 @@ plt.xlabel('3T ROI volume')
 plt.ylabel('0.55 ROI volume')
 plt.legend()
 
-plt.savefig('3t_vs_lf_roi_vols.png')
+plt.savefig('3t_vs_lf_roi_vols_freesurfer.png')
 
 # Show the plot
-plt.show()
+#plt.show()
