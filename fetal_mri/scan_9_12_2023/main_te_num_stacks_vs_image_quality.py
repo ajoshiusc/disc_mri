@@ -17,15 +17,15 @@ from tqdm.contrib.itertools import product
 import matplotlib.pyplot as plt
 
 
-te = 98
+te = 140
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
 template = subdir + "/p22_t2_haste_tra_head_te98_p.nii.gz"
 mask = subdir + '/p22_t2_haste_tra_head_te98_p.mask.nii.gz'
-fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
-fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
-fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
+fetal_atlas = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
+fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
+fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
 
 
 stacks = glob.glob(subdir + f"/*head*te{te}*p.nii.gz")
@@ -36,8 +36,8 @@ th = 3
 
 num_stacks = len(stacks)
 
-outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}_masked.nii.gz"
-outsvr_aligned = f"outsvr/svr_te{te}_aligned.nii.gz"
+outsvr = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}_masked.nii.gz"
+outsvr_aligned = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_aligned.nii.gz"
 
 if not os.path.exists(outsvr_aligned):
 
@@ -60,8 +60,8 @@ print("registration of svr to atlas done")
 
 
 for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
-    outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
-    outsvr_aligned = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
+    outsvr = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+    outsvr_aligned = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
 
     if os.path.exists(outsvr_aligned):
         continue
@@ -84,11 +84,11 @@ for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
 val_ssim = np.zeros((len(stacks), MAX_COMB))
 val_mse = np.zeros((len(stacks), MAX_COMB))
 mse = MSELoss()
-ssim = SSIMLoss(spatial_dims=3)
+#ssim = SSIMLoss(spatial_dims=3)
 
 for ns, i in product(range(len(stacks)), range(MAX_COMB)):
-    outsvr_aligned = f"outsvr/svr_te{te}_numstacks_{ns+1}_iter_{i}_aligned.nii.gz"
-    target = f"outsvr/svr_te{te}_aligned.nii.gz"
+    outsvr_aligned = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{ns+1}_iter_{i}_aligned.nii.gz"
+    target = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_aligned.nii.gz"
 
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
@@ -107,7 +107,8 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
     )
 
     data_range = y.max().unsqueeze(0)
-    val_ssim[ns, i] = ssim.forward(x, y, data_range=data_range)
+    ssim = SSIMLoss(spatial_dims=3, data_range=data_range)
+    val_ssim[ns, i] = ssim.forward(x, y)
     val_mse[ns, i] = mse.forward(x, y)
 
 print(val_ssim, val_mse)

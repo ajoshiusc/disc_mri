@@ -19,17 +19,17 @@ import pandas as pd
 import seaborn as sb
 from nilearn.plotting import plot_anat
 
-te = 272
+te = 140
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_scan_9_12_2023/vol0700_nii_rot"
-template = subdir + "/p42_t2_haste_cor_head_te272_p.nii.gz"
-mask = subdir + "/p42_t2_haste_cor_head_te272_p.mask.nii.gz"
+template = subdir + "/p11_t2_haste_sag_head_te140_p.nii.gz"
+mask = subdir + "/p11_t2_haste_sag_head_te140_p.mask.nii.gz"
 
 
-fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
-fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
-fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
+fetal_atlas = "/deneb_disk/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp.nii.gz"
+fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_regional.nii.gz"
+fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
 
 
 stacks = glob.glob(subdir + f"/*head*te{te}*p.nii.gz")[:12]
@@ -52,14 +52,17 @@ y = np.arange(MAX_COMB)
 data = pd.DataFrame(val_mse.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "mse"})
-sb.lineplot(data=m, x="num_stacks", y="mse")
+g = sb.lineplot(data=m, x="num_stacks", y="mse")
+g.set(ylim=(0, None))
+
 plt.savefig(f"te{te}_mse_vs_num_stacks.png")
 plt.close()
 
 data = pd.DataFrame(val_ssim.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "ssim"})
-sb.lineplot(data=m, x="num_stacks", y="ssim")
+g = sb.lineplot(data=m, x="num_stacks", y="ssim")
+g.set(ylim=(0, None))
 plt.savefig(f"te{te}_ssim_vs_num_stacks.png")
 plt.close()
 
@@ -67,7 +70,7 @@ print("done")
 
 
 for i in range(num_stacks):
-    fname = f"/home/ajoshi/projects/disc_mri/fetal_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{i+1}_iter_0_aligned.nii.gz"
+    fname = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{i+1}_iter_0_aligned.nii.gz"
     plot_anat(
         anat_img=fname,
         cut_coords=[0],
