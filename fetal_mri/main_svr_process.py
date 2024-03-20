@@ -41,13 +41,14 @@ for num_stacks in range(1, len(stacks)+1):
     if os.path.isfile(outsvr_aligned):
         continue
 
-    cmd = 'mirtksvr reconstruct ' + outsvr + ' ' + \
+    cmd = 'mirtk reconstruct ' + outsvr + ' ' + \
         str(num_stacks) + str_stacks + ' --resolution ' + str(res)
 
     cmd += ' --thickness' + str_th + ' --template ' + template + ' --mask ' + mask
 
-    print(cmd)
-    os.system(cmd)
+    docker_cmd = f'docker run --rm --mount type=bind,source=/deneb_disk,target=/deneb_disk fetalsvrtk/svrtk /bin/bash -lic \'cd {subdir}; {cmd}\''
+    print(docker_cmd)
+    os.system(docker_cmd)
 
 """     cmd = 'flirt -in ' + outsvr + ' -ref '+ fetal_atlas +' -out ' + \
         outsvr_aligned+' -dof 7 -omat reorient.mat -searchrx -180 180 -searchry -180 180 -searchrz -180 180'
