@@ -23,9 +23,9 @@ MAX_COMB = 1
 subdir = "/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot"
 template = subdir + '/p28_t2_haste_sag_head_te272_p.nii.gz'
 mask = subdir + '/p28_t2_haste_sag_head_te272_p.mask.nii.gz'
-fetal_atlas = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33.nii.gz"
-fetal_atlas_seg = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_regional.nii.gz"
-fetal_atlas_tissue = "/home/ajoshi/projects/disc_mri/fetal_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_tissue.nii.gz"
+fetal_atlas = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33.nii.gz"
+fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_regional.nii.gz"
+fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA33_tissue.nii.gz"
 
 stacks = glob.glob(subdir + f"/*head*te{te}*p.nii.gz")
 
@@ -34,9 +34,9 @@ th = 3
 
 
 num_stacks = len(stacks)
-
-outsvr = f"outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{0}.nii.gz"
-outsvr_aligned = f"outsvr/svr_te{te}_aligned.nii.gz"
+outsvr_dir = '/deneb_disk/fetal_scan_6_2_2023/VOL632_nii_rot'
+outsvr = f"{outsvr_dir}/svr_te{te}_numstacks_{num_stacks}_iter_{0}.nii.gz"
+outsvr_aligned = f"{outsvr_dir}/svr_te{te}_aligned.nii.gz"
 
 if not os.path.exists(outsvr_aligned):
 
