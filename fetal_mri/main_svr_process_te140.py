@@ -50,7 +50,7 @@ for num_stacks in (3,6,9,12): #range(1, len(stacks_all) + 1):
             str_stacks += " " + s
             str_th += " " + str(th)
 
-        outsvr = f"{outsvr_dir}/svr_te98_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+        outsvr = f"{outsvr_dir}/svr_te140_numstacks_{num_stacks}_iter_{ns}.nii.gz"
 
         cmd = (
             "mirtk reconstruct "
