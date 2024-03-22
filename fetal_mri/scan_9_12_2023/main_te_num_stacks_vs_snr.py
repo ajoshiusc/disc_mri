@@ -28,32 +28,24 @@ fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/S
 fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_tissue.nii.gz"
 wm_eroded_mask = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_wm_eroded_mask.nii.gz"
 
-"""# read tissue mask fetal_atlas_tissue, create mask corresponding to the tissue labels 121 and 122, erode the mask by 3 voxels in 3D and save the mask to a nifti file
-img = load_img(fetal_atlas_tissue)
-data = img.get_fdata()
-mask = np.zeros(data.shape, dtype=np.uint16)
-mask[data == 121] = 1
-mask[data == 122] = 1
-mask = sitk.GetImageFromArray(mask)
-mask = sitk.BinaryErode(mask, (3,3,3), sitk.sitkBall)
 
-sitk.WriteImage(mask, fetal_atlas_tissue.replace('.nii.gz', '_tissue_mask.nii.gz'))
-"""
-#read tissue mask fetal_atlas_tissue using simpleitk, create mask corresponding to the tissue labels 121 and 120, erode the mask by 3 voxels in 3D and save the mask to a nifti file
+if not os.path.exists(wm_eroded_mask):
 
-img=sitk.ReadImage(fetal_atlas_tissue)
-data = sitk.GetArrayFromImage(img)
-mask = np.zeros(data.shape, dtype=np.uint16)
-mask[data == 121] = 1
-mask[data == 120] = 1
-mask = sitk.GetImageFromArray(mask)
-mask = sitk.BinaryErode(mask, (3,3,3), sitk.sitkBall)
-affine = img.GetDirection()
-mask.SetDirection(affine)
-mask.SetOrigin(img.GetOrigin()[:3])
-mask.SetSpacing(img.GetSpacing())
+    #read tissue mask fetal_atlas_tissue using simpleitk, create mask corresponding to the tissue labels 121 and 120, erode the mask by 3 voxels in 3D and save the mask to a nifti file
 
-sitk.WriteImage(mask, wm_eroded_mask)
+    img=sitk.ReadImage(fetal_atlas_tissue)
+    data = sitk.GetArrayFromImage(img)
+    mask = np.zeros(data.shape, dtype=np.uint16)
+    mask[data == 121] = 1
+    mask[data == 120] = 1
+    mask = sitk.GetImageFromArray(mask)
+    mask = sitk.BinaryErode(mask, (3,3,3), sitk.sitkBall)
+    affine = img.GetDirection()
+    mask.SetDirection(affine)
+    mask.SetOrigin(img.GetOrigin()[:3])
+    mask.SetSpacing(img.GetSpacing())
+
+    sitk.WriteImage(mask, wm_eroded_mask)
 
 
 
