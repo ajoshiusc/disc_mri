@@ -25,14 +25,11 @@ res = 1
 th = 3
 MAX_COMB = 20
 
-outsvr = "/deneb_disk/disc_mri/scan_3_20_2024/outsvr"
+outsvr_dir = "/deneb_disk/disc_mri/scan_3_20_2024/outsvr"
 
 for num_stacks in (3, 6, 9, 10):  # range(1, len(stacks_all) + 1):
     for ns in range(MAX_COMB):
         stacks = random_combination(stacks_all, num_stacks)
-
-        if ns > MAX_COMB:
-            continue
 
         str_stacks = ""
         str_th = ""
@@ -43,11 +40,11 @@ for num_stacks in (3, 6, 9, 10):  # range(1, len(stacks_all) + 1):
 
         outsvr = f"svr_te140_numstacks_{num_stacks}_iter_{ns}.nii.gz"
 
-        if os.path.isfile("outsvr/" + outsvr):
+        if os.path.isfile(f"{outsvr_dir}/" + outsvr):
             continue
 
         cmd = (
-            "cd outsvr; mirtk reconstruct "
+            f"cd {outsvr_dir}; mirtk reconstruct "
             + outsvr
             + " "
             + str(num_stacks)
