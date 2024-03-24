@@ -15,6 +15,31 @@ from torch.nn import MSELoss
 from tqdm.contrib.itertools import product
 
 import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import nibabel as nib
+
+
+def calculate_white_matter_snr(image_path, wm_mask_path):
+    # Load the NIfTI image
+    img = nib.load(image_path)
+    data = img.get_fdata()
+
+    # Load the white matter mask
+    white_matter_mask = nib.load(wm_mask_path).get_fdata() > 0
+
+    # Calculate mean signal intensity in white matter
+    white_matter_mean = np.mean(data[white_matter_mask])
+
+    # Calculate standard deviation of background noise
+    # Background noise can be estimated from regions outside the brain
+    background_mask = data <= np.mean(data)
+    background_std = np.std(data[background_mask])
+
+    # Calculate SNR
+    white_matter_snr = white_matter_mean / background_std
+
+    return white_matter_snr
+
 
 
 te = 98
@@ -26,6 +51,7 @@ mask = subdir + '/p21_t2_haste_tra_head_te98_p.mask.nii.gz'
 fetal_atlas = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
 fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
 fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+wm_eroded_mask = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_wm_eroded_mask.nii.gz"
 
 outsvr_dir = "/deneb_disk/disc_mri/scan_8_11_2023/outsvr"
 
@@ -101,6 +127,9 @@ for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
 
 val_ssim = np.zeros((len(stacks), MAX_COMB))
 val_mse = np.zeros((len(stacks), MAX_COMB))
+wm_snr = np.zeros((len(stacks), MAX_COMB))
+
+
 mse = MSELoss()
 ssim = SSIMLoss(spatial_dims=3)
 

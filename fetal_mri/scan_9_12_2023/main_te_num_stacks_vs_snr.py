@@ -15,6 +15,29 @@ from torch.nn import MSELoss
 from tqdm.contrib.itertools import product
 
 import matplotlib.pyplot as plt
+import nibabel as nib
+
+
+def calculate_white_matter_snr(image_path, wm_mask_path):
+    # Load the NIfTI image
+    img = nib.load(image_path)
+    data = img.get_fdata()
+
+    # Load the white matter mask
+    white_matter_mask = nib.load(wm_mask_path).get_fdata() > 0
+
+    # Calculate mean signal intensity in white matter
+    white_matter_mean = np.mean(data[white_matter_mask])
+
+    # Calculate standard deviation of background noise
+    # Background noise can be estimated from regions outside the brain
+    background_mask = data <= np.mean(data)
+    background_std = np.std(data[background_mask])
+
+    # Calculate SNR
+    white_matter_snr = white_matter_mean / background_std
+
+    return white_matter_snr
 
 
 te = 140
@@ -85,6 +108,7 @@ for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
     outsvr = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
     outsvr_aligned = f"/deneb_disk/disc_mri/scan_9_12_2023/outsvr/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
 
+
     if os.path.exists(outsvr_aligned):
         continue
 
@@ -105,6 +129,8 @@ for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
 
 val_ssim = np.zeros((len(stacks), MAX_COMB))
 val_mse = np.zeros((len(stacks), MAX_COMB))
+wm_snr = np.zeros((len(stacks), MAX_COMB))
+
 mse = MSELoss()
 #ssim = SSIMLoss(spatial_dims=3)
 
@@ -133,9 +159,11 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
     val_ssim[ns, i] = ssim.forward(x, y)
     val_mse[ns, i] = mse.forward(x, y)
 
+    wm_snr[ns, i] = calculate_white_matter_snr(outsvr_aligned, wm_eroded_mask)
+
 print(val_ssim, val_mse)
 
-np.savez("ssim_mse.npz", val_ssim=val_ssim, val_mse=val_mse)
+np.savez("ssim_mse_wm_snr.npz", val_ssim=val_ssim, val_mse=val_mse, wm_snr=wm_snr)
 
 x = range(1, len(stacks) + 1)
 
@@ -150,6 +178,17 @@ plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
 plt.plot(x[2:], val_mse[2:])
 plt.savefig("mse.png")
+
+
+plt.close()
+
+plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
+
+plt.plot(x[2:], wm_snr[2:])
+plt.savefig("wm_snr.png")
+
+plt.close()
+
 
 
 """
