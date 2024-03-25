@@ -42,7 +42,7 @@ def calculate_white_matter_snr(image_path, wm_mask_path):
 
 
 
-te = 98
+te = 140
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
@@ -157,25 +157,32 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
     ssim = SSIMLoss(spatial_dims=3, data_range=data_range)
     val_ssim[ns, i] = ssim.forward(x, y)
     val_mse[ns, i] = mse.forward(x, y)
+    wm_snr[ns, i] = calculate_white_matter_snr(outsvr_aligned, wm_eroded_mask)
 
 print(val_ssim, val_mse)
 
-np.savez("ssim_mse.npz", val_ssim=val_ssim, val_mse=val_mse)
+np.savez("ssim_mse_wm_snr.npz", val_ssim=val_ssim, val_mse=val_mse, wm_snr=wm_snr)
 
 x = range(1, len(stacks) + 1)
 
 plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
 plt.plot(x[2:], val_ssim[2:])
-plt.savefig("ssim.png")
+plt.savefig(f"ssim_{te}.png")
 
 plt.close()
 
 plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
 
 plt.plot(x[2:], val_mse[2:])
-plt.savefig("mse.png")
+plt.savefig(f"mse_{te}.png")
 
+plt.xticks(np.arange(min(x), max(x) + 1, 1.0))
+
+plt.plot(x[2:], wm_snr[2:])
+plt.savefig("wm_snr.png")
+
+plt.close()
 
 """
 # warp atlas to subject
