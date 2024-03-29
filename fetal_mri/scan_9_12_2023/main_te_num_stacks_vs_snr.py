@@ -31,8 +31,10 @@ def calculate_white_matter_snr(image_path, wm_mask_path):
 
     # Calculate standard deviation of background noise
     # Background noise can be estimated from regions outside the brain
-    background_mask = data <= np.mean(data)
-    background_std = np.std(data[background_mask])
+    # background_mask = data <= np.mean(data)
+    background_std = np.std(data[white_matter_mask])
+
+    #background_std = np.std(data[background_mask])
 
     # Calculate SNR
     white_matter_snr = white_matter_mean / background_std
