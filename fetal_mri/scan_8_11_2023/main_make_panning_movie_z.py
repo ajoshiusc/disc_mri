@@ -3,13 +3,13 @@ import numpy as np
 import imageio
 
 # Load the NIfTI image
-nifti_file = "/deneb_disk/disc_mri/scan_8_11_2023/outsvr/svr_te140_numstacks_12_iter_0_aligned.nii.gz"  # Replace with your input NIfTI file
+nifti_file = "/deneb_disk/disc_mri/scan_8_11_2023/outsvr/svr_te140_numstacks_12_iter_0_aligned_masked.nii.gz"  # Replace with your input NIfTI file
 img = nib.load(nifti_file)
 data = img.get_fdata()
 data = 1.5 * 255.0 * data / np.max(data)
 
 # Define the output GIF file
-output_gif = "svr_te140_z.gif"
+output_gif = "svr_te140_z_masked.gif"
 
 # Define the number of frames and the panning direction
 num_frames = data.shape[2]  # 30
