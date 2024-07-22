@@ -21,20 +21,19 @@ mask = subdir + "/p61_cardiac_multi_slice_real_time_spiral_ssfp_ga_res_22.mask.n
 
 stacks_all = glob.glob(subdir + "/*22.nii.gz")
 
-res = 2
-th = 8
+
 MAX_COMB = 20
 
 outsvr_dir = "/deneb_disk/disc_mri/for_Ye_7_18_2024/outsvr"
 
 stacks = " " + stacks_all[0]
 
-outsvr = f"svr_heart_2mm.nii.gz"
+outsvr = f"svr_heart_0p5mm.nii.gz"
 
 num_stacks = 1
-res = 1.0
-th=8.0
-str_th=str(th)
+res = 0.5
+th = 8.0
+str_th = str(th)
 
 cmd = (
     f"cd {outsvr_dir}; mirtk reconstruct "
