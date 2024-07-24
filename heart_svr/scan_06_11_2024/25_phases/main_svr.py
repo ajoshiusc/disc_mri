@@ -48,7 +48,7 @@ if __name__ == "__main__":
         outsvr = f"svr_heart_phase_{phase+1}_res_{res:.1f}.nii.gz"
         outsvr_dir = "/deneb_disk/disc_mri/for_Ye_7_18_2024/25_phase_data/outsvr"
 
-        svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=8.0)
+        svr(subdir, template, mask, outsvr_dir, outsvr, res=res, slice_thickness=8.0)
 
 
 # End of main_svr.py
