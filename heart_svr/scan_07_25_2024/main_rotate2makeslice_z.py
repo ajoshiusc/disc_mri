@@ -24,7 +24,7 @@ def make_slices(subdir, outsubdir):
         img = sitk.ReadImage(sub_img)
         print (img.GetSpacing())
 
-        sliceaxis = np.argmin(img.GetSpacing())
+        sliceaxis = np.argmax(img.GetSpacing())
 
         if sliceaxis == 2:
             img2 = img
