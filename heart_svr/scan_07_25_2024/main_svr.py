@@ -50,10 +50,10 @@ if __name__ == "__main__":
 
         res = 1.0
         subdir = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/phase_{phase+1:02}_rot"
-        template = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/common_template_mask/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga.nii.gz"
-        mask = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/common_template_mask/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga.mask.nii.gz"
+        template = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/common_template_mask/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga_pad.nii.gz"
+        mask = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/common_template_mask/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga_pad.mask.nii.gz"
         outsvr = f"svr_heart_phase_{phase+1}_res_{res:.1f}.nii.gz"
-        outsvr_dir = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/outsvr"
+        outsvr_dir = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/outsvr_pad"
 
         svr(subdir, template, mask, outsvr_dir, outsvr, res=res, slice_thickness=6.0)
 
