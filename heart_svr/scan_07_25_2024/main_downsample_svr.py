@@ -52,7 +52,7 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 if __name__ == "__main__":
 
     phase = 10
-    for ds_ratio in [2, 4, 6, 8]:
+    for ds_ratio in [1, 2, 4, 6, 8]:
 
         res = 1.0
         subdir = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_{phase+1:02}_rot_downsampled{ds_ratio}"
