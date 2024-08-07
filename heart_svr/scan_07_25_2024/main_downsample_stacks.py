@@ -49,10 +49,6 @@ downsample_factor = 2
 input_phase_dir = (
     "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files/phase_11_rot"
 )
-output_phase_dir = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled"
-
-# make output directory if it doesn't exist
-os.makedirs(output_phase_dir, exist_ok=True)
 
 
 # Get a list of all NIfTI files in the input directory
@@ -60,20 +56,26 @@ nii_files = glob.glob(input_phase_dir + "/*.nii.gz")
 
 
 # Loop through each NIfTI file
-for input_file in nii_files:
+for downsample_factor in [1, 2, 4, 6, 8]:
 
-    # get filename
-    filename = os.path.basename(input_file)
+    output_phase_dir = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{downsample_factor}"
 
-    print(f"Downsampling {filename}...")  # Let us know which file is being processed
+    # make output directory if it doesn't exist
+    os.makedirs(output_phase_dir, exist_ok=True)
 
-    # create output file path
-    output_file = os.path.join(output_phase_dir, filename.replace(".nii.gz", f"_downsampled{downsample_factor}.nii.gz"))
+    for input_file in nii_files:
+        
+        # get filename
+        filename = os.path.basename(input_file)
+        print(f"Downsampling {filename}...")  # Let us know which file is being processed
+
+        # create output file path
+        output_file = os.path.join(output_phase_dir, filename.replace(".nii.gz", f"_downsampled{downsample_factor}.nii.gz"))
 
 
-    # Downsample the NIfTI file
-    downsample_nifti(input_file, output_file, downsample_factor)
+        # Downsample the NIfTI file
+        downsample_nifti(input_file, output_file, downsample_factor)
 
-    print("Done!")  # Let us know it's done
+print("Done!")  # Let us know it's done
 
 # end of code
