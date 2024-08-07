@@ -56,8 +56,8 @@ if __name__ == "__main__":
 
         res = 1.0
         subdir = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_{phase+1:02}_rot_downsampled{ds_ratio}"
-        template = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{ds_ratio}/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga_downsampled2.nii.gz"
-        mask = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{ds_ratio}/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga.mask_downsampled2.nii.gz"
+        template = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{ds_ratio}/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga_downsampled{ds_ratio}.nii.gz"
+        mask = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{ds_ratio}/p66_cardiac_multi_slice_multi_res_real_time_spiral_ssfp_ga.mask_downsampled{ds_ratio}.nii.gz"
         outsvr = f"svr_heart_phase_{phase+1}_res_{res:.1f}_downsampled{ds_ratio}.nii.gz"
         outsvr_dir = "/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/outsvr_pad_experiments"
 
