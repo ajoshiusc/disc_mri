@@ -56,7 +56,7 @@ nii_files = glob.glob(input_phase_dir + "/*.nii.gz")
 
 
 # Loop through each NIfTI file
-for downsample_factor in [1, 2, 4, 6, 8]:
+for downsample_factor in [1, 2, 3, 4, 6, 8]:
 
     output_phase_dir = f"/deneb_disk/disc_mri/for_Ye_Heart_07_26_2024/nifti_files_experiments/phase_11_rot_downsampled{downsample_factor}"
 
