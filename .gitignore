@@ -161,3 +161,4 @@ fetal_mri/.vscode/settings.json
 *.tar.gz
 *.npz
 *_log.txt
+heart_svr/*/.vscode/*
