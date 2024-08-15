@@ -25,7 +25,7 @@ for expmt_dir in expmt_dir_all:
         if not os.path.isdir(out_expmt_dir):
             os.mkdir(out_expmt_dir)
         
-        out_stack_dir = out_expmt_dir + '/' + stack_dir.split('/')[-1]
+        out_stack_dir = out_expmt_dir #+ '/' + stack_dir.split('/')[-1]
 
         if not os.path.isdir(out_stack_dir):
             os.mkdir(out_stack_dir)

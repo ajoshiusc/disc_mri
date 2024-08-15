@@ -53,7 +53,7 @@ def main():
     for expmt_dir in expmt_dir_all:
 
         # stack_id =stack_dir.split('ssfp_')[-1][0:8]
-        stack_dir_all = glob.glob(expmt_dir + "/*")
+        stack_dir_all = [expmt_dir] #glob.glob(expmt_dir + "/*")
 
         for stack_dir in stack_dir_all:
 
@@ -63,7 +63,7 @@ def main():
             if not os.path.isdir(out_expmt_dir):
                 os.mkdir(out_expmt_dir)
             
-            out_stack_dir = out_expmt_dir + '/' + stack_dir.split('/')[-1]
+            out_stack_dir = out_expmt_dir #+ '/' + stack_dir.split('/')[-1]
 
             if not os.path.isdir(out_stack_dir):
                 os.mkdir(out_stack_dir)
