@@ -4,7 +4,7 @@ import numpy as np
 import os
 import SimpleITK as sitk
 import glob
-
+from itertools import product
 
 # make the following code into a function
 def make_slices(subdir, outsubdir):
@@ -48,16 +48,15 @@ def main():
     scans_dir_top =  '/deneb_disk/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files'
     expmt_dir_all = glob.glob(scans_dir_top + "/*")
 
-    phase_fixed = 11
 
-    for expmt_dir in expmt_dir_all:
+    for phase, expmt_dir in product(range(25),expmt_dir_all):
 
         # stack_id =stack_dir.split('ssfp_')[-1][0:8]
         stack_dir_all = [expmt_dir] #glob.glob(expmt_dir + "/*")
 
         for stack_dir in stack_dir_all:
 
-            inp_dir = expmt_dir + f'/phase_{phase_fixed:02d}'
+            inp_dir = expmt_dir + f'/phase_{phase+1:02d}'
             out_expmt_dir = "/deneb_disk/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files/" + expmt_dir.split('/')[-1] 
 
             if not os.path.isdir(out_expmt_dir):
@@ -68,12 +67,12 @@ def main():
             if not os.path.isdir(out_stack_dir):
                 os.mkdir(out_stack_dir)
 
-            out_dir = out_stack_dir + f'/phase_{phase_fixed:02d}_rot'
+            out_dir = out_stack_dir + f'/phase_{phase+1:02d}_rot'
 
             if not os.path.isdir(out_dir):
                 os.mkdir(out_dir)
 
-            phase_dir = stack_dir + f'/phase_{phase_fixed:02d}'        
+            phase_dir = stack_dir + f'/phase_{phase+1:02d}'        
 
 
             make_slices(phase_dir, out_dir)  # call the function
