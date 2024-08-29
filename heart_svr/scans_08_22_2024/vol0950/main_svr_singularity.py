@@ -14,9 +14,9 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
     stacks = ""
     num_stacks = len(stacks_all)
     
-    print("*********************************")
-    print(num_stacks)
-    print("*********************************")
+    #print("*********************************")
+    #print(num_stacks)
+    #print("*********************************")
 
     if num_stacks != 4:
         print("Number of stacks is not 4 Check!!")
@@ -29,7 +29,9 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
         stacks += " " + stacks_all[j]
         str_th += " " + str(slice_thickness)
 
-    cmd = (        f"cd {outsvr_dir}; mirtk reconstruct "        + outsvr
+    cmd = (
+        f"cd {outsvr_dir}; mirtk reconstruct "
+        + outsvr
         + " "
         + str(num_stacks)
         + stacks
