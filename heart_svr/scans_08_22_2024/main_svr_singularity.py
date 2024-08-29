@@ -18,12 +18,15 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
         print("Number of stacks is not 4 Check!!")
         return
 
-    for j in range(num_stacks):
-        stacks += " " + stacks_all[j]
-
     str_th = ""
 
     for j in range(num_stacks):
+        stacks += " " + stacks_all[j]
+
+        if stacks_all[j].find("p56") + stacks_all[j].find("p58") >= 0:
+            slice_thickness = 4.0
+        else:
+            slice_thickness = 6.0
         str_th += " " + str(slice_thickness)
 
     cmd = (
@@ -50,22 +53,22 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 if __name__ == "__main__":
 
 
-    scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/nifti_files"
+    scans_dir_top = "/deneb_disk/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/nifti_files"
     expmt_dir_all = [scans_dir_top]
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
-        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/common_template/p58_cardiac_svr_sweep_2_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/common_template/p58_cardiac_svr_sweep_2_res_15.pad.dilated.mask.nii.gz"
+        template = "/deneb_disk/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/common_template/p58_cardiac_svr_sweep_2_res_15.pad.nii.gz"
+        mask = "/deneb_disk/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/common_template/p58_cardiac_svr_sweep_2_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
             + expmt_dir.split("/")[-1]
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
-        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/outsvr_pad"
+        outsvr_dir = "/deneb_disk/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/outsvr_pad"
 
         thickness = 6.0
 
