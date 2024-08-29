@@ -41,7 +41,7 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
     print(cmd)
     # os.system(cmd)
     docker_cmd = f"singularity run --bind /project/ajoshi_27 /scratch1/ajoshi/svrtk_latest.sif /bin/bash -lic \\\"cd {subdir}; {cmd}\\\" "
-    print(docker_cmd)
+    #print(docker_cmd)
     full_cmd = 'sbatch '+ 'mycmd.sh "' + docker_cmd +"\""
     print(full_cmd)
     os.system(full_cmd)
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files"
     expmt_dir_all = [
-        "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files/res_1.2_thickness_6"
+        "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files/res_1.5_thickness_6"
     ]  # glob.glob(scans_dir_top + "/*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
@@ -82,8 +82,6 @@ if __name__ == "__main__":
             res=res,
             slice_thickness=thickness,
         )
-        
-        break
 
 
 # End of main_svr.py
