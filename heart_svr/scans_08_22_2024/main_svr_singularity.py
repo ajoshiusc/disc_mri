@@ -66,7 +66,7 @@ if __name__ == "__main__":
         )
         outsvr_dir = "/deneb_disk/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/outsvr_pad"
 
-        thickness = expmt_dir.split("/")[-1].split("thickness_")[-1].split("_")[0]
+        thickness = 6.0
 
         # convert thickness to float
         thickness = float(thickness)
