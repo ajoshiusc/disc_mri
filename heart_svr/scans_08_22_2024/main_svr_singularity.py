@@ -13,9 +13,14 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 
     stacks = ""
     num_stacks = len(stacks_all)
+    
+    #print("*********************************")
+    #print(num_stacks)
+    #print("*********************************")
 
-    if num_stacks < 4:
+    if num_stacks != 4:
         print("Number of stacks is not 4 Check!!")
+        print(stacks_all)
         return
 
     str_th = ""
@@ -41,9 +46,9 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 
     cmd += " --thickness " + str_th + " --template " + template + " --mask " + mask
 
-    print(cmd)
+    #print(cmd)
     # os.system(cmd)
-    docker_cmd = f"singularity run --bind /project/ajoshi_27 /scratch1/ajoshi/svrtk_latest.sif /bin/bash -lic \\\"cd {subdir}; {cmd}\\\" "
+    docker_cmd = f"singularity run --bind /project/ajoshi_27 /scratch1/ajoshi/svrtk_latest.sif /bin/bash -lic \\\"{cmd}\\\" "
     #print(docker_cmd)
     full_cmd = 'sbatch '+ 'mycmd.sh "' + docker_cmd +"\""
     print(full_cmd)
@@ -69,6 +74,11 @@ if __name__ == "__main__":
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
         outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/outsvr_pad"
+
+        #expdir_prefix = expmt_dir.split("/")[-1]
+        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0949/outsvr_pad/" + f"phase_{phase+1:02}_allstacks"
+
+        os.makedirs(outsvr_dir)
 
         thickness = 6.0
 
