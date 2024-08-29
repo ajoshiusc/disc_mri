@@ -162,3 +162,4 @@ fetal_mri/.vscode/settings.json
 *.npz
 *_log.txt
 heart_svr/*/.vscode/*
+*/*/mainsvrlog.txt
