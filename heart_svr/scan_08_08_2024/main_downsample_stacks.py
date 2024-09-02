@@ -43,22 +43,22 @@ def downsample_nifti(input_file, output_file, n):
     nib.save(img_downsampled, output_file)
 
 
-downsample_factor = 2
 
 
-input_phase_dir = (
-    "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files/res_1.5_thickness_6/phase_11_rot"
-)
-
-
-# Get a list of all NIfTI files in the input directory
-nii_files = glob.glob(input_phase_dir + "/*.nii.gz")
-
-
+downsample_factor = 2  # Downsample factor
 # Loop through each NIfTI file
-for downsample_factor in [2]:
+for phase in range(25):
 
-    output_phase_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files_experiments/res_1.5_thickness_6/phase_11_rot_downsampled{downsample_factor}"
+    input_phase_dir = (
+        f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files/res_1.5_thickness_6/phase_{phase+1:02}_rot"
+    )
+
+
+    # Get a list of all NIfTI files in the input directory
+    nii_files = glob.glob(input_phase_dir + "/*.nii.gz")
+
+
+    output_phase_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files_experiments/res_1.5_thickness_6/phase_{phase+1:02}_rot_downsampled{downsample_factor}"
     print(output_phase_dir)
     # make output directory if it doesn't exist
     os.makedirs(output_phase_dir, exist_ok=True)

@@ -61,17 +61,17 @@ if __name__ == "__main__":
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
         template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/common_template/p60_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/common_template/p60_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
+        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/common_template/p60_cardiac_svr_sweep_1_res_15.pad.dilated2.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
             + expmt_dir.split("/")[-1]
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
-        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad"
+        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad2"
 
         #expdir_prefix = expmt_dir.split("/")[-1]
-        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad/" + f"phase_{phase+1:02}_allstacks"
+        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad2/" + f"phase_{phase+1:02}_allstacks"
 
         os.makedirs(outsvr_dir)
 
