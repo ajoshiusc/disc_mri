@@ -77,8 +77,17 @@ if __name__ == "__main__":
             + expmt_dir.split("/")[-1]
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
+
+
+        print(outsvr)
+
         expdir_prefix = expmt_dir.split("/")[-1]        
         outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_08_2024/nifti_files_experiments/outsvr_pad_3stacks/" + f"phase_{phase+1:02}_expt_{expdir_prefix}"
+
+        # is file outsvr exists, skip
+        if os.path.exists(os.path.join(outsvr_dir,outsvr)):
+            continue
+
 
         os.makedirs(outsvr_dir)
 
