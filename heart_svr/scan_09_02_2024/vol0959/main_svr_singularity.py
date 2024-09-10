@@ -18,8 +18,8 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
     #print(num_stacks)
     #print("*********************************")
 
-    if num_stacks != 4:
-        print("Number of stacks is not 4 Check!!")
+    if num_stacks < 3:
+        print("Number of stacks is less than 3 Check!!")
         print(stacks_all)
         return
 
@@ -53,25 +53,24 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 if __name__ == "__main__":
 
 
-    scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/nifti_files"
-    expmt_dir_all = [scans_dir_top]
+    scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/nifti_files"
+    expmt_dir_all = glob.glob(scans_dir_top + "/v*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
-        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/common_template/p60_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/common_template/p60_cardiac_svr_sweep_1_res_15.pad.dilated2.mask.nii.gz"
+        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/common_template/p56_cardiac_svr_sweep_1_res_15.pad.nii.gz"
+        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/common_template/p56_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
             + expmt_dir.split("/")[-1]
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
-        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad2"
 
-        #expdir_prefix = expmt_dir.split("/")[-1]
-        outsvr_dir = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_08_22_2024/vol0950/outsvr_pad2/" + f"phase_{phase+1:02}_allstacks"
+        expdir_prefix = expmt_dir.split("/")[-1]
+        outsvr_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
         os.makedirs(outsvr_dir)
 
