@@ -43,21 +43,31 @@ data_3T = {
 diff_0_55T = np.array(data_0_55T['First Repetition']) - np.array(data_0_55T['Second Repetition'])
 mean_0_55T = (np.array(data_0_55T['First Repetition']) + np.array(data_0_55T['Second Repetition'])) / 2
 
+# divide the measures by 1000 to get the volumes in mm^3
+mean_0_55T = mean_0_55T / 1000
+diff_0_55T = diff_0_55T / 1000
+
+
 diff_3T = np.array(data_3T['First Repetition']) - np.array(data_3T['Second Repetition'])
 mean_3T = (np.array(data_3T['First Repetition']) + np.array(data_3T['Second Repetition'])) / 2
 
-# Bland-Altman Plot for 0.55T
+# divide the measures by 1000 to get the volumes in mm^3
+mean_3T = mean_3T / 1000
+diff_3T = diff_3T / 1000
+
+# Bland-Altman Plot for 0.55T with increased font size
+plt.rcParams.update({'font.size': 16})
 plt.figure(figsize=(8, 6))
 plt.scatter(mean_0_55T, diff_0_55T, c='blue', marker='o', label='0.55T')
 plt.axhline(np.mean(diff_0_55T), color='red', linestyle='--', label='Bias')
 plt.axhline(np.mean(diff_0_55T) + 1.96 * np.std(diff_0_55T), color='gray', linestyle='--', label='Upper LoA')
 plt.axhline(np.mean(diff_0_55T) - 1.96 * np.std(diff_0_55T), color='gray', linestyle='--', label='Lower LoA')
-plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T)')
-plt.ylabel('Difference (1st - 2nd Repetition)')
+plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in mm$^3$')
+plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
 plt.legend()
-plt.title('Bland-Altman Plot for 0.55T')
+#plt.title('Bland-Altman Plot for 0.55T')
 plt.grid(True)
-plt.savefig('Bland-Altman_Plot_for_0.55T_vol.png')
+plt.savefig('Bland-Altman_Plot_for_0.55T_vol_BrainSuite.png')
 
 # Bland-Altman Plot for 3T
 plt.figure(figsize=(8, 6))
@@ -65,16 +75,20 @@ plt.scatter(mean_3T, diff_3T, c='green', marker='s', label='3T')
 plt.axhline(np.mean(diff_3T), color='red', linestyle='--', label='Bias')
 plt.axhline(np.mean(diff_3T) + 1.96 * np.std(diff_3T), color='gray', linestyle='--', label='Upper LoA')
 plt.axhline(np.mean(diff_3T) - 1.96 * np.std(diff_3T), color='gray', linestyle='--', label='Lower LoA')
-plt.xlabel('Mean of 1st and 2nd Repetitions (3T)')
-plt.ylabel('Difference (1st - 2nd Repetition)')
+plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in mm$^3$')
+plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
 plt.legend()
-plt.title('Bland-Altman Plot for 3T')
+#plt.title('Bland-Altman Plot for 3T')
 plt.grid(True)
-plt.savefig('Bland-Altman_Plot_for_3T_vol.png')
+plt.savefig('Bland-Altman_Plot_for_3T_vol_BrainSuite.png')
 
 # Calculate the means for both datasets
 mean_0_55T = (np.array(data_0_55T['First Repetition']) + np.array(data_0_55T['Second Repetition'])) / 2
 mean_3T = (np.array(data_3T['First Repetition']) + np.array(data_3T['Second Repetition'])) / 2
+
+# Divide the measures by 1000 to get the volumes in mm^3
+mean_0_55T = mean_0_55T / 1000
+mean_3T = mean_3T / 1000
 
 # Calculate the differences between means
 diff_means = mean_0_55T - mean_3T
@@ -85,12 +99,12 @@ plt.scatter(mean_0_55T, diff_means, c='purple', marker='x', label='0.55T vs. 3T'
 plt.axhline(np.mean(diff_means), color='red', linestyle='--', label='Bias')
 plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means), color='gray', linestyle='--', label='Upper LoA')
 plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means), color='gray', linestyle='--', label='Lower LoA')
-plt.xlabel('Mean of Means of 0.55T and 3T')
-plt.ylabel('Difference in Means (0.55T - 3T)')
+plt.xlabel('Mean of Means of 0.55T and 3T in mm$^3$')
+plt.ylabel('Difference in Means (0.55T - 3T) in mm$^3$')
 plt.legend()
-plt.title('Bland-Altman Plot: 0.55T vs. 3T')
+#plt.title('Bland-Altman Plot: 0.55T vs. 3T')
 plt.grid(True)
-plt.savefig('Bland-Altman_Plot_0.55T_vs_3T_vol.png')
+plt.savefig('Bland-Altman_Plot_0.55T_vs_3T_vol_BrainSuite.png')
 
 # Show the plots
 #plt.show()
