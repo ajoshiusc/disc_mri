@@ -17,6 +17,9 @@ import nilearn.image as ni
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
+import matplotlib
+matplotlib.use('Qt5Agg')
+
 atlas = "/home/ajoshi/Software/BrainSuite23a/svreg/BrainSuiteAtlas1/mri.label.nii.gz"
 
 
@@ -32,8 +35,8 @@ roi_vols_lf = np.load("brainSuite_low_field.npz")["roi_vols"]
 label_ids = np.load("brainSuite_3T.npz")["label_ids"]
 
 
-roi_vols_3t = roi_vols_3t[:,:,1:-1]
-roi_vols_lf = roi_vols_lf[:,:,0,1:-1]
+roi_vols_3t = roi_vols_3t[:, :, 1:-1]
+roi_vols_lf = roi_vols_lf[:, :, 0, 1:-1]
 
 # for LF dims of roi_vols_lf is session, subj, param, roino
 # for 3T dims of roi_vols_3t is session, subj, roino
@@ -41,31 +44,42 @@ roi_vols_lf = roi_vols_lf[:,:,0,1:-1]
 stat_3t_intra = np.zeros(label_data.shape)
 
 param = 0
-#roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
-#roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
+# roi_vols_3t = np.mean(roi_vols_3t,axis=0).flatten()
+# roi_vols_lf = np.mean(roi_vols_lf,axis=0).flatten()
 
 roi_vols_3t = roi_vols_3t[0].flatten()
 roi_vols_lf = roi_vols_lf[0].flatten()
 
 
-x= roi_vols_3t
-y = roi_vols_lf
+x = roi_vols_3t / 1000  # to convert to cm^3
+y = roi_vols_lf / 1000  # to convert to cm^3
+
 # Calculate correlation coefficient (Pearson's r)
 correlation = np.corrcoef(x, y)[0, 1]
 
 # Calculate R-squared value
 slope, intercept, r_value, p_value, std_err = linregress(x, y)
-r_squared = r_value ** 2
+r_squared = r_value**2
+
+# Create a scatter plot. Increase font size to 16
+plt.rcParams.update({'font.size': 16})
+plt.figure(figsize=(8, 6))
 
 # Create a scatter plot
-plt.scatter(x, y, label=f'Correlation: {correlation:.2f}\nR-squared: {r_squared:.2f}')
+plt.scatter(x, y, label=f"Correlation: {correlation:.2f}\nR-squared: {r_squared:.2f}")
+
+# plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
+plt.plot(
+    x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
+)
 
 # Add labels and legend
-plt.xlabel('3T ROI volume')
-plt.ylabel('0.55 ROI volume')
+plt.xlabel("3T ROI volume in cm$^3$")
+plt.ylabel("0.55 ROI volume in cm$^3$")
 plt.legend()
 
-plt.savefig('3t_vs_lf_roi_vols_brainsuite.png')
+plt.savefig("3t_vs_lf_roi_vols_brainsuite.png")
 
 # Show the plot
-#plt.show()
+plt.draw()
+plt.show()
