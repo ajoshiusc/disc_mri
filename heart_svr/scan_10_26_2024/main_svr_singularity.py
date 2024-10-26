@@ -53,15 +53,15 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
 if __name__ == "__main__":
 
 
-    scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/nifti_files"
+    scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/nifti_files"
     expmt_dir_all = glob.glob(scans_dir_top + "/v*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
-        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/common_template/p56_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/common_template/p56_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
+        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/common_template/p55_cardiac_svr_sweep_1_res_15.pad.nii.gz"
+        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/common_template/p55_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         )
 
         expdir_prefix = expmt_dir.split("/")[-1]
-        outsvr_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_09_02_2024/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
+        outsvr_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
         os.makedirs(outsvr_dir)
 
