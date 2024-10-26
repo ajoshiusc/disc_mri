@@ -64,6 +64,12 @@ plt.axhline(np.mean(diff_0_55T) + 1.96 * np.std(diff_0_55T), color='gray', lines
 plt.axhline(np.mean(diff_0_55T) - 1.96 * np.std(diff_0_55T), color='gray', linestyle='--', label='Lower LoA')
 plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in mm$^3$')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
+
+# Add coefficients of variation in a box at the top right corner for 0.55T
+plt.text(0.95, 0.95, f'CV 0.55T: {np.std(mean_0_55T) / np.mean(mean_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.90, f'CV Diff: {np.std(diff_0_55T) / np.mean(diff_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
+
 plt.legend()
 #plt.title('Bland-Altman Plot for 0.55T')
 plt.grid(True)
@@ -77,6 +83,12 @@ plt.axhline(np.mean(diff_3T) + 1.96 * np.std(diff_3T), color='gray', linestyle='
 plt.axhline(np.mean(diff_3T) - 1.96 * np.std(diff_3T), color='gray', linestyle='--', label='Lower LoA')
 plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in mm$^3$')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
+
+# Add coefficients of variation in a box at the top right corner for 3T
+plt.text(0.95, 0.95, f'CV 3T: {np.std(mean_3T) / np.mean(mean_3T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.90, f'CV Diff: {np.std(diff_3T) / np.mean(diff_3T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
+# Add legend
 plt.legend()
 #plt.title('Bland-Altman Plot for 3T')
 plt.grid(True)
@@ -93,7 +105,8 @@ mean_3T = mean_3T / 1000
 # Calculate the differences between means
 diff_means = mean_0_55T - mean_3T
 
-# Bland-Altman Plot comparing averages of repetitions for 0.55T and 3T
+# Bland-Altman Plot comparing averages of repetitions for 0.55T and 3T, show coefficients of variation
+
 plt.figure(figsize=(8, 6))
 plt.scatter(mean_0_55T, diff_means, c='purple', marker='x', label='0.55T vs. 3T')
 plt.axhline(np.mean(diff_means), color='red', linestyle='--', label='Bias')
@@ -101,10 +114,22 @@ plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means), color='gray', lines
 plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means), color='gray', linestyle='--', label='Lower LoA')
 plt.xlabel('Mean of Means of 0.55T and 3T in mm$^3$')
 plt.ylabel('Difference in Means (0.55T - 3T) in mm$^3$')
+
+# Add coefficients of variation in a box at the top right corner
+plt.text(0.95, 0.95, f'CV 0.55T: {np.std(mean_0_55T) / np.mean(mean_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.90, f'CV 3T: {np.std(mean_3T) / np.mean(mean_3T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.85, f'CV Diff: {np.std(diff_means) / np.mean(diff_means) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
+# Add legend
 plt.legend()
+
+
+
+
+
 #plt.title('Bland-Altman Plot: 0.55T vs. 3T')
 plt.grid(True)
 plt.savefig('Bland-Altman_Plot_0.55T_vs_3T_vol_BrainSuite.png')
 
 # Show the plots
-#plt.show()
+plt.show()
