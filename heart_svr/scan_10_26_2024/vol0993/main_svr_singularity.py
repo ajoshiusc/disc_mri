@@ -54,13 +54,13 @@ if __name__ == "__main__":
 
 
     scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/nifti_files"
-    expmt_dir_all = glob.glob(scans_dir_top + "/v0993*")
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol0993*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
-        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/vol0993_template/p55_cardiac_svr_sweep_1_res_15..nii.gz"
+        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/vol0993_template/p55_cardiac_svr_sweep_1_res_15.pad.nii.gz"
         mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/vol0993_template/p55_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (

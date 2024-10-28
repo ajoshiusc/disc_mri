@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
 
     scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/nifti_files"
-    expmt_dir_all = glob.glob(scans_dir_top + "/v0929*")
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol0929*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
