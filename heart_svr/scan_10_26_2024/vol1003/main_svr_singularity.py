@@ -72,6 +72,11 @@ if __name__ == "__main__":
         expdir_prefix = expmt_dir.split("/")[-1]
         outsvr_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
+        if os.path.exists(outsvr_dir + "/" + outsvr):
+            print("Already exists")
+            continue
+    
+
         os.makedirs(outsvr_dir)
 
         thickness = 6.0
