@@ -40,11 +40,11 @@ def pad_nifti(input_file, output_file, pad_width):
 
 
 # Define the path to the template and mask images
-template = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files/vol1052_20241204_standard_view/phase_13_rot/p70_cardiac_svr_sweep_2_res_15.nii.gz"
-mask = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files/vol1052_20241204_standard_view/phase_13_rot/p70_cardiac_svr_sweep_2_res_15.mask.nii.gz"
+template = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files/vol1063_20241210/phase_13_rot/p56_cardiac_svr_sweep_1_res_15.nii.gz"
+mask = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files/vol1063_20241210/phase_13_rot/p56_cardiac_svr_sweep_1_res_15.mask.nii.gz"
 
-padded_template_filename = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/vol1052_20241204_standard_view_template/p70_cardiac_svr_sweep_2_res_15.pad.nii.gz"
-padded_mask_filename = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/vol1052_20241204_standard_view_template/p70_cardiac_svr_sweep_2_res_15.pad.mask.nii.gz"
+padded_template_filename = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/vol1063_20241210_template/p56_cardiac_svr_sweep_1_res_15.pad.nii.gz"
+padded_mask_filename = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/vol1063_20241210_template/p56_cardiac_svr_sweep_1_res_15.pad.mask.nii.gz"
 
 pad_width = 20
 
