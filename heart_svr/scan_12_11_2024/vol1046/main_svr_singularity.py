@@ -64,7 +64,7 @@ if __name__ == "__main__":
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
         template = "/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/vol1046_20241122_template/p73_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/vol1046_20241122_template/p73_cardiac_svr_sweep_1_res_15.pad.pad.dilated.mask.nii.gz"
+        mask = "/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/vol1046_20241122_template/p73_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
