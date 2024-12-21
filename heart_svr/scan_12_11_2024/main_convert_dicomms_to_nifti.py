@@ -12,7 +12,7 @@ settings.disable_validate_slice_increment()
 # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
 scans_dir_top = ("/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/dicoms/unzipped")
 
-expmt_dir_all = glob.glob(scans_dir_top + "/*")
+expmt_dir_all = glob.glob(scans_dir_top + "/vol1046*")
 
 #phase_fixed = 11
 

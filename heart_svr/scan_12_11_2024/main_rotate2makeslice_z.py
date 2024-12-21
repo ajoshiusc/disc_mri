@@ -46,7 +46,7 @@ def main():
  
     # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
     scans_dir_top =  '/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files'
-    expmt_dir_all = glob.glob(scans_dir_top + "/*")
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol1046*")
 
 
     for phase, expmt_dir in product(range(25),expmt_dir_all):
