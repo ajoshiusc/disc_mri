@@ -112,7 +112,7 @@ plt.legend()
 #plt.title('Bland-Altman Plot: 0.55T vs. 3T')
 
 # Add coefficients of variation in a box at the top right corner for 0.55T vs 3T
-plt.text(0.95, 0.95, f'CV 0.55T: {np.mean(np.abs(diff_means) / ((mean_0_55T + mean_3T+1e-6)/2.0)) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.95, f'CV 3T vs 0.55T: {np.mean(np.abs(diff_means) / ((mean_0_55T + mean_3T+1e-6)/2.0)) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 
 
 plt.grid(True)
