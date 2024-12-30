@@ -54,6 +54,11 @@ plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in mm')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm')
 plt.legend()
 #plt.title('Bland-Altman Plot (thickness) for 0.55T')
+
+# Add coefficients of variation in a box at the top right corner for 0.55T
+plt.text(0.95, 0.95, f'CV 0.55T: {np.mean(np.abs(diff_0_55T) / (mean_0_55T+1e-6)) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
+
 plt.grid(True)
 plt.savefig('Bland-Altman_Plot_thickness_for_0.55T_freesurfer.png')
 
@@ -67,6 +72,10 @@ plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in mm')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm')
 plt.legend()
 #plt.title('Bland-Altman Plot (thickness) for 3T')
+
+# Add coefficients of variation in a box at the top right corner for 3T
+plt.text(0.95, 0.95, f'CV 3T: {np.mean(np.abs(diff_3T) / (mean_3T+1e-6)) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
 plt.grid(True)
 plt.savefig('Bland-Altman_Plot_thickness_for_3T_freesurfer.png')
 
@@ -87,6 +96,10 @@ plt.xlabel('Mean of Means of 0.55T and 3T in mm')
 plt.ylabel('Difference in Means (0.55T - 3T) in mm')
 plt.legend()
 #plt.title('Bland-Altman Plot (thickness): 0.55T vs. 3T')
+
+# Add coefficients of variation in a box at the top right corner for 0.55T vs 3T
+plt.text(0.95, 0.95, f'CV 0.55T and 3T: {np.mean(np.abs(diff_means) / ((mean_0_55T + mean_3T+1e-6)/2.0)) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
+
 plt.grid(True)
 plt.savefig('Bland-Altman_Plot_thickness_0.55T_vs_3T_freesurfer.png')
 
