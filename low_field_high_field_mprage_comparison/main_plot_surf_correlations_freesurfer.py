@@ -11,10 +11,7 @@ import nibabel as nib
 import numpy as np
 import matplotlib.pyplot as plt
 from nilearn import plotting
-import nibabel as nib
-import numpy as np
 import nilearn.image as ni
-import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 
@@ -63,8 +60,9 @@ plt.figure(figsize=(8, 6))
 plt.rcParams.update({'font.size': 16})
 
 # Create a scatter plot
-plt.scatter(x, y, label=f"Correlation: {correlation:.2f}\nR-squared: {r_squared:.2f}")
-
+plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
+plt.xlim(0, 5)
+plt.ylim(0, 5)
 # plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
@@ -104,18 +102,22 @@ plt.figure(figsize=(8, 6))
 plt.rcParams.update({'font.size': 16})
 
 # Create a scatter plot
-plt.scatter(x, y, label=f"Correlation: {correlation:.2f}\nR-squared: {r_squared:.2f}")
+plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
 
 
+plt.xlim(0, 5)
+plt.ylim(0, 5)
 # plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
+
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
 )
+# legend should be on top left corner
+plt.legend(loc='upper left')
 
 # Add labels and legend
 plt.xlabel("3T ROI avg cortical thickness in mm")
 plt.ylabel("0.55 ROI avg cortical thickness in mm")
-plt.legend()
 
 plt.savefig("3t_vs_lf_roi_avg_cortical_thickness_freesurfer_noavg.png")
 

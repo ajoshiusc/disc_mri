@@ -69,8 +69,10 @@ plt.rcParams.update({'font.size': 16})
 plt.figure(figsize=(8, 6))
 
 # Create a scatter plot
-plt.scatter(x, y, label=f"Correlation: {correlation:.2f}\nR-squared: {r_squared:.2f}")
+plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
 
+plt.xlim(0, 300)
+plt.ylim(0, 300)
 # Plot regression line on the scatter plot (y = mx + b) with the calculated slope and intercept values, include the equation in the plot, also include correlation and R-squared values, and p-value
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
