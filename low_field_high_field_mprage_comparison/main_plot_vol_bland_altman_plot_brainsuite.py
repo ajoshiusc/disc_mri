@@ -72,13 +72,13 @@ plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
 #plt.text(0.95, 0.95, f'CV 0.55T: {np.std(mean_0_55T) / np.mean(mean_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 #plt.text(0.95, 0.90, f'CV Diff: {np.std(diff_0_55T) / np.mean(diff_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 
-
+plt.ylim(-6, 6)
 plt.legend()
 #plt.title('Bland-Altman Plot for 0.55T')
 
 print("mean",np.mean(diff_0_55T), "1.96 * std dev", 1.96 * np.std(diff_0_55T))
 # add mean and std dev to the plot in a box at the top center
-plt.text(0.5, 0.95, f'Mean: {np.mean(diff_0_55T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_0_55T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
+#plt.text(0.5, 0.95, f'Mean: {np.mean(diff_0_55T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_0_55T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
 
 
@@ -102,12 +102,13 @@ plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
 #plt.text(0.95, 0.90, f'CV Diff: {np.std(diff_3T) / np.mean(diff_3T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 
 # Add legend
+plt.ylim(-6, 6)
 plt.legend()
 #plt.title('Bland-Altman Plot for 3T')
 
 print("mean",np.mean(diff_3T), "1.96 * std dev", 1.96 * np.std(diff_3T))
 # add mean and std dev to the plot in a box at the top center
-plt.text(0.5, 0.95, f'Mean: {np.mean(diff_3T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_3T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
+#plt.text(0.5, 0.95, f'Mean: {np.mean(diff_3T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_3T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
 
 plt.grid(True)
@@ -145,11 +146,12 @@ plt.ylabel('Difference in Means (0.55T - 3T) in mm$^3$')
 #plt.text(0.95, 0.85, f'CV Diff: {np.std(diff_means) / np.mean(diff_means) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 
 # Add legend
+plt.ylim(-6, 6)
 plt.legend()
 
 print("mean",np.mean(diff_means), "1.96 * std dev", 1.96 * np.std(diff_means))
 # add mean and std dev to the plot in a box at the top center
-plt.text(0.5, 0.95, f'Mean: {np.mean(diff_means):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_means):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
+#plt.text(0.5, 0.95, f'Mean: {np.mean(diff_means):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_means):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
 
 
