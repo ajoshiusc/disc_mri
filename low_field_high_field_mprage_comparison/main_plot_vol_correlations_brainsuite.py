@@ -63,19 +63,23 @@ r_squared = r_value**2
 
 # Create a scatter plot. Increase font size to 16
 plt.rcParams.update({'font.size': 16})
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(7, 7))
 
 # Create a scatter plot
 plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
 
 # Set the same limits for x and y axes
-plt.xlim(0, 170)
-plt.ylim(0, 170)
+plt.xlim(0, 180)
+plt.ylim(0, 180)
+
+
+x = np.linspace(0, 180, 100)
 # plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
 )
-
+plt.xticks(range(0, 200, 20))
+plt.yticks(range(0, 200, 20))
 # Add labels and legend
 plt.xlabel("3T ROI volume in cm$^3$")
 plt.ylabel("0.55 ROI volume in cm$^3$")

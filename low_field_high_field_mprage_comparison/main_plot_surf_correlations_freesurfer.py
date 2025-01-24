@@ -53,7 +53,7 @@ slope, intercept, r_value, p_value, std_err = linregress(x, y)
 r_squared = r_value**2
 
 
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 6))
 
 
 # Create a scatter plot with increased font size
@@ -61,9 +61,10 @@ plt.rcParams.update({'font.size': 16})
 
 # Create a scatter plot
 plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
-plt.xlim(0, 5)
-plt.ylim(0, 5)
+plt.xlim(0, 4)
+plt.ylim(0, 4)
 # plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
+x = np.linspace(0, 4, 100)
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
 )
@@ -95,7 +96,7 @@ r_squared = r_value**2
 # 
 
 
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 6))
 
 
 # Create a scatter plot with increased font size
@@ -105,10 +106,10 @@ plt.rcParams.update({'font.size': 16})
 plt.scatter(x, y, label=f"R\N{SUPERSCRIPT TWO}: {r_squared:.2f}")
 
 
-plt.xlim(0, 5)
-plt.ylim(0, 5)
+plt.xlim(0, 4)
+plt.ylim(0, 4)
 # plot the regression line and include the equation in the plot, also include correlation and R-squared values, and p-value
-
+x= np.linspace(0, 4, 100)
 plt.plot(
     x, slope * x + intercept, color="red", label=f"y = {slope:.2f}x + {intercept:.2f}"
 )
