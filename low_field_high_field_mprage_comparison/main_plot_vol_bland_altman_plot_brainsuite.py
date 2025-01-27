@@ -43,7 +43,7 @@ data_3T = {
 diff_0_55T = np.array(data_0_55T['First Repetition']) - np.array(data_0_55T['Second Repetition'])
 mean_0_55T = (np.array(data_0_55T['First Repetition']) + np.array(data_0_55T['Second Repetition'])) / 2
 
-# divide the measures by 1000 to get the volumes in mm^3
+# divide the measures by 1000 to get the volumes in cm^3
 mean_0_55T = mean_0_55T / 1000
 diff_0_55T = diff_0_55T / 1000
 
@@ -51,7 +51,7 @@ diff_0_55T = diff_0_55T / 1000
 diff_3T = np.array(data_3T['First Repetition']) - np.array(data_3T['Second Repetition'])
 mean_3T = (np.array(data_3T['First Repetition']) + np.array(data_3T['Second Repetition'])) / 2
 
-# divide the measures by 1000 to get the volumes in mm^3
+# divide the measures by 1000 to get the volumes in cm^3
 mean_3T = mean_3T / 1000
 diff_3T = diff_3T / 1000
 
@@ -62,8 +62,8 @@ plt.scatter(mean_0_55T, diff_0_55T, c='blue', marker='.')#, label='0.55T')
 plt.axhline(np.mean(diff_0_55T), color='red', linestyle='--')#, label='Bias')
 plt.axhline(np.mean(diff_0_55T) + 1.96 * np.std(diff_0_55T), color='gray', linestyle='--')#, label='Upper LoA')
 plt.axhline(np.mean(diff_0_55T) - 1.96 * np.std(diff_0_55T), color='gray', linestyle='--')#, label='Lower LoA')
-plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in mm$^3$')
-plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
+plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in cm$^3$')
+plt.ylabel('Difference (1st - 2nd Repetition) in cm$^3$')
 
 # Add coefficients of variation in a box at the top right corner for 0.55T
 #plt.text(0.95, 0.95, f'CV 0.55T: {np.mean(np.abs(diff_0_55T) / mean_0_55T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
@@ -92,8 +92,8 @@ plt.scatter(mean_3T, diff_3T, c='green', marker='.')#, label='3T')
 plt.axhline(np.mean(diff_3T), color='red', linestyle='--')#, label='Bias')
 plt.axhline(np.mean(diff_3T) + 1.96 * np.std(diff_3T), color='gray', linestyle='--')#, label='Upper LoA')
 plt.axhline(np.mean(diff_3T) - 1.96 * np.std(diff_3T), color='gray', linestyle='--')#, label='Lower LoA')
-plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in mm$^3$')
-plt.ylabel('Difference (1st - 2nd Repetition) in mm$^3$')
+plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in cm$^3$')
+plt.ylabel('Difference (1st - 2nd Repetition) in cm$^3$')
 
 # Add coefficients of variation in a box at the top right corner for 3T
 #plt.text(0.95, 0.95, f'CV 3T: {np.mean(np.abs(diff_3T) / mean_3T) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
@@ -118,9 +118,9 @@ plt.savefig('Bland-Altman_Plot_for_3T_vol_BrainSuite.png')
 mean_0_55T = (np.array(data_0_55T['First Repetition']) + np.array(data_0_55T['Second Repetition'])) / 2
 mean_3T = (np.array(data_3T['First Repetition']) + np.array(data_3T['Second Repetition'])) / 2
 
-# Divide the measures by 1000 to get the volumes in mm^3
-mean_0_55T = mean_0_55T / 1000
-mean_3T = mean_3T / 1000
+# Divide the measures by 1000 to get the volumes in cm^3
+mean_0_55T = mean_0_55T / 1000 # convert to cm^3
+mean_3T = mean_3T / 1000 # convert to cm^3
 
 # Calculate the differences between means
 diff_means = mean_0_55T - mean_3T
@@ -132,8 +132,8 @@ plt.scatter(mean_0_55T, diff_means, c='purple', marker='.')#, label='0.55T vs. 3
 plt.axhline(np.mean(diff_means), color='red', linestyle='--')#, label='Bias')
 plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means), color='gray', linestyle='--')#, label='Upper LoA')
 plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means), color='gray', linestyle='--')#, label='Lower LoA')
-plt.xlabel('Mean of Means of 0.55T and 3T in mm$^3$')
-plt.ylabel('Difference in Means (0.55T - 3T) in mm$^3$')
+plt.xlabel('Mean of Means of 0.55T and 3T in cm$^3$')
+plt.ylabel('Difference in Means (0.55T - 3T) in cm$^3$')
 
 
 

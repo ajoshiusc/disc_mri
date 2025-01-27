@@ -163,3 +163,5 @@ fetal_mri/.vscode/settings.json
 *_log.txt
 heart_svr/*/.vscode/*
 */*/mainsvrlog.txt
+*/*.png~
+*.png~
