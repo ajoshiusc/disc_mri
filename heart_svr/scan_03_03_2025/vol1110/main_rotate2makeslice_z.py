@@ -37,7 +37,6 @@ def make_slices(subdir, outsubdir):
 
 
         print(img2.GetSpacing())
-        print('-------------------')
 
         sitk.WriteImage(img2, out_file)
 
