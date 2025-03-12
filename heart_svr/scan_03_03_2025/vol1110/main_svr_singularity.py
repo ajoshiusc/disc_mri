@@ -56,15 +56,15 @@ if __name__ == "__main__":
     #scans_dir_top = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_10_26_2024/nifti_files"
     #expmt_dir_all = glob.glob(scans_dir_top + "/vol0929*")
 
-    scans_dir_top =  '/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files'
-    expmt_dir_all = glob.glob(scans_dir_top + "/vol1046*")
+    scans_dir_top =  '/project/ajoshi_27/disc_mri/heart_svr_acquisition_03_03_2025/nifti_files'
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol1110*")
 
     for phase, expmt_dir in product(range(25), expmt_dir_all):
 
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
-        template = "/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/vol1046_20241122_template/p73_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-        mask = "/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/vol1046_20241122_template/p73_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
+        template = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_03_03_2025/vol1110_20241122_template/p59_cardiac_svr_sweep_1_res_15.pad.nii.gz"
+        mask = "/project/ajoshi_27/disc_mri/heart_svr_acquisition_03_03_2025/vol1110_20241122_template/p59_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
 
         outsvr = (
             f"svr_heart_"
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         )
 
         expdir_prefix = expmt_dir.split("/")[-1]
-        outsvr_dir = f"/project/ajoshi_27/disc_mri/for_Ye_12_11_2024_4subjects/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
+        outsvr_dir = f"/project/ajoshi_27/disc_mri/heart_svr_acquisition_03_03_2025/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
         os.makedirs(outsvr_dir)
 
