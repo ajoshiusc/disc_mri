@@ -19,7 +19,7 @@ import pandas as pd
 import seaborn as sb
 from nilearn.plotting import plot_anat
 
-te = 140
+te = 98
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
@@ -75,14 +75,16 @@ y = np.arange(MAX_COMB)
 data = pd.DataFrame(val_mse.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "mse"})
-sb.lineplot(data=m, x="num_stacks", y="mse")
+g=sb.lineplot(data=m, x="num_stacks", y="mse")
+g.set(ylim=(0, None))
 plt.savefig(f"te{te}_mse_vs_num_stacks.png")
 plt.close()
 
 data = pd.DataFrame(val_ssim.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "ssim"})
-sb.lineplot(data=m, x="num_stacks", y="ssim")
+g=sb.lineplot(data=m, x="num_stacks", y="ssim")
+g.set(ylim=(0, None))
 plt.savefig(f"te{te}_ssim_vs_num_stacks.png")
 plt.close()
 
@@ -90,7 +92,7 @@ data = pd.DataFrame(wm_snr.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "wm_snr"})
 g = sb.lineplot(data=m, x="num_stacks", y="wm_snr")
-#g.set(ylim=(0, None))
+g.set(ylim=(0, None))
 plt.savefig(f"te{te}_wm_snr_vs_num_stacks.png")
 plt.close()
 

@@ -41,7 +41,7 @@ th = 3
 num_stacks = len(stacks)
 
 
-a = np.load("ssim_mse_wm_snr.npz")
+a = np.load(f"ssim_mse_wm_snr_3_15_2025_{te}.npz")
 val_ssim = a["val_ssim"]
 val_mse = a["val_mse"]
 wm_snr = a["wm_snr"]
@@ -73,7 +73,7 @@ data = pd.DataFrame(wm_snr.T, columns=x)
 m = pd.melt(data, var_name="column", value_name="value")
 m = m.rename(columns={"column": "num_stacks", "value": "wm_snr"})
 g = sb.lineplot(data=m, x="num_stacks", y="wm_snr")
-#g.set(ylim=(0, None))
+g.set(ylim=(0, None))
 plt.savefig(f"te{te}_wm_snr_vs_num_stacks.png")
 plt.close()
 

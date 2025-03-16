@@ -43,7 +43,7 @@ def calculate_white_matter_snr(image_path, wm_mask_path):
     return white_matter_snr
 
 
-te = 140
+te = 272
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"

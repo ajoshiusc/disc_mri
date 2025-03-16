@@ -171,14 +171,14 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
     y = load_img(target).get_fdata()
     x *= y > 0
 
-    """# plot x and y images
+    # plot x and y images
     plt.imshow(x[100, :, :])
     plt.savefig(f"image_x_{ns}_{i}.png")
     plt.close()
 
     plt.imshow(y[100, :, :])
     plt.savefig(f"image_y_{ns}_{i}.png")
-    plt.close()"""
+    plt.close()
 
     x = EnsureChannelFirst(channel_dim=1)(
         x[
