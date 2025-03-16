@@ -63,7 +63,7 @@ th = 3
 num_stacks = len(stacks)
 
 
-a = np.load("ssim_mse_wm_snr.npz")
+a = np.load(f"ssim_mse_wm_snr_3_15_2025_{te}.npz")
 val_ssim = a["val_ssim"]
 val_mse = a["val_mse"]
 wm_snr = a["wm_snr"]

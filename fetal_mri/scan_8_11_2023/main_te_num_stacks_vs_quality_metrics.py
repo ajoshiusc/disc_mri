@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 import nibabel as nib
 
+
 def calculate_white_matter_snr(image_path, wm_mask_path):
     # Load the NIfTI image
     img = nib.load(image_path)
@@ -34,7 +35,7 @@ def calculate_white_matter_snr(image_path, wm_mask_path):
     # background_mask = data <= np.mean(data)
     background_std = np.std(data[white_matter_mask])
 
-    #background_std = np.std(data[background_mask])
+    # background_std = np.std(data[background_mask])
 
     # Calculate SNR
     white_matter_snr = white_matter_mean / background_std
@@ -42,19 +43,43 @@ def calculate_white_matter_snr(image_path, wm_mask_path):
     return white_matter_snr
 
 
-
 te = 140
 MAX_COMB = 20
 
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
 template = subdir + "/p21_t2_haste_tra_head_te98_p.nii.gz"
-mask = subdir + '/p21_t2_haste_tra_head_te98_p.mask.nii.gz'
-fetal_atlas = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
-fetal_atlas_seg = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
-fetal_atlas_tissue = "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
-wm_eroded_mask = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA37exp_wm_eroded_mask.nii.gz"
+mask = subdir + "/p21_t2_haste_tra_head_te98_p.mask.nii.gz"
+fetal_atlas = (
+    "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
+)
+fetal_atlas_seg = (
+    "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
+)
+fetal_atlas_tissue = (
+    "/deneb_disk/disc_mri/fetal_atlas//CRL_FetalBrainAtlas_2017v3/STA30_regional.nii.gz"
+)
+wm_eroded_mask = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_wm_eroded_mask.nii.gz"
 
 outsvr_dir = "/deneb_disk/disc_mri/scan_8_11_2023/outsvr"
+
+if not os.path.exists(wm_eroded_mask):
+
+    # read tissue mask fetal_atlas_tissue using simpleitk, create mask corresponding to the tissue labels 121 and 120, erode the mask by 3 voxels in 3D and save the mask to a nifti file
+
+    img = sitk.ReadImage(fetal_atlas_tissue)
+    data = sitk.GetArrayFromImage(img)
+    wmmask = np.zeros(data.shape, dtype=np.uint16)
+    wmmask[data == 121] = 1
+    wmmask[data == 120] = 1
+    wmmask = sitk.GetImageFromArray(wmmask)
+    wmmask = sitk.BinaryErode(wmmask, (1, 1, 1), sitk.sitkBall)
+    affine = img.GetDirection()
+    wmmask.SetDirection(affine)
+    wmmask.SetOrigin(img.GetOrigin()[:3])
+    wmmask.SetSpacing(img.GetSpacing())
+
+    sitk.WriteImage(wmmask, wm_eroded_mask)
+
 
 """
 subdir = "/deneb_disk/fetal_data_8_11_2023/nifti_data_rot"
@@ -106,7 +131,9 @@ print("registration of svr to atlas done")
 
 for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
     outsvr = f"{outsvr_dir}/svr_te{te}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
-    outsvr_aligned = f"{outsvr_dir}/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
+    outsvr_aligned = (
+        f"{outsvr_dir}/svr_te{te}_numstacks_{num_stacks}_iter_{ns}_aligned.nii.gz"
+    )
 
     if os.path.exists(outsvr_aligned):
         continue
@@ -140,6 +167,16 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
 
     x = load_img(outsvr_aligned).get_fdata()
     y = load_img(target).get_fdata()
+    x *= y > 0
+
+    """# plot x and y images
+    plt.imshow(x[100, :, :])
+    plt.savefig(f"image_x_{ns}_{i}.png")
+    plt.close()
+
+    plt.imshow(y[100, :, :])
+    plt.savefig(f"image_y_{ns}_{i}.png")
+    plt.close()"""
 
     x = EnsureChannelFirst(channel_dim=1)(
         x[
@@ -162,7 +199,12 @@ for ns, i in product(range(len(stacks)), range(MAX_COMB)):
 
 print(val_ssim, val_mse)
 
-np.savez("ssim_mse_wm_snr.npz", val_ssim=val_ssim, val_mse=val_mse, wm_snr=wm_snr)
+np.savez(
+    f"ssim_mse_wm_snr_3_15_2025_{te}.npz",
+    val_ssim=val_ssim,
+    val_mse=val_mse,
+    wm_snr=wm_snr,
+)
 
 x = range(1, len(stacks) + 1)
 
