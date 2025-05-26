@@ -114,9 +114,9 @@ def plot_surface(verts, faces, title, filename):
     plt.savefig(filename)
     plt.close()
 # Plot and save inner surface
-plot_surface(inner_verts, inner_faces, 'Inner Surface', 'inner_surface.png')
+plot_surface(inner_verts, inner_faces, 'Inner Surface', f'{week}_week_inner_surface.png')
 # Plot and save pial surface
-plot_surface(pial_verts, pial_faces, 'Pial Surface', 'pial_surface.png')
+plot_surface(pial_verts, pial_faces, 'Pial Surface', f'{week}_week_pial_surface.png')
 # Print completion message
-print("Surface plots saved as inner_surface.png and pial_surface.png")
+print(f"Surface plots saved as {week}_week_inner_surface.png and {week}_week_pial_surface.png")
 # End of script
