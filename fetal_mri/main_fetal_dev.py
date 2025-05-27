@@ -12,6 +12,10 @@ import numpy as np
 from skimage import measure
 import dfsio  # Make sure dfsio.py is in your Python path
 
+from scipy.spatial import cKDTree
+from surfproc import patch_color_attrib, view_patch_vtk, smooth_patch
+
+
 def laplacian_smooth(verts, faces, iterations=10, lam=0.5):
     """
     Simple Laplacian smoothing for triangle meshes.
@@ -166,5 +170,53 @@ for week in range(21, 36):
     plot_surface(inner_verts, inner_faces, 'Inner Surface', f'{week}_week_inner_surface.png')
     plot_surface(pial_verts, pial_faces, 'Pial Surface', f'{week}_week_pial_surface.png')
     print(f"Surface plots saved as {week}_week_inner_surface.png and {week}_week_pial_surface.png")
+
+
+    inner = dfsio.readdfs(f'{week}_week_inner_surface.dfs')
+    pial = dfsio.readdfs(f'{week}_week_pial_surface.dfs')
+
+
+    tree = cKDTree(pial.vertices)
+    d1, inds = tree.query(inner.vertices, k=1, p=2)
+    d = inner.vertices - pial.vertices[inds]
+
+
+    tree = cKDTree(inner.vertices)
+    d2, inds2 = tree.query(pial.vertices[inds], k=1, p=2)
+
+
+    thickness = (d1+d2)/2.0
+
+    inner.attributes = thickness
+
+    patch_color_attrib(inner, cmap='jet', clim=[0, 5])
+
+    #inner = smooth_patch(inner, 50)
+
+    view_patch_vtk(inner, outfile=f'{week}_week_inner_surface_view.png', show=False)
+    dfsio.writedfs(f'{week}_week_inner_depth.dfs', inner)
+    print(f"Computed and saved inner surface depth for week {week}.")
+
+
+    tree = cKDTree(inner.vertices)
+    d1, inds = tree.query(pial.vertices, k=1, p=2)
+    d = pial.vertices - inner.vertices[inds]
+
+
+    tree = cKDTree(pial.vertices)
+    d2, inds2 = tree.query(inner.vertices[inds], k=1, p=2)
+
+
+    thickness = (d1+d2)/2.0
+
+    pial.attributes = thickness
+    patch_color_attrib(pial, cmap='jet', clim=[0, 5])
+    #pial = smooth_patch(pial, 50)
+    view_patch_vtk(pial, outfile=f'{week}_week_pial_surface_view.png', show=False)
+    dfsio.writedfs(f'{week}_week_pial_depth.dfs', pial)
+    print(f"Computed and saved pial surface depth for week {week}.")
+
+
+
 
 # End of script

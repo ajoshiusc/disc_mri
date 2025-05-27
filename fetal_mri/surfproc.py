@@ -76,7 +76,7 @@ def patch_color_attrib(s,values=[],cmap='jet', clim=[0]):
         vmin = clim[0]; vmax = clim[1]
 
 
-    s.vColor = sp.zeros(s.vertices.shape)
+    s.vColor = np.zeros(s.vertices.shape)
     color_norm  = colors.Normalize(vmin=vmin,vmax=vmax)
     scalar_map = cmx.ScalarMappable(norm=color_norm, cmap=cmap)
     s.vColor = scalar_map.to_rgba(values)
@@ -517,7 +517,7 @@ def view_patch(r, attrib=[], opacity=1, fig=0, show=1, colorbar=1, clim=[0], out
                              r.faces, representation='surface',
                              scalars=sc)
         colors=255*sp.ones((r.vertices.shape[0],4))
-        colors[:,:3]=sp.int16(255.0*r.vColor)
+        colors[:,:3]=np.int16(255.0*r.vColor)
         mt.module_manager.scalar_lut_manager.lut.table = colors
 
     mlab.gcf().scene.parallel_projection = True
@@ -562,7 +562,7 @@ def smooth_patch(surf, iterations=15, relaxation=0.1):
     faces1 = surf1.GetPolys()
     f1 = faces1.GetData()
     f2 = vtk_to_numpy(f1)
-    f2 = f2.reshape(sp.int32(len(f2) / 4), 4)
+    f2 = f2.reshape(np.int32(len(f2) / 4), 4)
 
 
 
