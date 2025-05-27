@@ -56,7 +56,7 @@ def extract_surface(tissue_data, labels, mesh_smooth_iter=10, mesh_smooth_lambda
     return verts, faces
 
 # File paths
-
+'''
 week = 25
 
 mri_path = f'/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA{week}.nii.gz'
@@ -99,6 +99,7 @@ dfsio.writedfs(f'{week}_week_pial_surface.dfs', s)
 
 print("Saved: inner_surface.dfs and pial_surface.dfs")
 
+'''
 
 # plot the surfaces and save as png files
 import matplotlib.pyplot as plt
@@ -113,10 +114,57 @@ def plot_surface(verts, faces, title, filename):
     ax.set_zlabel('Z')
     plt.savefig(filename)
     plt.close()
+
+'''
 # Plot and save inner surface
 plot_surface(inner_verts, inner_faces, 'Inner Surface', f'{week}_week_inner_surface.png')
 # Plot and save pial surface
 plot_surface(pial_verts, pial_faces, 'Pial Surface', f'{week}_week_pial_surface.png')
 # Print completion message
 print(f"Surface plots saved as {week}_week_inner_surface.png and {week}_week_pial_surface.png")
+'''
+
+# Loop over weeks 21 to 35
+for week in range(21, 36):
+    mri_path = f'/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA{week}.nii.gz'
+    tissue_path = f'/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA{week}_tissue.nii.gz'
+
+    # Load tissue segmentation
+    tissue_img = nib.load(tissue_path)
+    tissue_data = tissue_img.get_fdata()
+
+    # Define label sets (update these based on your segmentation schema)
+    inner_labels = list(range(1, 126))
+    inner_labels.remove(124)
+    inner_labels.remove(112)
+    inner_labels.remove(113)
+
+    pial_labels = list(range(1, 126))
+    pial_labels.remove(124)  # Assuming label 1 is the inner surface
+
+    # Extract and smooth surfaces
+    inner_verts, inner_faces = extract_surface(
+        tissue_data, inner_labels, mesh_smooth_iter=10, mesh_smooth_lambda=0.5)
+    pial_verts, pial_faces = extract_surface(
+        tissue_data, pial_labels, mesh_smooth_iter=10, mesh_smooth_lambda=0.5)
+
+    # Save surfaces
+    class s:
+        pass
+
+    s.faces = inner_faces
+    s.vertices = inner_verts
+    dfsio.writedfs(f'{week}_week_inner_surface.dfs', s)
+
+    s.faces = pial_faces
+    s.vertices = pial_verts
+    dfsio.writedfs(f'{week}_week_pial_surface.dfs', s)
+
+    print(f"Saved: {week}_week_inner_surface.dfs and {week}_week_pial_surface.dfs")
+
+    # Plot and save surfaces
+    plot_surface(inner_verts, inner_faces, 'Inner Surface', f'{week}_week_inner_surface.png')
+    plot_surface(pial_verts, pial_faces, 'Pial Surface', f'{week}_week_pial_surface.png')
+    print(f"Surface plots saved as {week}_week_inner_surface.png and {week}_week_pial_surface.png")
+
 # End of script
