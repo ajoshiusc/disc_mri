@@ -189,11 +189,11 @@ for week in range(21, 36):
 
     inner.attributes = thickness
 
-    patch_color_attrib(inner, cmap='jet', clim=[0, 5])
+    patch_color_attrib(inner, cmap='jet', clim=[0, 6])
 
     #inner = smooth_patch(inner, 50)
 
-    view_patch_vtk(inner, outfile=f'{week}_week_inner_surface_view.png', show=False)
+    view_patch_vtk(inner, outfile=f'{week}_week_inner_surface_view.png', show=False, azimuth=0, elevation=0, roll=-180)
     dfsio.writedfs(f'{week}_week_inner_depth.dfs', inner)
     print(f"Computed and saved inner surface depth for week {week}.")
 
@@ -210,9 +210,9 @@ for week in range(21, 36):
     thickness = (d1+d2)/2.0
 
     pial.attributes = thickness
-    patch_color_attrib(pial, cmap='jet', clim=[0, 5])
+    patch_color_attrib(pial, cmap='jet', clim=[0, 6])
     #pial = smooth_patch(pial, 50)
-    view_patch_vtk(pial, outfile=f'{week}_week_pial_surface_view.png', show=False)
+    view_patch_vtk(pial, outfile=f'{week}_week_pial_surface_view.png', show=False, azimuth=0, elevation=0, roll=-180)
     dfsio.writedfs(f'{week}_week_pial_depth.dfs', pial)
     print(f"Computed and saved pial surface depth for week {week}.")
 
