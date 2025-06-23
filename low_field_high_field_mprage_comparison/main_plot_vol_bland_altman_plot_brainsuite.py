@@ -146,7 +146,7 @@ plt.ylabel('Difference in Means (0.55T - 3T) in cm$^3$')
 #plt.text(0.95, 0.85, f'CV Diff: {np.std(diff_means) / np.mean(diff_means) * 100:.2f}%', horizontalalignment='right', verticalalignment='top', transform=plt.gca().transAxes)
 
 # Add legend
-plt.ylim(-6, 6)
+plt.ylim(-15, 15)
 plt.legend()
 
 print("mean",np.mean(diff_means), "1.96 * std dev", 1.96 * np.std(diff_means))
