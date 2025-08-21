@@ -56,14 +56,10 @@ if not os.path.exists(outsvr_max_aligned):
     print(cmd)
     os.system(cmd)
 
-# Warp tissue atlas to subject space using the max stack registration
-warped_tissue = f"{outsvr_dir}/warped_tissue_te{te}.nii.gz"
-if not os.path.exists(warped_tissue):
-    cmd = f'flirt -ref {outsvr_max_aligned} -in {fetal_atlas_tissue} -out {warped_tissue} -init reorient_te{te}_max.mat -applyxfm -interp nearestneighbour'
-    print(cmd)
-    os.system(cmd)
+# Since SVR reconstructions are registered to atlas space, use original tissue atlas directly
+tissue_atlas = fetal_atlas_tissue
 
-print("Registration and tissue warping done")
+print("Registration done - using original tissue atlas since images are in atlas space")
 
 # Apply the same transformation to align all other reconstructions
 for num_stacks, ns in product(range(1, len(stacks) + 1), range(MAX_COMB)):
@@ -91,9 +87,11 @@ def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     Calculate WM to GM contrast and SNR
     Assumes tissue labels: GM=1, WM=2 (adjust based on your atlas)
     """
-    # Define tissue labels based on labelnames.csv
+    # Define tissue labels based on labelnames.csv and what's present in STA30
     GM_LABELS = [112, 113]  # Cortical_Plate_L, Cortical_Plate_R
-    WM_LABELS = [120, 121]  # White_Matter_L, White_Matter_R
+    
+    # For GA30, white matter is represented by developmental zones:
+    WM_LABELS = [114, 115, 116, 117, 118, 119, 122, 123]  # All white matter developmental zones
 
     # Extract tissue regions
     gm_mask = np.isin(tissue_data, GM_LABELS)
@@ -123,7 +121,8 @@ def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     return contrast_ratio, cnr, snr_gm, snr_wm
 
 # Load warped tissue map
-tissue_img = load_img(warped_tissue)
+# Since images are now in atlas space, use the atlas tissue labels directly
+tissue_img = load_img(fetal_atlas_tissue)
 tissue_data = tissue_img.get_fdata()
 
 # Initialize arrays for metrics
