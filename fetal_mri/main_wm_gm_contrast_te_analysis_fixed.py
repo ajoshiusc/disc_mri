@@ -255,68 +255,50 @@ def main():
             print(f"Skipping TE {te_value} - no files found")
             continue
             
-        # Initialize arrays for this TE
+        # Initialize arrays for this TE (with error bars)
         stack_numbers = list(range(1, max_stacks + 1))
         contrast_ratios = []
+        contrast_ratio_stds = []
         cnrs = []
+        cnr_stds = []
         snr_gms = []
+        snr_gm_stds = []
         snr_wms = []
+        snr_wm_stds = []
         
         # Process each stack number
         for num_stacks in tqdm(stack_numbers, desc=f"Processing TE {te_value}"):
             
-            # Get final iteration for this configuration
-            final_iter = get_final_iteration_for_file(te_value, num_stacks, svr_dir)
+            # Calculate metrics with variation for this specific stack number
+            cr_mean, cr_std, cnr_mean, cnr_std, snr_gm_mean, snr_gm_std, snr_wm_mean, snr_wm_std = \
+                calculate_metrics_with_variation(te_value, num_stacks, svr_dir, tissue_data, n_combinations=10)
             
-            if final_iter is None:
-                print(f"Warning: No iterations found for TE {te_value}, stacks {num_stacks}")
-                contrast_ratios.append(np.nan)
-                cnrs.append(np.nan)
-                snr_gms.append(np.nan)
-                snr_wms.append(np.nan)
-                continue
+            contrast_ratios.append(cr_mean)
+            contrast_ratio_stds.append(cr_std)
+            cnrs.append(cnr_mean)
+            cnr_stds.append(cnr_std)
+            snr_gms.append(snr_gm_mean)
+            snr_gm_stds.append(snr_gm_std)
+            snr_wms.append(snr_wm_mean)
+            snr_wm_stds.append(snr_wm_std)
             
-            # Load SVR reconstruction (final iteration)
-            svr_filename = f"svr_te{te_value}_numstacks_{num_stacks}_iter_{final_iter}_aligned.nii.gz"
-            svr_path = os.path.join(svr_dir, svr_filename)
-            
-            if not os.path.exists(svr_path):
-                print(f"Warning: {svr_filename} not found, adding NaN values")
-                contrast_ratios.append(np.nan)
-                cnrs.append(np.nan)
-                snr_gms.append(np.nan)
-                snr_wms.append(np.nan)
-                continue
-            
-            try:
-                # Load image data
-                img = nib.load(svr_path)
-                img_data = img.get_fdata()
-                
-                # Calculate metrics
-                contrast_ratio, cnr, snr_gm, snr_wm = calculate_wm_gm_contrast_and_snr(img_data, tissue_data)
-                
-                contrast_ratios.append(contrast_ratio)
-                cnrs.append(cnr)
-                snr_gms.append(snr_gm)
-                snr_wms.append(snr_wm)
-                
-                print(f"  Stacks {num_stacks:2d}: CR={contrast_ratio:.3f}, CNR={cnr:.3f}, SNR_GM={snr_gm:.3f}, SNR_WM={snr_wm:.3f}")
-                
-            except Exception as e:
-                print(f"Error processing {svr_filename}: {e}")
-                contrast_ratios.append(np.nan)
-                cnrs.append(np.nan)
-                snr_gms.append(np.nan)
-                snr_wms.append(np.nan)
+            if not np.isnan(cr_mean):
+                print(f"  Stacks {num_stacks:2d}: CR={cr_mean:.3f}±{cr_std:.3f}, CNR={cnr_mean:.3f}±{cnr_std:.3f}, " +
+                      f"SNR_GM={snr_gm_mean:.3f}±{snr_gm_std:.3f}, SNR_WM={snr_wm_mean:.3f}±{snr_wm_std:.3f}")
+            else:
+                print(f"  Stacks {num_stacks:2d}: No valid data")
         
-        # Store results for this TE
+        # Store results for this TE (now including error bars)
         results[te_value] = {
             'stack_numbers': stack_numbers,
             'contrast_ratios': contrast_ratios,
+            'contrast_ratio_stds': contrast_ratio_stds,
             'cnrs': cnrs,
+            'cnr_stds': cnr_stds,
             'snr_gms': snr_gms,
-            'snr_wms': snr_wms
+            'snr_gm_stds': snr_gm_stds,
+            'snr_wms': snr_wms,
+            'snr_wm_stds': snr_wm_stds
         }
     
     # Calculate metrics with variation for specific stack numbers (for TE vs metric plots)
@@ -362,7 +344,9 @@ def main():
     for te_value in TE_VALUES:
         if te_value in results:
             data = results[te_value]
-            ax1.plot(data['stack_numbers'], data['contrast_ratios'], 'o-', label=f'TE {te_value}ms', linewidth=2)
+            ax1.errorbar(data['stack_numbers'], data['contrast_ratios'], 
+                        yerr=data['contrast_ratio_stds'], 
+                        marker='o', label=f'TE {te_value}ms', linewidth=2, capsize=5)
     ax1.set_xlabel('Number of Stacks')
     ax1.set_ylabel('WM/GM Contrast Ratio')
     ax1.set_title('Contrast Ratio vs Number of Stacks')
@@ -374,7 +358,9 @@ def main():
     for te_value in TE_VALUES:
         if te_value in results:
             data = results[te_value]
-            ax2.plot(data['stack_numbers'], data['cnrs'], 's-', label=f'TE {te_value}ms', linewidth=2)
+            ax2.errorbar(data['stack_numbers'], data['cnrs'], 
+                        yerr=data['cnr_stds'], 
+                        marker='s', label=f'TE {te_value}ms', linewidth=2, capsize=5)
     ax2.set_xlabel('Number of Stacks')
     ax2.set_ylabel('Contrast-to-Noise Ratio')
     ax2.set_title('CNR vs Number of Stacks')
@@ -386,7 +372,9 @@ def main():
     for te_value in TE_VALUES:
         if te_value in results:
             data = results[te_value]
-            ax3.plot(data['stack_numbers'], data['snr_gms'], '^-', label=f'TE {te_value}ms', linewidth=2)
+            ax3.errorbar(data['stack_numbers'], data['snr_gms'], 
+                        yerr=data['snr_gm_stds'], 
+                        marker='^', label=f'TE {te_value}ms', linewidth=2, capsize=5)
     ax3.set_xlabel('Number of Stacks')
     ax3.set_ylabel('SNR Gray Matter')
     ax3.set_title('SNR GM vs Number of Stacks')
@@ -398,7 +386,9 @@ def main():
     for te_value in TE_VALUES:
         if te_value in results:
             data = results[te_value]
-            ax4.plot(data['stack_numbers'], data['snr_wms'], 'd-', label=f'TE {te_value}ms', linewidth=2)
+            ax4.errorbar(data['stack_numbers'], data['snr_wms'], 
+                        yerr=data['snr_wm_stds'], 
+                        marker='d', label=f'TE {te_value}ms', linewidth=2, capsize=5)
     ax4.set_xlabel('Number of Stacks')
     ax4.set_ylabel('SNR White Matter')
     ax4.set_title('SNR WM vs Number of Stacks')
@@ -492,18 +482,20 @@ def main():
         f.write("WM-GM Contrast Analysis Results by TE Value\n")
         f.write("=" * 50 + "\n\n")
         
-        # Original results (Stack number vs metrics for each TE)
-        f.write("SECTION 1: Metrics vs Stack Number for Each TE\n")
-        f.write("-" * 45 + "\n")
+        # Original results (Stack number vs metrics for each TE - now with error bars)
+        f.write("SECTION 1: Metrics vs Stack Number for Each TE (with variation)\n")
+        f.write("-" * 60 + "\n")
         for te_value in sorted(results.keys()):
             data = results[te_value]
             f.write(f"\nTE {te_value} ms:\n")
             f.write(f"Number of available stacks: {len(data['stack_numbers'])}\n")
-            f.write("Stacks\tContrast\tCNR\tSNR_GM\tSNR_WM\n")
+            f.write("Stacks\tCR_mean±std\tCNR_mean±std\tSNR_GM_mean±std\tSNR_WM_mean±std\n")
             
             for i, num_stacks in enumerate(data['stack_numbers']):
-                f.write(f"{num_stacks}\t{data['contrast_ratios'][i]:.4f}\t{data['cnrs'][i]:.4f}\t"
-                       f"{data['snr_gms'][i]:.4f}\t{data['snr_wms'][i]:.4f}\n")
+                f.write(f"{num_stacks}\t{data['contrast_ratios'][i]:.3f}±{data['contrast_ratio_stds'][i]:.3f}\t")
+                f.write(f"{data['cnrs'][i]:.3f}±{data['cnr_stds'][i]:.3f}\t")
+                f.write(f"{data['snr_gms'][i]:.3f}±{data['snr_gm_stds'][i]:.3f}\t")
+                f.write(f"{data['snr_wms'][i]:.3f}±{data['snr_wm_stds'][i]:.3f}\n")
         
         # New results (TE vs metrics for each stack number)
         f.write(f"\n\nSECTION 2: Metrics vs TE for Different Stack Numbers (with variation)\n")
