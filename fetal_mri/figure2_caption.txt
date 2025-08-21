@@ -1,0 +1,12 @@
+**Figure Caption for Second Plot (wm_gm_contrast_te_vs_metrics.png):**
+
+**Figure 2: Image Quality Metrics as a Function of Echo Time (TE) for Different Stack Numbers.** 
+Four image quality metrics are plotted against TE values (98, 140, 181, and 272 ms) with separate curves for reconstructions using 3, 6, 9, and 12 input stacks. Error bars represent standard deviation across different stack combinations for each stack count (n=10 combinations where available). 
+
+**(A) Contrast Ratio (CR)** shows the white matter to gray matter signal intensity ratio (WM/GM), demonstrating decreasing tissue contrast with increasing TE. 
+
+**(B) Contrast-to-Noise Ratio (CNR)** quantifies tissue contrast relative to noise levels, showing optimal values at intermediate TE values (140-181 ms). 
+
+**(C) Signal-to-Noise Ratio for Gray Matter (SNR GM)** and **(D) Signal-to-Noise Ratio for White Matter (SNR WM)** both decrease monotonically with increasing TE, reflecting T2 decay effects. 
+
+All metrics show improved stability (smaller error bars) with increasing number of input stacks, indicating more robust reconstruction quality. The analysis demonstrates the trade-off between tissue contrast enhancement and signal-to-noise ratio as TE increases in fetal MRI super-resolution volume reconstruction. Data obtained from T2-weighted HASTE acquisitions with tissue segmentation based on CRL Fetal Brain Atlas (STA30, 30-week gestational age).
