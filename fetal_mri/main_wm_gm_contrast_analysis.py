@@ -91,35 +91,35 @@ def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     Calculate WM to GM contrast and SNR
     Assumes tissue labels: GM=1, WM=2 (adjust based on your atlas)
     """
-    # Define tissue labels (adjust these based on your tissue atlas)
-    GM_LABEL = 2  # Gray matter label
-    WM_LABEL = 3  # White matter label
-    
+    # Define tissue labels based on labelnames.csv
+    GM_LABELS = [112, 113]  # Cortical_Plate_L, Cortical_Plate_R
+    WM_LABELS = [120, 121]  # White_Matter_L, White_Matter_R
+
     # Extract tissue regions
-    gm_mask = tissue_data == GM_LABEL
-    wm_mask = tissue_data == WM_LABEL
-    
+    gm_mask = np.isin(tissue_data, GM_LABELS)
+    wm_mask = np.isin(tissue_data, WM_LABELS)
+
     if np.sum(gm_mask) == 0 or np.sum(wm_mask) == 0:
         return np.nan, np.nan, np.nan, np.nan
-    
+
     # Calculate mean intensities
     gm_mean = np.mean(image_data[gm_mask])
     wm_mean = np.mean(image_data[wm_mask])
-    
+
     # Calculate standard deviations
     gm_std = np.std(image_data[gm_mask])
     wm_std = np.std(image_data[wm_mask])
-    
+
     # WM to GM contrast ratio
     contrast_ratio = wm_mean / gm_mean if gm_mean != 0 else np.nan
-    
+
     # Contrast-to-noise ratio (CNR)
     cnr = abs(wm_mean - gm_mean) / np.sqrt((wm_std**2 + gm_std**2) / 2)
-    
+
     # Signal-to-noise ratio for GM and WM
     snr_gm = gm_mean / gm_std if gm_std != 0 else np.nan
     snr_wm = wm_mean / wm_std if wm_std != 0 else np.nan
-    
+
     return contrast_ratio, cnr, snr_gm, snr_wm
 
 # Load warped tissue map
