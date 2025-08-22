@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
 """
-Fetal MRI Analysis: WM-GM Contrast vs TE Values
-This script analyzes white matter to gray matter contrast across different TE values.
+Fetal MRI Analysis: Comprehensive Image Quality Assessment vs TE Values
+This script analyzes multiple image quality metrics across different TE values including:
+- Tissue contrast metrics (WM-GM contrast, CNR, SNR) 
+- Structural similarity (SSIM)
+- Reconstruction fidelity (MSE)
 """
 
 import os
@@ -12,6 +15,10 @@ import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import torch
+from monai.losses.ssim_loss import SSIMLoss
+from torch.nn import MSELoss
+from monai.transforms import EnsureChannelFirst
 
 def get_max_stacks_for_te(te_value, svr_dir):
     """Find maximum available stacks for a given TE value"""
@@ -50,6 +57,55 @@ def get_final_iteration_for_file(te_value, num_stacks, svr_dir):
             iterations.append(int(match.group(1)))
     
     return max(iterations) if iterations else None
+
+def calculate_ssim_mse_metrics(img_data, reference_data):
+    """
+    Calculate SSIM and MSE metrics for image quality assessment.
+    
+    SSIM (Structural Similarity Index):
+    Measures structural similarity between images, accounting for luminance,
+    contrast, and structure. Values range from -1 to 1, where 1 indicates
+    perfect similarity.
+    
+    MSE (Mean Squared Error):
+    Measures pixel-wise reconstruction error. Lower values indicate better
+    reconstruction fidelity.
+    
+    Parameters:
+    -----------
+    img_data : ndarray
+        Test image data
+    reference_data : ndarray  
+        Reference/target image data
+        
+    Returns:
+    --------
+    tuple : (ssim_value, mse_value)
+    """
+    # Convert to torch tensors with appropriate dimensions for MONAI
+    try:
+        # Add batch and channel dimensions: [batch, channel, depth, height, width]
+        img_tensor = torch.tensor(img_data[None, None, :, :, :], dtype=torch.float32)
+        ref_tensor = torch.tensor(reference_data[None, None, :, :, :], dtype=torch.float32)
+        
+        # Initialize metrics
+        ssim_loss = SSIMLoss(spatial_dims=3)
+        mse_loss = MSELoss()
+        
+        # Calculate data range for SSIM (max value in reference)
+        data_range = ref_tensor.max().unsqueeze(0)
+        
+        # Calculate metrics (SSIM loss returns 1-SSIM, so we convert back)
+        ssim_loss_val = ssim_loss.forward(img_tensor, ref_tensor, data_range=data_range)
+        ssim_value = 1.0 - ssim_loss_val.item()
+        
+        mse_value = mse_loss.forward(img_tensor, ref_tensor).item()
+        
+        return ssim_value, mse_value
+        
+    except Exception as e:
+        print(f"Error calculating SSIM/MSE: {e}")
+        return np.nan, np.nan
 
 def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     """
@@ -130,7 +186,46 @@ def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
 
     return contrast_ratio, cnr, snr_gm, snr_wm
 
-def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_data, n_combinations=10):
+def calculate_comprehensive_metrics(image_data, tissue_data, reference_data=None):
+    """
+    Calculate comprehensive image quality metrics including tissue contrast and structural similarity.
+    
+    Parameters:
+    -----------
+    image_data : ndarray
+        Test image data
+    tissue_data : ndarray
+        Tissue segmentation labels
+    reference_data : ndarray, optional
+        Reference image for SSIM/MSE calculation
+        
+    Returns:
+    --------
+    dict : Dictionary containing all metrics
+        - contrast_ratio, cnr, snr_gm, snr_wm (tissue-based)
+        - ssim, mse (structural similarity, if reference provided)
+    """
+    # Calculate tissue-based metrics
+    contrast_ratio, cnr, snr_gm, snr_wm = calculate_wm_gm_contrast_and_snr(image_data, tissue_data)
+    
+    metrics = {
+        'contrast_ratio': contrast_ratio,
+        'cnr': cnr, 
+        'snr_gm': snr_gm,
+        'snr_wm': snr_wm,
+        'ssim': np.nan,
+        'mse': np.nan
+    }
+    
+    # Calculate structural similarity metrics if reference provided
+    if reference_data is not None:
+        ssim_val, mse_val = calculate_ssim_mse_metrics(image_data, reference_data)
+        metrics['ssim'] = ssim_val
+        metrics['mse'] = mse_val
+    
+    return metrics
+
+def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_data, reference_data=None, n_combinations=10):
     """
     Calculate metrics for different combinations of stacks to estimate variation.
     
@@ -149,7 +244,7 @@ def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_da
         
     Returns:
     --------
-    tuple : (mean_cr, std_cr, mean_cnr, std_cnr, mean_snr_gm, std_snr_gm, mean_snr_wm, std_snr_wm)
+    dict : Dictionary with mean and std for each metric
     """
     from itertools import combinations
     import random
@@ -158,7 +253,14 @@ def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_da
     max_stacks = get_max_stacks_for_te(te_value, svr_dir)
     
     if max_stacks < target_stacks:
-        return np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+        return {
+            'cr_mean': np.nan, 'cr_std': np.nan,
+            'cnr_mean': np.nan, 'cnr_std': np.nan,
+            'snr_gm_mean': np.nan, 'snr_gm_std': np.nan,
+            'snr_wm_mean': np.nan, 'snr_wm_std': np.nan,
+            'ssim_mean': np.nan, 'ssim_std': np.nan,
+            'mse_mean': np.nan, 'mse_std': np.nan
+        }
     
     # Generate different combinations of stacks
     available_stacks = list(range(1, max_stacks + 1))
@@ -170,7 +272,7 @@ def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_da
     else:
         selected_combinations = all_combinations
     
-    metrics = []
+    all_metrics = []
     
     for stack_combo in selected_combinations:
         # For simplicity, we'll use the middle stack number from the combination
@@ -193,25 +295,44 @@ def calculate_metrics_with_variation(te_value, target_stacks, svr_dir, tissue_da
             img = nib.load(svr_path)
             img_data = img.get_fdata()
             
-            # Calculate metrics
-            cr, cnr, snr_gm, snr_wm = calculate_wm_gm_contrast_and_snr(img_data, tissue_data)
+            # Calculate comprehensive metrics
+            metrics_dict = calculate_comprehensive_metrics(img_data, tissue_data, reference_data)
             
-            if not np.isnan(cr):  # Only include valid measurements
-                metrics.append([cr, cnr, snr_gm, snr_wm])
+            # Only include valid measurements
+            if not np.isnan(metrics_dict['contrast_ratio']):
+                all_metrics.append([
+                    metrics_dict['contrast_ratio'], metrics_dict['cnr'], 
+                    metrics_dict['snr_gm'], metrics_dict['snr_wm'],
+                    metrics_dict['ssim'], metrics_dict['mse']
+                ])
                 
         except Exception as e:
             continue
     
-    if len(metrics) == 0:
-        return np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    if len(all_metrics) == 0:
+        return {
+            'cr_mean': np.nan, 'cr_std': np.nan,
+            'cnr_mean': np.nan, 'cnr_std': np.nan,
+            'snr_gm_mean': np.nan, 'snr_gm_std': np.nan,
+            'snr_wm_mean': np.nan, 'snr_wm_std': np.nan,
+            'ssim_mean': np.nan, 'ssim_std': np.nan,
+            'mse_mean': np.nan, 'mse_std': np.nan
+        }
     
-    metrics = np.array(metrics)
+    all_metrics = np.array(all_metrics)
     
     # Calculate means and standard deviations
-    means = np.mean(metrics, axis=0)
-    stds = np.std(metrics, axis=0)
+    means = np.nanmean(all_metrics, axis=0)
+    stds = np.nanstd(all_metrics, axis=0)
     
-    return means[0], stds[0], means[1], stds[1], means[2], stds[2], means[3], stds[3]
+    return {
+        'cr_mean': means[0], 'cr_std': stds[0],
+        'cnr_mean': means[1], 'cnr_std': stds[1],
+        'snr_gm_mean': means[2], 'snr_gm_std': stds[2],
+        'snr_wm_mean': means[3], 'snr_wm_std': stds[3],
+        'ssim_mean': means[4], 'ssim_std': stds[4],
+        'mse_mean': means[5], 'mse_std': stds[5]
+    }
 
 def main():
     """
@@ -235,7 +356,7 @@ def main():
     results_dir = "/home/ajoshi/Projects/disc_mri/fetal_mri"
     
     # TE values to analyze
-    TE_VALUES = [98, 140, 181, 272]
+    TE_VALUES = [140]#[98, 140, 181, 272]
     
     # Load tissue atlas
     print("Loading tissue atlas...")
