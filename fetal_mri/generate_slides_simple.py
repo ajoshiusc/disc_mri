@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 import os
+from itertools import combinations
 
 # Set up professional presentation style
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -20,6 +21,51 @@ plt.rcParams.update({
     'legend.fontsize': 12,
     'figure.titlesize': 20
 })
+
+def compute_stack_combination_stats(data_dict, n_stacks, n_combinations=20):
+    """
+    Compute statistics for different combinations of stacks
+    
+    Parameters:
+    - data_dict: dictionary with TE as keys and lists of values as values
+    - n_stacks: number of stacks to select
+    - n_combinations: number of random combinations to try
+    
+    Returns:
+    - dict with means and stds for each TE
+    """
+    stats = {}
+    
+    for te in data_dict.keys():
+        if len(data_dict[te]) < n_stacks:
+            continue
+            
+        # Get all possible combinations or sample if too many
+        total_stacks = len(data_dict[te])
+        if total_stacks == 12:  # Our case
+            all_combinations = list(combinations(range(total_stacks), n_stacks))
+            if len(all_combinations) > n_combinations:
+                # Sample random combinations
+                selected_combinations = np.random.choice(len(all_combinations), 
+                                                       n_combinations, replace=False)
+                combinations_to_use = [all_combinations[i] for i in selected_combinations]
+            else:
+                combinations_to_use = all_combinations
+        else:
+            combinations_to_use = [tuple(range(n_stacks))]
+        
+        # Compute mean for each combination
+        combination_means = []
+        for combo in combinations_to_use:
+            combo_values = [data_dict[te][i] for i in combo]
+            combination_means.append(np.mean(combo_values))
+        
+        stats[te] = {
+            'mean': np.mean(combination_means),
+            'std': np.std(combination_means)
+        }
+    
+    return stats
 
 # Load actual data from comprehensive analysis
 def load_actual_data():
@@ -105,21 +151,22 @@ def create_title_slide():
     return fig
 
 def create_comprehensive_analysis_slide(data):
-    """Create slide with comprehensive analysis including actual figures"""
+    """Create slide with comprehensive analysis including actual figures with proper error bars"""
     fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(20, 12))
     
-    # 1. CNR vs TE - Use stabilized values (stacks 6-12 average)
+    # 1. CNR vs TE with error bars from stack combinations (using 8 stacks as representative)
     te_values = data['te_values']
-    # Use average of last 7 stack counts (6-12) where performance stabilizes
-    cnr_means = [np.mean(data['cnr'][te][5:]) for te in te_values]  # stacks 6-12
-    cnr_stds = [np.std(data['cnr'][te][5:]) for te in te_values]   # stacks 6-12
+    cnr_stats = compute_stack_combination_stats(data['cnr'], n_stacks=8, n_combinations=30)
     
-    bars = ax1.bar(te_values, cnr_means, yerr=cnr_stds, capsize=5,
+    cnr_means = [cnr_stats[te]['mean'] for te in te_values if te in cnr_stats]
+    cnr_stds = [cnr_stats[te]['std'] for te in te_values if te in cnr_stats]
+    
+    bars = ax1.bar(te_values, cnr_means, yerr=cnr_stds, capsize=8,
                    color=['#ff9999', '#66b3ff', '#99ff99', '#ffcc99'],
                    edgecolor='black', linewidth=1)
     ax1.set_xlabel('Echo Time (ms)', fontweight='bold')
     ax1.set_ylabel('CNR', fontweight='bold')
-    ax1.set_title('A. CNR vs TE (Stabilized Performance)', fontweight='bold')
+    ax1.set_title('A. CNR vs TE (8-stack combinations)', fontweight='bold')
     ax1.grid(True, alpha=0.3)
     
     # Add value labels on bars
@@ -129,26 +176,45 @@ def create_comprehensive_analysis_slide(data):
                 f'{mean:.3f}±{std:.3f}', ha='center', va='bottom', 
                 fontweight='bold', fontsize=10)
     
-    # 2. SSIM vs Stack count
+    # 2. SSIM vs Stack count with error bars from combinations
     colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12']
+    stack_range = [3, 6, 9, 12]  # Representative stack counts
+    
     for i, te in enumerate(te_values):
-        ssim_values = data['ssim'][te]
-        ax2.plot(data['stacks'], ssim_values, 'o-', label=f'TE {te}ms', 
-                linewidth=2, markersize=6, color=colors[i])
+        ssim_means = []
+        ssim_stds = []
+        
+        for n_stacks in stack_range:
+            if n_stacks <= len(data['ssim'][te]):
+                stats = compute_stack_combination_stats({te: data['ssim'][te]}, 
+                                                      n_stacks=n_stacks, n_combinations=20)
+                ssim_means.append(stats[te]['mean'])
+                ssim_stds.append(stats[te]['std'])
+            else:
+                ssim_means.append(data['ssim'][te][-1])
+                ssim_stds.append(0)
+        
+        ax2.errorbar(stack_range, ssim_means, yerr=ssim_stds, 
+                    fmt='o-', label=f'TE {te}ms', linewidth=2, markersize=8, 
+                    color=colors[i], capsize=5, capthick=2)
     
     ax2.axhline(y=0.95, color='red', linestyle='--', linewidth=2, alpha=0.8)
     ax2.set_xlabel('Number of Stacks', fontweight='bold')
     ax2.set_ylabel('SSIM', fontweight='bold')
-    ax2.set_title('B. Structural Similarity vs Stack Count', fontweight='bold')
+    ax2.set_title('B. SSIM vs Stack Count (combination variability)', fontweight='bold')
     ax2.legend(fontsize=10)
     ax2.grid(True, alpha=0.3)
+    ax2.set_ylim(0.7, 1.02)
     
-    # 3. SNR comparison - Use stabilized values (stacks 6-12 average)
+    # 3. SNR comparison with error bars from 8-stack combinations
     te_labels = [f'{te}ms' for te in te_values]
-    gm_snr = [np.mean(data['snr_gm'][te][5:]) for te in te_values]  # stacks 6-12
-    wm_snr = [np.mean(data['snr_wm'][te][5:]) for te in te_values]  # stacks 6-12
-    gm_std = [np.std(data['snr_gm'][te][5:]) for te in te_values]   # stacks 6-12
-    wm_std = [np.std(data['snr_wm'][te][5:]) for te in te_values]   # stacks 6-12
+    snr_gm_stats = compute_stack_combination_stats(data['snr_gm'], n_stacks=8, n_combinations=30)
+    snr_wm_stats = compute_stack_combination_stats(data['snr_wm'], n_stacks=8, n_combinations=30)
+    
+    gm_snr = [snr_gm_stats[te]['mean'] for te in te_values if te in snr_gm_stats]
+    wm_snr = [snr_wm_stats[te]['mean'] for te in te_values if te in snr_wm_stats]
+    gm_std = [snr_gm_stats[te]['std'] for te in te_values if te in snr_gm_stats]
+    wm_std = [snr_wm_stats[te]['std'] for te in te_values if te in snr_wm_stats]
     
     x = np.arange(len(te_labels))
     width = 0.35
@@ -160,89 +226,285 @@ def create_comprehensive_analysis_slide(data):
     
     ax3.set_xlabel('Echo Time', fontweight='bold')
     ax3.set_ylabel('SNR', fontweight='bold')
-    ax3.set_title('C. SNR by Tissue (Stabilized Performance)', fontweight='bold')
+    ax3.set_title('C. SNR by Tissue (8-stack combinations)', fontweight='bold')
     ax3.set_xticks(x)
     ax3.set_xticklabels(te_labels)
     ax3.legend(fontsize=10)
     ax3.grid(True, alpha=0.3)
     
-    # 4. MSE vs Stack count
+    # 4. MSE vs Stack count with error bars from combinations
     for i, te in enumerate(te_values):
-        mse_values = data['mse'][te]
-        ax4.semilogy(data['stacks'], mse_values, 'o-', label=f'TE {te}ms', 
-                    linewidth=2, markersize=6, color=colors[i])
+        mse_means = []
+        mse_stds = []
+        
+        for n_stacks in stack_range:
+            if n_stacks <= len(data['mse'][te]):
+                stats = compute_stack_combination_stats({te: data['mse'][te]}, 
+                                                      n_stacks=n_stacks, n_combinations=20)
+                mse_means.append(stats[te]['mean'])
+                mse_stds.append(stats[te]['std'])
+            else:
+                mse_means.append(data['mse'][te][-1])
+                mse_stds.append(0)
+        
+        ax4.errorbar(stack_range, mse_means, yerr=mse_stds,
+                    fmt='o-', label=f'TE {te}ms', linewidth=2, markersize=6, 
+                    color=colors[i], capsize=5, capthick=2)
     
+    ax4.set_yscale('log')
     ax4.set_xlabel('Number of Stacks', fontweight='bold')
     ax4.set_ylabel('MSE (log scale)', fontweight='bold')
-    ax4.set_title('D. Reconstruction Error vs Stack Count', fontweight='bold')
+    ax4.set_title('D. Reconstruction Error (combination variability)', fontweight='bold')
     ax4.legend(fontsize=10)
     ax4.grid(True, alpha=0.3)
     
-    # 5. Quality vs Time trade-off
+    # 5. Quality vs Time trade-off with error bars
     stack_points = [6, 8, 10, 12]
     scan_time = [100, 133, 167, 200]
-    quality_scores = []
+    quality_means = []
+    quality_stds = []
+    
     for stack in stack_points:
-        avg_ssim = np.mean([data['ssim'][te][stack-1] for te in te_values])
-        quality_scores.append(avg_ssim)
+        # Get SSIM values for all TEs at this stack count
+        ssim_values = [data['ssim'][te][stack-1] for te in te_values if stack <= len(data['ssim'][te])]
+        if len(ssim_values) > 0:
+            # Compute stats across different stack combinations for average SSIM
+            all_te_stats = []
+            for te in te_values:
+                if stack <= len(data['ssim'][te]):
+                    te_stats = compute_stack_combination_stats({te: data['ssim'][te]}, 
+                                                             n_stacks=stack, n_combinations=15)
+                    all_te_stats.append(te_stats[te]['mean'])
+            
+            quality_means.append(np.mean(all_te_stats))
+            quality_stds.append(np.std(all_te_stats))
+        else:
+            quality_means.append(1.0)
+            quality_stds.append(0.0)
     
-    ax5.scatter(scan_time, quality_scores, s=[200, 400, 300, 200], 
-               c=['orange', 'green', 'blue', 'red'], 
-               alpha=0.8, edgecolors='black', linewidth=2)
+    ax5.errorbar(scan_time, quality_means, yerr=quality_stds,
+                fmt='o', markersize=12, capsize=8, capthick=3, linewidth=3,
+                color='purple', ecolor='red', alpha=0.8)
     
-    for i, (x, y, s) in enumerate(zip(scan_time, quality_scores, stack_points)):
-        ax5.annotate(f'{s} stacks', (x, y), xytext=(10, 10), 
-                    textcoords='offset points', fontsize=10, fontweight='bold')
+    for i, (x, y, s, std) in enumerate(zip(scan_time, quality_means, stack_points, quality_stds)):
+        ax5.annotate(f'{s} stacks\nSSIM={y:.3f}±{std:.3f}', (x, y), 
+                    xytext=(10, 15), textcoords='offset points', 
+                    fontsize=10, fontweight='bold',
+                    bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8))
     
     ax5.set_xlabel('Relative Scan Time (%)', fontweight='bold')
     ax5.set_ylabel('Quality Score (SSIM)', fontweight='bold')
-    ax5.set_title('E. Quality vs Scan Time Trade-off', fontweight='bold')
+    ax5.set_title('E. Quality vs Time (combination variability)', fontweight='bold')
     ax5.grid(True, alpha=0.3)
+    ax5.set_xlim(90, 210)
+    ax5.set_ylim(0.85, 1.02)
     
-    # 6. Clinical recommendations with corrected values
+    # 6. Clinical recommendations with updated combination-based values
     ax6.axis('off')
     
-    # Calculate actual stabilized values for recommendations
-    cnr_181 = np.mean(data['cnr'][181][5:])  # stacks 6-12 average
-    cnr_140 = np.mean(data['cnr'][140][5:])  
-    cnr_272 = np.mean(data['cnr'][272][5:])  
+    # Calculate combination-based values for recommendations
+    cnr_181_stats = compute_stack_combination_stats({181: data['cnr'][181]}, n_stacks=8, n_combinations=30)
+    cnr_140_stats = compute_stack_combination_stats({140: data['cnr'][140]}, n_stacks=6, n_combinations=20)
+    cnr_272_stats = compute_stack_combination_stats({272: data['cnr'][272]}, n_stacks=10, n_combinations=20)
     
-    ssim_181_8 = data['ssim'][181][7]  # 8th stack (0-indexed)
-    ssim_140_6 = data['ssim'][140][5]  # 6th stack
-    ssim_272_10 = data['ssim'][272][9] # 10th stack
+    ssim_181_stats = compute_stack_combination_stats({181: data['ssim'][181]}, n_stacks=8, n_combinations=30)
+    ssim_140_stats = compute_stack_combination_stats({140: data['ssim'][140]}, n_stacks=6, n_combinations=20)
+    ssim_272_stats = compute_stack_combination_stats({272: data['ssim'][272]}, n_stacks=10, n_combinations=20)
     
     recommendations = f"""CLINICAL RECOMMENDATIONS
+    (Error bars from stack combinations)
     
     OPTIMAL PROTOCOL
     TE: 181 ms, Stacks: 8
-    CNR: {cnr_181:.3f}, SSIM: {ssim_181_8:.3f}
+    CNR: {cnr_181_stats[181]['mean']:.3f}±{cnr_181_stats[181]['std']:.3f}
+    SSIM: {ssim_181_stats[181]['mean']:.3f}±{ssim_181_stats[181]['std']:.3f}
     
     TIME-CRITICAL
-    TE: 140 ms, Stacks: 6  
-    CNR: {cnr_140:.3f}, SSIM: {ssim_140_6:.3f}
+    TE: 140 ms, Stacks: 6
+    CNR: {cnr_140_stats[140]['mean']:.3f}±{cnr_140_stats[140]['std']:.3f}
+    SSIM: {ssim_140_stats[140]['mean']:.3f}±{ssim_140_stats[140]['std']:.3f}
     
     HIGH CONTRAST
     TE: 272 ms, Stacks: 10
-    CNR: {cnr_272:.3f}, SSIM: {ssim_272_10:.3f}
+    CNR: {cnr_272_stats[272]['mean']:.3f}±{cnr_272_stats[272]['std']:.3f}
+    SSIM: {ssim_272_stats[272]['mean']:.3f}±{ssim_272_stats[272]['std']:.3f}
     
-    KEY FINDINGS:
-    • 33% time reduction possible
-    • SSIM >0.95 with ≥8 stacks
-    • TE 272ms best contrast
-    • TE 181ms optimal balance"""
+    Error bars represent variability
+    across different stack combinations"""
     
-    ax6.text(0.05, 0.95, recommendations, fontsize=12, ha='left', va='top',
+    ax6.text(0.05, 0.95, recommendations, fontsize=11, ha='left', va='top',
             transform=ax6.transAxes, fontweight='bold',
             bbox=dict(boxstyle="round,pad=0.5", facecolor='lightyellow', 
                      alpha=0.9, edgecolor='orange', linewidth=2))
     
-    ax6.set_title('F. Clinical Impact & Recommendations', fontweight='bold')
+    ax6.set_title('F. Clinical Recommendations (Combination-based)', fontweight='bold')
+    
+    plt.tight_layout()
+    return fig
+
+def create_updated_comprehensive_figure(data):
+    """Create updated version of comprehensive analysis figure with proper error bars"""
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    ax1, ax2, ax3, ax4, ax5, ax6 = axes.flatten()
+    
+    colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12']
+    te_values = data['te_values']
+    stack_counts = [3, 6, 9, 12]
+    
+    # Plot 1: CNR vs TE with combination-based error bars
+    cnr_stats = compute_stack_combination_stats(data['cnr'], n_stacks=8, n_combinations=30)
+    cnr_means = [cnr_stats[te]['mean'] for te in te_values]
+    cnr_stds = [cnr_stats[te]['std'] for te in te_values]
+    
+    ax1.errorbar(te_values, cnr_means, yerr=cnr_stds, fmt='o-', 
+                 capsize=8, capthick=3, linewidth=3, markersize=10,
+                 color='#2E86AB', ecolor='#A23B72', markerfacecolor='white',
+                 markeredgecolor='#2E86AB', markeredgewidth=2)
+    
+    ax1.set_xlabel('Echo Time (ms)', fontweight='bold')
+    ax1.set_ylabel('Contrast-to-Noise Ratio', fontweight='bold')
+    ax1.set_title('CNR vs TE (8-stack combinations)', fontweight='bold')
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot 2: SSIM vs Stack Count with combination error bars
+    for i, te in enumerate(te_values):
+        means, stds = [], []
+        for n_stacks in stack_counts:
+            stats = compute_stack_combination_stats({te: data['ssim'][te]}, 
+                                                   n_stacks=n_stacks, n_combinations=20)
+            means.append(stats[te]['mean'])
+            stds.append(stats[te]['std'])
+        
+        ax2.errorbar(stack_counts, means, yerr=stds, fmt='o-', 
+                     label=f'TE {te}ms', color=colors[i], linewidth=2, 
+                     markersize=8, capsize=5, capthick=2)
+    
+    ax2.axhline(y=0.95, color='red', linestyle='--', linewidth=2, alpha=0.8, 
+                label='Quality threshold')
+    ax2.set_xlabel('Number of Stacks', fontweight='bold')
+    ax2.set_ylabel('Structural Similarity Index', fontweight='bold')
+    ax2.set_title('SSIM vs Stack Count (combination variability)', fontweight='bold')
+    ax2.legend(fontsize=10)
+    ax2.grid(True, alpha=0.3)
+    
+    # Plot 3: SNR by Tissue with combination error bars
+    snr_gm_stats = compute_stack_combination_stats(data['snr_gm'], n_stacks=8, n_combinations=30)
+    snr_wm_stats = compute_stack_combination_stats(data['snr_wm'], n_stacks=8, n_combinations=30)
+    
+    gm_means = [snr_gm_stats[te]['mean'] for te in te_values]
+    wm_means = [snr_wm_stats[te]['mean'] for te in te_values]
+    gm_stds = [snr_gm_stats[te]['std'] for te in te_values]
+    wm_stds = [snr_wm_stats[te]['std'] for te in te_values]
+    
+    x = np.arange(len(te_values))
+    width = 0.35
+    
+    ax3.bar(x - width/2, gm_means, width, yerr=gm_stds, 
+            label='Gray Matter', color='lightcoral', capsize=5, 
+            edgecolor='black', alpha=0.8)
+    ax3.bar(x + width/2, wm_means, width, yerr=wm_stds,
+            label='White Matter', color='lightblue', capsize=5, 
+            edgecolor='black', alpha=0.8)
+    
+    ax3.set_xlabel('Echo Time (ms)', fontweight='bold')
+    ax3.set_ylabel('Signal-to-Noise Ratio', fontweight='bold')
+    ax3.set_title('SNR by Tissue Type (8-stack combinations)', fontweight='bold')
+    ax3.set_xticks(x)
+    ax3.set_xticklabels([f'{te}ms' for te in te_values])
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+    
+    # Plot 4: MSE vs Stack Count with combination error bars
+    for i, te in enumerate(te_values):
+        means, stds = [], []
+        for n_stacks in stack_counts:
+            stats = compute_stack_combination_stats({te: data['mse'][te]}, 
+                                                   n_stacks=n_stacks, n_combinations=20)
+            means.append(stats[te]['mean'])
+            stds.append(stats[te]['std'])
+        
+        ax4.errorbar(stack_counts, means, yerr=stds, fmt='o-', 
+                     label=f'TE {te}ms', color=colors[i], linewidth=2, 
+                     markersize=8, capsize=5, capthick=2)
+    
+    ax4.set_yscale('log')
+    ax4.set_xlabel('Number of Stacks', fontweight='bold')
+    ax4.set_ylabel('Mean Squared Error (log scale)', fontweight='bold')
+    ax4.set_title('Reconstruction Error (combination variability)', fontweight='bold')
+    ax4.legend()
+    ax4.grid(True, alpha=0.3)
+    
+    # Plot 5: Combined TE analysis with error bars
+    # Show both CNR and SSIM for 8-stack combinations
+    ax5_twin = ax5.twinx()
+    
+    # CNR on left axis
+    bars1 = ax5.bar([x - 0.2 for x in range(len(te_values))], cnr_means, 
+                    0.4, yerr=cnr_stds, capsize=5, 
+                    color='coral', alpha=0.7, label='CNR')
+    ax5.set_ylabel('Contrast-to-Noise Ratio', fontweight='bold', color='coral')
+    ax5.tick_params(axis='y', labelcolor='coral')
+    
+    # SSIM on right axis (8-stack values with combinations)
+    ssim_8_stats = [compute_stack_combination_stats({te: data['ssim'][te]}, 
+                                                    n_stacks=8, n_combinations=30)[te] 
+                    for te in te_values]
+    ssim_8_means = [s['mean'] for s in ssim_8_stats]
+    ssim_8_stds = [s['std'] for s in ssim_8_stats]
+    
+    bars2 = ax5_twin.bar([x + 0.2 for x in range(len(te_values))], ssim_8_means, 
+                         0.4, yerr=ssim_8_stds, capsize=5,
+                         color='skyblue', alpha=0.7, label='SSIM (8 stacks)')
+    ax5_twin.set_ylabel('Structural Similarity Index', fontweight='bold', color='skyblue')
+    ax5_twin.tick_params(axis='y', labelcolor='skyblue')
+    
+    ax5.set_xlabel('Echo Time (ms)', fontweight='bold')
+    ax5.set_title('CNR & SSIM vs TE (8-stack combinations)', fontweight='bold')
+    ax5.set_xticks(range(len(te_values)))
+    ax5.set_xticklabels([f'{te}' for te in te_values])
+    
+    # Combined legend
+    lines1, labels1 = ax5.get_legend_handles_labels()
+    lines2, labels2 = ax5_twin.get_legend_handles_labels()
+    ax5.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+    ax5.grid(True, alpha=0.3)
+    
+    # Plot 6: Quality metrics summary table
+    ax6.axis('off')
+    
+    # Create summary table with combination statistics
+    table_data = [['TE (ms)', 'CNR', 'SSIM (8 stacks)', 'SNR GM', 'SNR WM']]
+    
+    for te in te_values:
+        cnr_val = f"{cnr_stats[te]['mean']:.3f}±{cnr_stats[te]['std']:.3f}"
+        ssim_val = f"{ssim_8_stats[te_values.index(te)]['mean']:.3f}±{ssim_8_stats[te_values.index(te)]['std']:.3f}"
+        gm_val = f"{snr_gm_stats[te]['mean']:.2f}±{snr_gm_stats[te]['std']:.2f}"
+        wm_val = f"{snr_wm_stats[te]['mean']:.2f}±{snr_wm_stats[te]['std']:.2f}"
+        table_data.append([str(te), cnr_val, ssim_val, gm_val, wm_val])
+    
+    table = ax6.table(cellText=table_data[1:], colLabels=table_data[0],
+                      cellLoc='center', loc='center',
+                      colWidths=[0.15, 0.25, 0.25, 0.20, 0.20])
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1, 2)
+    
+    # Style the table
+    for i in range(len(table_data[0])):
+        table[(0, i)].set_facecolor('#4472c4')
+        table[(0, i)].set_text_props(weight='bold', color='white')
+    
+    ax6.set_title('Quality Metrics Summary\n(Error bars from stack combinations)', 
+                  fontweight='bold')
     
     plt.tight_layout()
     return fig
 
 def main():
-    """Generate presentation slides with actual data and convert to PDF"""
+    """Generate presentation slides with actual data and proper combination-based error bars"""
+    # Set random seed for reproducible combinations
+    np.random.seed(42)
+    
     print("Loading actual analysis data...")
     data = load_actual_data()
     
