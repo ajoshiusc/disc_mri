@@ -40,11 +40,11 @@ def pad_nifti(input_file, output_file, pad_width):
 
 
 # Define the path to the template and mask images
-template = "/project2/ajoshi_27/data/heart_svr/common_templates/vol1065/p57_cardiac_svr_sweep_1_res_15.nii.gz"
-mask = "/project2/ajoshi_27/data/heart_svr/common_templates/vol1065/p57_cardiac_svr_sweep_1_res_15.mask.nii.gz"
+template = "/project2/ajoshi_27/data/heart_svr/vol1302_template/p65_cardiac_svr_sweep_1_res_15.nii.gz"
+mask = "/project2/ajoshi_27/data/heart_svr/vol1302_template/p65_cardiac_svr_sweep_1_res_15.mask.nii.gz"
 
-padded_template_filename = "/project2/ajoshi_27/data/heart_svr/common_templates/vol1065/p57_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-padded_mask_filename = "/project2/ajoshi_27/data/heart_svr/common_templates/vol1065/p57_cardiac_svr_sweep_1_res_15.pad.mask.nii.gz"
+padded_template_filename = "/project2/ajoshi_27/data/heart_svr/vol1302_template/p65_cardiac_svr_sweep_1_res_15.pad.nii.gz"
+padded_mask_filename = "/project2/ajoshi_27/data/heart_svr/vol1302_template/p65_cardiac_svr_sweep_1_res_15.pad.mask.nii.gz"
 
 pad_width = 20
 
