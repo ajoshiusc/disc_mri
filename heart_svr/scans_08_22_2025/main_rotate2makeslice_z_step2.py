@@ -45,8 +45,8 @@ def make_slices(subdir, outsubdir):
 def main():
  
     # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-    scans_dir_top = ("/deneb_disk/disc_mri/disc_mri/heart_svr_acquisition_03_03_2025/nifti_files")
-    expmt_dir_all = glob.glob(scans_dir_top + "/vol1110*")
+    scans_dir_top = ("/project2/ajoshi_27/data/heart_svr/nifti_files")
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol*")
 
 
     for phase, expmt_dir in product(range(25),expmt_dir_all):
@@ -57,7 +57,7 @@ def main():
         for stack_dir in stack_dir_all:
 
             inp_dir = expmt_dir + f'/phase_{phase+1:02d}'
-            out_expmt_dir = "/deneb_disk/disc_mri/disc_mri/heart_svr_acquisition_03_03_2025/nifti_files/" + expmt_dir.split('/')[-1] 
+            out_expmt_dir = "/project2/ajoshi_27/data/heart_svr/nifti_files/" + expmt_dir.split('/')[-1] 
 
             if not os.path.isdir(out_expmt_dir):
                 os.mkdir(out_expmt_dir)
