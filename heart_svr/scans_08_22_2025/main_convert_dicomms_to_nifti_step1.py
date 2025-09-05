@@ -10,18 +10,18 @@ settings.disable_validate_slice_increment()
 
 
 # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-scans_dir_top = ("/project2/ajoshi_27/data/heart_svr/vol1065")
+scans_dir_top = ("/project2/ajoshi_27/data/heart_svr")
 
-expmt_dir_all = glob.glob(scans_dir_top + "/vol1065*")
+expmt_dir_all = glob.glob(scans_dir_top + "/vol*")
 
 #phase_fixed = 11
 
 for phase, expmt_dir in product(range(25), expmt_dir_all):
 
     # stack_id =stack_dir.split('ssfp_')[-1][0:8]
-    stack_dir_all = glob.glob(expmt_dir +"/dicom_recon/*")
+    stack_dir_all = glob.glob(expmt_dir +"/dicom_recon/usc*")
     if len(stack_dir_all) == 0:
-        stack_dir_all = glob.glob(expmt_dir + "/vol*/*")
+        stack_dir_all = glob.glob(expmt_dir + "/usc*")
     
     
 
