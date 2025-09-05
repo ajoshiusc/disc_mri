@@ -32,9 +32,9 @@ Where:
 
 #### Clinical Significance
 - **Higher values** indicate better tissue differentiation
-- **Clinical threshold:** CR > 0.80 based on fetal brain imaging standards¹,²
-- **Research threshold:** CR > 0.85 for detailed morphometric analysis¹,²
 - **Range observed:** 0.72 - 0.91 across different TE values
+- **Literature support:** General importance of tissue contrast established in fetal MRI reconstruction studies¹,²
+- **Note:** No established numerical thresholds exist in the literature for CR in fetal MRI
 
 #### Observations from Analysis
 - **TE 98 ms:** Highest contrast ratio (0.854 ± 0.085)
@@ -58,9 +58,9 @@ Where:
 
 #### Clinical Significance
 - **Higher values** indicate better contrast relative to noise
-- **Clinical threshold:** CNR > 0.40 based on fetal MRI reconstruction studies²,³
-- **Research threshold:** CNR > 0.50 for detailed tissue analysis³,⁴
-- **Optimal range:** CNR > 0.60 for advanced morphometric studies⁴,⁵
+- **Range observed:** 0.45 - 0.59 across different TE values
+- **Literature support:** Importance of CNR in fetal MRI reconstruction established²,³,⁴
+- **Note:** No established numerical CNR thresholds exist in the literature for fetal MRI
 
 #### Observations from Analysis
 - **TE 272 ms:** Highest CNR (0.594 ± 0.089)
@@ -86,10 +86,10 @@ Where:
 
 #### Clinical Significance
 - **Higher values** indicate better signal quality
-- **Clinical threshold:** SNR > 3.0 for adequate diagnostic quality (general MRI standard)⁶
-- **Research threshold:** SNR > 5.0 for detailed morphometric analysis⁷
-- **Optimal threshold:** SNR > 6.0 for advanced quantitative studies⁷,⁸
+- **General MRI guidance:** SNR > 3.0 for adequate diagnostic quality (general MRI standard)⁶,⁷
+- **Range observed:** GM SNR 3.2-6.1, WM SNR 4.8-7.9 across different conditions
 - **Tissue-specific assessment** allows targeted quality evaluation
+- **Note:** Specific thresholds for fetal brain MRI are not established in literature
 
 #### Observations from Analysis
 
@@ -124,10 +124,10 @@ Where:
 
 #### Clinical Significance
 - **Range:** 0 to 1 (higher indicates better structural preservation)
-- **Clinical threshold:** SSIM > 0.90 for diagnostic adequacy (based on SSIM literature)⁹,¹⁰
-- **Research threshold:** SSIM > 0.95 for detailed morphometric studies¹⁰,¹¹
-- **Optimal threshold:** SSIM > 0.98 for advanced quantitative analysis¹¹,¹²
+- **Literature-supported thresholds:** SSIM > 0.9 indicates "excellent" image quality (for natural images)⁹,¹⁰
+- **Range observed:** 0.6-1.0 depending on stack count
 - **Perceptual correlation:** Strongly correlates with human visual assessment⁹,¹²
+- **Note:** Thresholds established for natural images; medical image thresholds not standardized
 
 #### Observations from Analysis
 - **Dramatic improvement:** From ~0.6-0.8 (1 stack) to >0.95 (8+ stacks)
@@ -150,10 +150,9 @@ Where:
 
 #### Clinical Significance
 - **Lower values** indicate better reconstruction accuracy
-- **Clinical threshold:** MSE < 5000 (empirically derived from reconstruction studies)¹³,¹⁴
-- **Research threshold:** MSE < 1000 for high-fidelity studies¹³,¹⁴
-- **Optimal threshold:** MSE < 500 for advanced quantitative analysis¹³,¹⁴
+- **Range observed:** 1,000 - 40,000 depending on stack count and TE
 - **Log scale display** accommodates wide dynamic range of values
+- **Note:** MSE values are highly dataset-dependent; no universal thresholds exist in literature
 
 #### Observations from Analysis
 - **Exponential decrease:** From ~40,000 (1 stack) to <1000 (8+ stacks)
@@ -320,15 +319,17 @@ Based on comprehensive metric analysis:
 - **Stack Count:** 6 acquisitions (minimum diagnostic quality)
 - **Rationale:** Shortest acquisition time while maintaining quality
 
-### Quality Thresholds
+### Quality Assessment Framework
 
-| Metric | Diagnostic Quality | Research Quality |
-|--------|-------------------|------------------|
-| Contrast Ratio | > 0.75 | > 0.80 |
-| CNR | > 0.40 | > 0.50 |
-| SSIM | > 0.90 | > 0.95 |
-| SNR (GM/WM) | > 3.0/4.0 | > 5.0/6.0 |
-| MSE | < 5000 | < 1000 |
+The following metrics provide a comprehensive assessment of fetal MRI reconstruction quality:
+
+| Metric | Literature Support | Observed Range | Notes |
+|--------|-------------------|---------------|-------|
+| Contrast Ratio | Conceptual importance²,³ | 0.72 - 0.91 | No numerical thresholds in literature |
+| CNR | Conceptual importance²,³,⁴ | 0.45 - 0.59 | No fetal-specific thresholds established |
+| SSIM | > 0.9 for natural images⁹,¹⁰ | 0.6 - 1.0 | Medical image thresholds not standardized |
+| SNR (GM/WM) | > 3.0 general MRI⁶,⁷ | 3.2-6.1 / 4.8-7.9 | Fetal-specific thresholds not established |
+| MSE | No universal thresholds¹³ | 1,000 - 40,000 | Highly dataset-dependent |
 
 ### Clinical Impact
 
@@ -372,7 +373,7 @@ This comprehensive metric framework enables evidence-based optimization of fetal
 
 17. **Wright R, et al.** Construction of a fetal spinal cord atlas revealing effects of spina bifida. *NeuroImage* 2014; 95: 11-26. [Tissue contrast and imaging standards in fetal MRI]
 
-**Note:** The specific threshold values presented in this document (CR > 0.80, CNR > 0.40, SSIM > 0.90, SNR > 3.0, MSE < 5000) are derived from the experimental analysis of this dataset and represent empirically determined quality levels based on visual assessment and clinical requirements. While supported by the general principles established in the referenced literature, the exact numerical thresholds are study-specific and should be validated for other datasets and acquisition protocols.
+**Note:** Most of the numerical ranges and patterns presented in this document are derived from experimental analysis of this specific dataset. Only SSIM has established thresholds in the literature (for natural images), and general MRI SNR guidelines exist. The lack of standardized quality thresholds for fetal brain MRI reconstruction represents a significant gap in the literature. This study provides baseline data that could inform future standardization efforts, but the specific numerical values should not be considered universal standards without broader validation.
 
 **Scan Time Optimization:**
 - Traditional protocol: 10-12 stacks (~25-30 minutes)
@@ -391,3 +392,83 @@ This comprehensive metric framework enables evidence-based optimization of fetal
 This comprehensive analysis demonstrates that fetal MRI image quality can be optimized through evidence-based protocol selection. The combination of multiple complementary metrics provides robust assessment of reconstruction quality and enables confident clinical decision-making.
 
 **Key Clinical Message:** High-quality diagnostic fetal MRI can be achieved with TE 140-181 ms using 6-8 input stacks, providing significant time savings compared to traditional protocols while maintaining or improving image quality.
+
+---
+
+## Detailed Methodology for Threshold Derivation
+
+### Transparency in Threshold Selection
+
+It is important to provide complete transparency regarding how the quality thresholds presented in this document were derived. The threshold values (CR > 0.80, CNR > 0.40, SSIM > 0.90, SNR > 3.0, MSE < 5000) represent a combination of literature-based principles and empirical analysis of our specific dataset.
+
+### Literature-Based Foundations vs. Empirical Observations
+
+**1. Contrast Ratio (CR)**
+
+No established thresholds exist in the literature for CR in fetal MRI:
+
+- Gholipour et al. (2010)¹ discusses the importance of tissue contrast in fetal brain reconstruction but does not specify numerical CR thresholds
+- Kuklisova-Murgasova et al. (2012)² emphasizes tissue differentiation quality but uses qualitative rather than quantitative contrast assessment
+- The CR threshold of 0.80 was selected based on the observed range of values in our dataset (0.72-0.91) as a mid-range value that appeared to separate lower-quality from higher-quality reconstructions
+- This threshold should be considered study-specific and requires validation through systematic visual assessment studies
+- The 0.80 value represents an initial estimate that could serve as a starting point for future validation studies
+
+**2. Contrast-to-Noise Ratio (CNR)**
+
+No fetal MRI-specific CNR thresholds exist in the literature:
+
+- Kainz et al. (2015)³ and Ebner et al. (2020)⁴ discuss CNR importance in reconstruction quality but do not specify exact numerical thresholds
+- General MRI literature suggests CNR > 3-5 for adult brain imaging, but fetal brain imaging operates at different contrast regimes
+- The CNR threshold of 0.40 was selected based on the observed data distribution and represents a conservative estimate for adequate image quality
+- This threshold requires validation through systematic reader studies with defined assessment criteria
+- The 0.40 threshold represents an initial estimate derived from data analysis rather than validated clinical assessment
+
+**3. Structural Similarity Index (SSIM)**
+
+SSIM has the strongest literature foundation, but not for medical images:
+
+- Wang et al. (2004)⁹ established that SSIM > 0.9 generally indicates "excellent" image quality for natural images
+- Sheikh et al. (2006)¹¹ confirmed that SSIM values above 0.9 correlate strongly with human perception of image quality
+- However, these studies focused on natural images, not medical reconstructions
+- Medical image SSIM thresholds remain unstandardized in the literature
+- The observed range (0.6-1.0) demonstrates reconstruction quality improvement with increased stack count
+
+**4. Signal-to-Noise Ratio (SNR)**
+
+Limited literature support for specific thresholds:
+
+- Dietrich et al. (2007)⁶ discusses SNR measurement methodology but focuses on technical aspects rather than diagnostic thresholds
+- General MRI textbooks (Tofts, 2003)⁷ suggest minimum SNR of 3-5 for diagnostic imaging in general
+- No fetal brain-specific SNR thresholds are established in the literature
+- Observed ranges (GM: 3.2-6.1, WM: 4.8-7.9) provide baseline data for future threshold development
+
+**5. Mean Squared Error (MSE)**
+
+No literature support for universal MSE thresholds:
+
+- Horé & Ziou (2010)¹³ compare MSE with other metrics but do not establish universal thresholds
+- MSE values are highly dependent on image intensity ranges and reconstruction parameters
+- No standardized MSE thresholds exist for medical image reconstruction
+- Observed range (1,000-40,000) is entirely dataset-specific
+
+### Methodological Limitations and Recommendations
+
+**Study-Specific Nature:**
+The numerical thresholds presented are derived from our specific dataset using:
+- Single-center acquisition protocols
+- Specific reconstruction algorithms
+- Particular image intensity ranges
+- Expert visual assessment as ground truth
+
+**Validation Requirements:**
+These thresholds should be validated before application to:
+- Different acquisition protocols
+- Alternative reconstruction methods
+- Multi-center studies
+- Different patient populations
+
+**Literature Gap:**
+There is a notable absence in the literature of standardized, quantitative quality thresholds specifically for fetal brain MRI reconstruction. Most studies rely on qualitative assessment or application-specific metrics. This study contributes empirically-derived thresholds that could serve as starting points for future standardization efforts.
+
+**Recommendation for Future Work:**
+Establishment of consensus-based quality thresholds through multi-center validation studies would significantly benefit the fetal MRI community. The thresholds presented here provide a foundation for such efforts but should not be considered definitive standards without broader validation.
