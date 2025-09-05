@@ -6,7 +6,9 @@
 We performed a comprehensive quantitative analysis of Super-Resolution Volume (SVR) reconstruction quality across four echo times (TE = 98, 140, 181, 272 ms) using 1-12 input motion-corrupted stacks. Image quality was assessed using five complementary metrics encompassing tissue contrast, signal quality, and structural fidelity.
 
 ### Image Quality Metrics
-**Tissue Contrast Metrics:** (1) Contrast Ratio (CR = μ_WM/μ_GM), (2) Contrast-to-Noise Ratio (CNR = |μ_WM - μ_GM|/√[(σ_WM² + σ_GM²)/2]), and (3) tissue-specific Signal-to-Noise Ratios (SNR = μ_tissue/σ_tissue) were computed using the CRL Fetal Brain Atlas for gray matter (GM) and white matter (WM) segmentation. **Structural Fidelity Metrics:** (4) 3D Structural Similarity Index (SSIM) and (5) Mean Squared Error (MSE) were calculated relative to the highest-quality reference reconstruction (12 stacks) using MONAI framework implementations.
+**Notation:** Let μ_tissue and σ_tissue denote the mean intensity and standard deviation within tissue region, where tissue ∈ {GM, WM} for gray matter and white matter, respectively. Let I_recon and I_ref represent the reconstructed and reference images.
+
+**Tissue Contrast Metrics:** (1) Contrast Ratio (CR = μ_WM/μ_GM), (2) Contrast-to-Noise Ratio (CNR = |μ_WM - μ_GM|/√[(σ_WM² + σ_GM²)/2]), and (3) tissue-specific Signal-to-Noise Ratios (SNR_tissue = μ_tissue/σ_tissue) were computed using the CRL Fetal Brain Atlas for gray matter (GM) and white matter (WM) segmentation. **Structural Fidelity Metrics:** (4) 3D Structural Similarity Index (SSIM(I_recon, I_ref) ∈ [0,1]) and (5) Mean Squared Error (MSE = ||I_recon - I_ref||²/N, where N is the total number of voxels) were calculated relative to the highest-quality reference reconstruction (12 stacks) using MONAI framework implementations.
 
 ### Statistical Analysis
 Error bars represent inter-reconstruction variability computed from different combinations of stacks for each stack count (n=50 combinations), simulating clinical acquisition scenarios. Analysis included 96 total reconstructions across all TE values and stack counts.
