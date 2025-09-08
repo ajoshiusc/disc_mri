@@ -109,14 +109,14 @@ def calculate_ssim_mse_metrics(img_data, reference_data):
 
 def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     """
-    Calculate WM-GM contrast and signal-to-noise ratios for fetal MRI analysis.
+    Calculate GM-WM contrast and signal-to-noise ratios for fetal MRI analysis.
     
     METHODS - Image Quality Metrics:
     
     1. CONTRAST RATIO (CR):
-       CR = μ_WM / μ_GM
-       where μ_WM = mean signal intensity in white matter voxels
-             μ_GM = mean signal intensity in gray matter voxels
+       CR = μ_GM / μ_WM
+       where μ_GM = mean signal intensity in gray matter voxels
+             μ_WM = mean signal intensity in white matter voxels
        This metric quantifies the relative signal difference between tissues.
        Higher values indicate better tissue differentiation.
     
@@ -171,9 +171,9 @@ def calculate_wm_gm_contrast_and_snr(image_data, tissue_data):
     gm_std = np.std(image_data[gm_mask])
     wm_std = np.std(image_data[wm_mask])
 
-    # Metric 1: WM to GM contrast ratio
-    # CR = μ_WM / μ_GM
-    contrast_ratio = wm_mean / gm_mean if gm_mean != 0 else np.nan
+    # Metric 1: GM to WM contrast ratio
+    # CR = μ_GM / μ_WM
+    contrast_ratio = gm_mean / wm_mean if wm_mean != 0 else np.nan
 
     # Metric 2: Contrast-to-noise ratio
     # CNR = |μ_WM - μ_GM| / √[(σ_WM² + σ_GM²) / 2]
@@ -356,7 +356,7 @@ def main():
     results_dir = "/home/ajoshi/Projects/disc_mri/fetal_mri"
     
     # TE values to analyze
-    TE_VALUES = [140]#[98, 140, 181, 272]
+    TE_VALUES = [98, 140, 181, 272]
     
     # Load tissue atlas
     print("Loading tissue atlas...")

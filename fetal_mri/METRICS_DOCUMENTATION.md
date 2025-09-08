@@ -24,24 +24,24 @@ Error bars represent variability computed from different combinations of stacks 
 
 #### Mathematical Definition
 ```
-CR = μ_WM / μ_GM
+CR = μ_GM / μ_WM
 ```
 Where:
-- μ_WM = Mean signal intensity in white matter regions
 - μ_GM = Mean signal intensity in gray matter regions
+- μ_WM = Mean signal intensity in white matter regions
 
 #### Clinical Significance
 - **Higher values** indicate better tissue differentiation
-- **Range observed:** 0.72 - 0.91 across different TE values
+- **Range observed:** 1.17 - 1.37 across different TE values
 - **Literature support:** General importance of tissue contrast established in fetal MRI reconstruction studies¹,²
 - **Note:** No established numerical thresholds exist in the literature for CR in fetal MRI
 
 #### Observations from Analysis
-- **TE 98 ms:** Highest contrast ratio (0.854 ± 0.085)
-- **TE 272 ms:** Lowest contrast ratio (0.729 ± 0.073)
-- **Trend:** Contrast ratio decreases with increasing echo time
+- **TE 272 ms:** Highest contrast ratio (1.371 ± 0.012)
+- **TE 98 ms:** Lowest contrast ratio (1.167 ± 0.008)
+- **Trend:** Contrast ratio increases with longer echo times
 - **Stack dependency:** Stabilizes after 6-8 input stacks
-- **Clinical impact:** TE 98-140 ms provides optimal tissue differentiation
+- **Clinical impact:** TE 272 ms provides optimal tissue differentiation
 
 ---
 
@@ -87,20 +87,20 @@ Where:
 #### Clinical Significance
 - **Higher values** indicate better signal quality
 - **General MRI guidance:** SNR > 3.0 for adequate diagnostic quality (general MRI standard)⁶,⁷
-- **Range observed:** GM SNR 3.2-6.1, WM SNR 4.8-7.9 across different conditions
+- **Range observed:** GM SNR 5.0-6.0, WM SNR 6.8-7.7 across different conditions
 - **Tissue-specific assessment** allows targeted quality evaluation
 - **Note:** Specific thresholds for fetal brain MRI are not established in literature
 
 #### Observations from Analysis
 
 **Gray Matter SNR:**
-- **Range:** 3.2 - 6.1 across all conditions
+- **Range:** 5.0 - 6.0 across all conditions
 - **TE 272 ms:** Highest GM SNR (5.95 ± 0.89)
 - **TE 98 ms:** Lowest GM SNR (5.05 ± 0.76)
 - **Stack dependency:** Steady improvement with more stacks
 
 **White Matter SNR:**
-- **Range:** 4.8 - 7.9 across all conditions
+- **Range:** 6.8 - 7.7 across all conditions
 - **TE 272 ms:** Highest WM SNR (7.65 ± 1.15)
 - **TE 98 ms:** Moderate WM SNR (6.75 ± 1.01)
 - **Consistency:** More stable across different stack counts
@@ -309,10 +309,10 @@ The following metrics provide a comprehensive assessment of fetal MRI reconstruc
 
 | Metric | Literature Support | Observed Range | Notes |
 |--------|-------------------|---------------|-------|
-| Contrast Ratio | Conceptual importance²,³ | 0.72 - 0.91 | No numerical thresholds in literature |
+| Contrast Ratio | Conceptual importance²,³ | 1.17 - 1.37 | No numerical thresholds in literature |
 | CNR | Conceptual importance²,³,⁴ | 0.45 - 0.59 | No fetal-specific thresholds established |
 | SSIM | > 0.9 for natural images⁹,¹⁰ | 0.6 - 1.0 | Medical image thresholds not standardized |
-| SNR (GM/WM) | > 3.0 general MRI⁶,⁷ | 3.2-6.1 / 4.8-7.9 | Fetal-specific thresholds not established |
+| SNR (GM/WM) | > 3.0 general MRI⁶,⁷ | 5.0-6.0 / 6.8-7.7 | Fetal-specific thresholds not established |
 | MSE | No universal thresholds¹³ | 1,000 - 40,000 | Highly dataset-dependent |
 
 ### Clinical Impact
@@ -393,7 +393,7 @@ No established thresholds exist in the literature for CR in fetal MRI:
 
 - Gholipour et al. (2010)¹ discusses the importance of tissue contrast in fetal brain reconstruction but does not specify numerical CR thresholds
 - Kuklisova-Murgasova et al. (2012)² emphasizes tissue differentiation quality but uses qualitative rather than quantitative contrast assessment
-- The CR threshold of 0.80 was selected based on the observed range of values in our dataset (0.72-0.91) as a mid-range value that appeared to separate lower-quality from higher-quality reconstructions
+- The CR threshold of 1.25 was selected based on the observed range of values in our dataset (1.17-1.37) as a mid-range value that appeared to separate lower-quality from higher-quality reconstructions
 - This threshold should be considered study-specific and requires validation through systematic visual assessment studies
 - The 0.80 value represents an initial estimate that could serve as a starting point for future validation studies
 

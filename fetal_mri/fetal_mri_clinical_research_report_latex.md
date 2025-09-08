@@ -68,8 +68,8 @@ This retrospective analysis employed a comprehensive image quality assessment fr
 ### Image Quality Metrics
 
 #### 1. Tissue Contrast Assessment
-- **Contrast Ratio (CR):** Quantitative measure of white matter to gray matter signal intensity ratio
-  - Formula: CR = $\mu_{WM}$ / $\mu_{GM}$
+- **Contrast Ratio (CR):** Quantitative measure of gray matter to white matter signal intensity ratio
+  - Formula: CR = $\mu_{GM}$ / $\mu_{WM}$
   - Clinical significance: Higher values indicate better tissue differentiation
 
 - **Contrast-to-Noise Ratio (CNR):** Normalized contrast accounting for noise characteristics

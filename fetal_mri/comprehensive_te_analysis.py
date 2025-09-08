@@ -112,11 +112,11 @@ def calculate_ssim_mse_metrics(img_data, reference_data):
 
 def calculate_tissue_contrast_metrics(image_data, tissue_data):
     """
-    Calculate tissue-based contrast metrics (WM-GM contrast, CNR, SNR).
+    Calculate tissue-based contrast metrics (GM-WM contrast, CNR, SNR).
     
     METHODS - Image Quality Metrics:
     
-    1. CONTRAST RATIO (CR): CR = μ_WM / μ_GM
+    1. CONTRAST RATIO (CR): CR = μ_GM / μ_WM
     2. CONTRAST-TO-NOISE RATIO (CNR): CNR = |μ_WM - μ_GM| / √[(σ_WM² + σ_GM²) / 2]
     3. SIGNAL-TO-NOISE RATIOS (SNR): SNR_tissue = μ_tissue / σ_tissue
     """
@@ -138,7 +138,7 @@ def calculate_tissue_contrast_metrics(image_data, tissue_data):
     wm_std = np.std(image_data[wm_mask])
 
     # Calculate metrics
-    contrast_ratio = wm_mean / gm_mean if gm_mean != 0 else np.nan
+    contrast_ratio = gm_mean / wm_mean if wm_mean != 0 else np.nan  # Changed to GM/WM
     cnr = abs(wm_mean - gm_mean) / np.sqrt((wm_std**2 + gm_std**2) / 2)
     snr_gm = gm_mean / gm_std if gm_std != 0 else np.nan
     snr_wm = wm_mean / wm_std if wm_std != 0 else np.nan

@@ -68,8 +68,8 @@ This retrospective analysis employed a comprehensive image quality assessment fr
 ### Image Quality Metrics
 
 #### 1. Tissue Contrast Assessment
-- **Contrast Ratio (CR):** Quantitative measure of white matter to gray matter signal intensity ratio
-  - Formula: CR = \$\mu_{WM}\$ / \$\mu_{GM}\$
+- **Contrast Ratio (CR):** Quantitative measure of gray matter to white matter signal intensity ratio
+  - Formula: CR = $\mu_{GM}$ / $\mu_{WM}$
   - Clinical significance: Higher values indicate better tissue differentiation
 
 - **Contrast-to-Noise Ratio (CNR):** Normalized contrast accounting for noise characteristics
@@ -159,15 +159,16 @@ Comprehensive analysis was performed across all echo time and stack count combin
 
 ### Tissue Contrast Optimization
 
-#### White Matter to Gray Matter Differentiation
-The ability to distinguish white matter from gray matter represents a fundamental requirement for fetal brain MRI interpretation. Our analysis reveals significant variability in tissue contrast across different echo times:
+#### Gray Matter to White Matter Differentiation
+The ability to distinguish gray matter from white matter represents a fundamental requirement for fetal brain MRI interpretation. Our analysis reveals significant variability in tissue contrast across different echo times:
 
 
-- **Optimal TE for Contrast:** 98 ms provides the best balance of tissue differentiation and image quality
+- **Optimal TE for Contrast:** 272 ms provides the highest tissue contrast ratio and overall image quality
 - **Clinical Impact:** Improved tissue contrast directly correlates with diagnostic confidence for:
   - Cortical development assessment
   - White matter injury detection
   - Structural abnormality identification
+  - Gestational age estimation accuracy
   - Gestational age estimation accuracy
 
 #### Contrast-to-Noise Ratio Clinical Significance
