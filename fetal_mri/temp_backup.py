@@ -7,14 +7,7 @@ computed from actual measurements, not fabricated estimates.
 """
 
 import numpy as np
-im    ax4.set_xlabel('Number of Input Stacks')
-    ax4.set_ylabel('SNR Gray Matter')
-    ax4.set_title('D. Gray Matter SNR', fontweight='bold', pad=10)
-    ax4.legend(fontsize=7, frameon=True)
-    ax4.grid(True, alpha=0.3)
-    ax4.set_ylim(1.5, 2.8)
-    ax4.set_xlim(0.5, 12.5)
-    ax4.set_xticks([1, 3, 6, 9, 12])atplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.gridspec import GridSpec
 import json
@@ -159,8 +152,6 @@ def create_publication_figure():
     ax1.legend(fontsize=7, frameon=True)
     ax1.grid(True, alpha=0.3)
     ax1.set_ylim(1.0, 1.5)
-    ax1.set_xlim(0.5, 12.5)
-    ax1.set_xticks([1, 3, 6, 9, 12])
     
     # Plot 2: CNR vs Stack Number
     ax2 = fig.add_subplot(gs[0, 1])
@@ -191,8 +182,6 @@ def create_publication_figure():
     ax2.legend(fontsize=7, frameon=True)
     ax2.grid(True, alpha=0.3)
     ax2.set_ylim(0.2, 0.65)
-    ax2.set_xlim(0.5, 12.5)
-    ax2.set_xticks([1, 3, 6, 9, 12])
     
     # Plot 3: SSIM vs Stack Number
     ax3 = fig.add_subplot(gs[1, 0])
@@ -218,13 +207,11 @@ def create_publication_figure():
                         markersize=4, linewidth=1.5, capsize=2)
     
     ax3.set_xlabel('Number of Input Stacks')
-    ax3.set_ylabel('SSIM')
+    ax3.set_ylabel('Structural Similarity Index')
     ax3.set_title('C. Structural Similarity (SSIM)', fontweight='bold', pad=10)
     ax3.legend(fontsize=7, frameon=True)
     ax3.grid(True, alpha=0.3)
     ax3.set_ylim(0.5, 1.05)
-    ax3.set_xlim(0.5, 12.5)
-    ax3.set_xticks([1, 3, 6, 9, 12])
     
     # Plot 4: SNR GM vs Stack Number
     ax4 = fig.add_subplot(gs[1, 1])
@@ -286,7 +273,7 @@ def create_publication_figure():
     ax5.grid(True, alpha=0.3)
     ax5.set_ylim(2.0, 5.0)
     
-    # Plot 6: MSE vs Stack Number - IMPROVED VISUALIZATION ONLY
+    # Plot 6: MSE vs Stack Number
     ax6 = fig.add_subplot(gs[2, 1])
     for i, te_value in enumerate(TE_VALUES):
         if te_value in comprehensive_data:
@@ -294,7 +281,7 @@ def create_publication_figure():
             stacks = comprehensive_data[te_value]['stacks']
             mse_values = comprehensive_data[te_value]['mse']
             
-            # Create error array with optimized error bars for MSE only
+            # Create error array - use real error bars where available, zero elsewhere
             mse_errors = []
             for stack_count in stacks:
                 if (te_value in real_error_data and 
@@ -302,67 +289,22 @@ def create_publication_figure():
                     real_error_data[te_value][stack_count]['mse_std'] is not None and
                     real_error_data[te_value][stack_count]['mse_mean'] is not None and
                     real_error_data[te_value][stack_count]['mse_mean'] > 0):
-                    # Cap MSE error bars at 30% of mean for smoother appearance on log scale
-                    error_val = real_error_data[te_value][stack_count]['mse_std']
-                    mean_val = real_error_data[te_value][stack_count]['mse_mean']
-                    conservative_error = min(error_val, 0.3 * mean_val)
-                    mse_errors.append(conservative_error)
+                    mse_errors.append(real_error_data[te_value][stack_count]['mse_std'])
                 else:
                     mse_errors.append(0.0)
             
-            # Handle zero MSE values properly for 12 stacks (perfect reconstruction)
-            # Use different approach: plot non-zero values on log scale, plot zeros separately
-            non_zero_stacks = []
-            non_zero_mse = []
-            non_zero_errors = []
-            zero_stacks = []
-            
-            for j, (stack_count, mse_val) in enumerate(zip(stacks, mse_values)):
-                if mse_val > 0:
-                    non_zero_stacks.append(stack_count)
-                    non_zero_mse.append(mse_val)
-                    non_zero_errors.append(mse_errors[j])
-                else:
-                    zero_stacks.append(stack_count)
-            
-            # Plot non-zero values on log scale
-            if non_zero_stacks:
-                ax6.errorbar(non_zero_stacks, non_zero_mse, yerr=non_zero_errors,
-                            marker=markers[i], color=colors[i], label=f'TE {te_value}ms',
-                            markersize=5, linewidth=2.0, capsize=3, alpha=0.9,
-                            markeredgewidth=0.5, markeredgecolor='white')
-            
-            # Plot zero values at the bottom of the plot
-            if zero_stacks:
-                # Use a small value for log scale visualization but mark as zero
-                bottom_value = 50  # Bottom of our y-axis range
-                ax6.scatter(zero_stacks, [bottom_value] * len(zero_stacks),
-                           marker=markers[i], color=colors[i], s=50, alpha=0.9,
-                           edgecolors='white', linewidth=0.5, zorder=10)
-                # Add text annotation for perfect reconstruction
-                for stack in zero_stacks:
-                    ax6.annotate('0', (stack, bottom_value), xytext=(0, -15), 
-                               textcoords='offset points', ha='center', va='top',
-                               fontsize=6, color=colors[i], fontweight='bold')
+            # Plot with error bars for all points
+            ax6.errorbar(stacks, mse_values, yerr=mse_errors,
+                        marker=markers[i], color=colors[i], label=f'TE {te_value}ms',
+                        markersize=4, linewidth=1.5, capsize=2)
     
     ax6.set_xlabel('Number of Input Stacks')
     ax6.set_ylabel('Mean Squared Error')
     ax6.set_title('F. Reconstruction Error (MSE)', fontweight='bold', pad=10)
-    ax6.legend(fontsize=7, frameon=True, loc='upper right')
-    ax6.grid(True, alpha=0.4, which='major', linestyle='-', linewidth=0.6)
-    ax6.grid(True, alpha=0.2, which='minor', linestyle=':', linewidth=0.4)
+    ax6.legend(fontsize=7, frameon=True)
+    ax6.grid(True, alpha=0.3)
     ax6.set_yscale('log')
-    ax6.set_ylim(50, 40000)  # Start from 50 to accommodate zero annotations
-    
-    # Enhanced minor ticks for smoother log scale appearance
-    ax6.minorticks_on()
-    ax6.set_xticks([1, 3, 6, 9, 12])
-    ax6.set_xlim(0.5, 12.5)
-    
-    # Add note about perfect reconstruction at 12 stacks
-    ax6.text(0.02, 0.02, 'MSE = 0 for 12 stacks\n(perfect reconstruction)', 
-             transform=ax6.transAxes, fontsize=6, verticalalignment='bottom',
-             bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.8))
+    ax6.set_ylim(400, 50000)
     
     # No additional layout adjustment needed - GridSpec handles it
     
@@ -370,12 +312,12 @@ def create_publication_figure():
     output_dir = "/home/ajoshi/Projects/disc_mri/fetal_mri"
     
     # PNG version
-    png_file = os.path.join(output_dir, "publication_figure_mse_with_zeros.png")
+    png_file = os.path.join(output_dir, "publication_figure_real_data.png")
     plt.savefig(png_file, dpi=300, bbox_inches='tight', facecolor='white')
     print(f"High-resolution PNG saved: {png_file}")
     
     # PDF version for publication
-    pdf_file = os.path.join(output_dir, "publication_figure_mse_with_zeros.pdf")
+    pdf_file = os.path.join(output_dir, "publication_figure_real_data.pdf")
     plt.savefig(pdf_file, bbox_inches='tight', facecolor='white')
     print(f"Publication PDF saved: {pdf_file}")
     
@@ -404,26 +346,7 @@ def print_data_summary():
     print("All curves show complete data, error bars shown at 3, 6, 9, 12 stacks")
 
 if __name__ == "__main__":
-    print("Generating publication figure with proper MSE zeros for 12 stacks...")
+    print("Generating publication figure with real error bars...")
     create_publication_figure()
-    
-    print("\n" + "="*60)
-    print("MSE SUBPLOT WITH PROPER ZERO VALUES FOR 12 STACKS")
-    print("="*60)
-    print("Key improvements to MSE subplot (Plot F):")
-    print("- MSE = 0 properly shown for 12 stacks (perfect reconstruction)")
-    print("- Non-zero MSE values plotted on log scale with error bars")
-    print("- Zero values annotated at bottom with '0' labels")
-    print("- Enhanced styling: thicker lines, larger markers, white edges")  
-    print("- Improved grid with major/minor lines for professional log scale")
-    print("- Text annotation explaining perfect reconstruction at 12 stacks")
-    print("")
-    print("Plots A-E (CR, CNR, SSIM, SNR_GM, SNR_WM) remain EXACTLY as before:")
-    print("- Same titles, same error bars, same styling")
-    print("- No changes whatsoever to these subplots")
-    print("")
-    print("MSE values by TE:")
-    print("- All TEs show MSE = 0 at 12 stacks (perfect reconstruction)")
-    print("- Non-zero MSE values properly displayed with capped error bars (30%)")
-    print("- Clear visualization of reconstruction quality improvement")
-    print("\nPublication figure complete - MSE zeros properly displayed!")
+    print_data_summary()
+    print("\nPublication figure complete with genuine statistical error bars!")

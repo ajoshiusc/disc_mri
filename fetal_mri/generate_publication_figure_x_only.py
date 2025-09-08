@@ -7,20 +7,19 @@ computed from actual measurements, not fabricated estimates.
 """
 
 import numpy as np
-im    ax4.set_xlabel('Number of Input Stacks')
-    ax4.set_ylabel('SNR Gray Matter')
-    ax4.set_title('D. Gray Matter SNR', fontweight='bold', pad=10)
-    ax4.legend(fontsize=7, frameon=True)
-    ax4.grid(True, alpha=0.3)
-    ax4.set_ylim(1.5, 2.8)
-    ax4.set_xlim(0.5, 12.5)
-    ax4.set_xticks([1, 3, 6, 9, 12])atplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.gridspec import GridSpec
 import json
-import os
-
-# Set publication-quality parameters
+im    # PNG version
+    png_file = os.path.join(output_dir, "publication_figure_x_axis_only.png")
+    fig.savefig(png_file, dpi=300, bbox_inches='tight', facecolor='white')
+    print(f"High-resolution PNG saved: {png_file}")
+    
+    # PDF version for publication
+    pdf_file = os.path.join(output_dir, "publication_figure_x_axis_only.pdf")
+    fig.savefig(pdf_file, bbox_inches='tight', facecolor='white')
+    print(f"Publication PDF saved: {pdf_file}")# Set publication-quality parameters
 plt.rcParams.update({
     'font.size': 10,
     'axes.titlesize': 11,
@@ -218,7 +217,7 @@ def create_publication_figure():
                         markersize=4, linewidth=1.5, capsize=2)
     
     ax3.set_xlabel('Number of Input Stacks')
-    ax3.set_ylabel('SSIM')
+    ax3.set_ylabel('Structural Similarity Index')
     ax3.set_title('C. Structural Similarity (SSIM)', fontweight='bold', pad=10)
     ax3.legend(fontsize=7, frameon=True)
     ax3.grid(True, alpha=0.3)
@@ -255,6 +254,8 @@ def create_publication_figure():
     ax4.legend(fontsize=7, frameon=True)
     ax4.grid(True, alpha=0.3)
     ax4.set_ylim(1.5, 3.0)
+    ax4.set_xlim(0.5, 12.5)
+    ax4.set_xticks([1, 3, 6, 9, 12])
     
     # Plot 5: SNR WM vs Stack Number  
     ax5 = fig.add_subplot(gs[2, 0])
@@ -285,8 +286,10 @@ def create_publication_figure():
     ax5.legend(fontsize=7, frameon=True)
     ax5.grid(True, alpha=0.3)
     ax5.set_ylim(2.0, 5.0)
+    ax5.set_xlim(0.5, 12.5)
+    ax5.set_xticks([1, 3, 6, 9, 12])
     
-    # Plot 6: MSE vs Stack Number - IMPROVED VISUALIZATION ONLY
+    # Plot 6: MSE vs Stack Number
     ax6 = fig.add_subplot(gs[2, 1])
     for i, te_value in enumerate(TE_VALUES):
         if te_value in comprehensive_data:
@@ -311,7 +314,6 @@ def create_publication_figure():
                     mse_errors.append(0.0)
             
             # Handle zero MSE values properly for 12 stacks (perfect reconstruction)
-            # Use different approach: plot non-zero values on log scale, plot zeros separately
             non_zero_stacks = []
             non_zero_mse = []
             non_zero_errors = []
@@ -334,7 +336,6 @@ def create_publication_figure():
             
             # Plot zero values at the bottom of the plot
             if zero_stacks:
-                # Use a small value for log scale visualization but mark as zero
                 bottom_value = 50  # Bottom of our y-axis range
                 ax6.scatter(zero_stacks, [bottom_value] * len(zero_stacks),
                            marker=markers[i], color=colors[i], s=50, alpha=0.9,
@@ -353,11 +354,11 @@ def create_publication_figure():
     ax6.grid(True, alpha=0.2, which='minor', linestyle=':', linewidth=0.4)
     ax6.set_yscale('log')
     ax6.set_ylim(50, 40000)  # Start from 50 to accommodate zero annotations
+    ax6.set_xlim(0.5, 12.5)
+    ax6.set_xticks([1, 3, 6, 9, 12])
     
     # Enhanced minor ticks for smoother log scale appearance
     ax6.minorticks_on()
-    ax6.set_xticks([1, 3, 6, 9, 12])
-    ax6.set_xlim(0.5, 12.5)
     
     # Add note about perfect reconstruction at 12 stacks
     ax6.text(0.02, 0.02, 'MSE = 0 for 12 stacks\n(perfect reconstruction)', 
@@ -370,12 +371,12 @@ def create_publication_figure():
     output_dir = "/home/ajoshi/Projects/disc_mri/fetal_mri"
     
     # PNG version
-    png_file = os.path.join(output_dir, "publication_figure_mse_with_zeros.png")
+    png_file = os.path.join(output_dir, "publication_figure_real_data.png")
     plt.savefig(png_file, dpi=300, bbox_inches='tight', facecolor='white')
     print(f"High-resolution PNG saved: {png_file}")
     
     # PDF version for publication
-    pdf_file = os.path.join(output_dir, "publication_figure_mse_with_zeros.pdf")
+    pdf_file = os.path.join(output_dir, "publication_figure_real_data.pdf")
     plt.savefig(pdf_file, bbox_inches='tight', facecolor='white')
     print(f"Publication PDF saved: {pdf_file}")
     
@@ -404,26 +405,7 @@ def print_data_summary():
     print("All curves show complete data, error bars shown at 3, 6, 9, 12 stacks")
 
 if __name__ == "__main__":
-    print("Generating publication figure with proper MSE zeros for 12 stacks...")
+    print("Generating publication figure with real error bars...")
     create_publication_figure()
-    
-    print("\n" + "="*60)
-    print("MSE SUBPLOT WITH PROPER ZERO VALUES FOR 12 STACKS")
-    print("="*60)
-    print("Key improvements to MSE subplot (Plot F):")
-    print("- MSE = 0 properly shown for 12 stacks (perfect reconstruction)")
-    print("- Non-zero MSE values plotted on log scale with error bars")
-    print("- Zero values annotated at bottom with '0' labels")
-    print("- Enhanced styling: thicker lines, larger markers, white edges")  
-    print("- Improved grid with major/minor lines for professional log scale")
-    print("- Text annotation explaining perfect reconstruction at 12 stacks")
-    print("")
-    print("Plots A-E (CR, CNR, SSIM, SNR_GM, SNR_WM) remain EXACTLY as before:")
-    print("- Same titles, same error bars, same styling")
-    print("- No changes whatsoever to these subplots")
-    print("")
-    print("MSE values by TE:")
-    print("- All TEs show MSE = 0 at 12 stacks (perfect reconstruction)")
-    print("- Non-zero MSE values properly displayed with capped error bars (30%)")
-    print("- Clear visualization of reconstruction quality improvement")
-    print("\nPublication figure complete - MSE zeros properly displayed!")
+    print_data_summary()
+    print("\nPublication figure complete with genuine statistical error bars!")
