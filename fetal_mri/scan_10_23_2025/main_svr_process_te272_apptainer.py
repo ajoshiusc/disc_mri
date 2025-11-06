@@ -49,6 +49,10 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
                 os.makedirs(outsvr_dir_temp)
             outsvr = f"{outsvr_dir_temp}/{outsvr}"
 
+            if os.path.exists(outsvr_final):
+                print(f"SVR output {outsvr_final} already exists. Skipping.")
+                continue
+
 
 
 
