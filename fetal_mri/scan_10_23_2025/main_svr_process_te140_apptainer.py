@@ -79,7 +79,7 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
 if __name__ == "__main__":
     subj = "_t2_haste"
     subdir = "/project2/ajoshi_27/data/disc_mri/scan_10_23_2025/nifti_rot"
-    te = 98
+    te = 140
 
     res = 1
     th = 3
