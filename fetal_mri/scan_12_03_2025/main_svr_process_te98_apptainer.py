@@ -42,6 +42,11 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
 
         
             outsvr_final = f"{outsvr_dir}/svr_te{te}_{subj}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
+
+            if os.path.exists(outsvr_final):
+                print(f"File {outsvr_final} exists. Skipping...")
+                continue
+            
             # make a temp directory inside outsvr_dir and set outsvr based on that
             outsvr = f"svr_te{te}_{subj}_numstacks_{num_stacks}_iter_{ns}.nii.gz"
             outsvr_dir_temp = f"{outsvr_dir}/temp_svr_te{te}_{subj}_numstacks_{num_stacks}_iter_{ns}"
