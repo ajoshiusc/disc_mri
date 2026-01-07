@@ -10,7 +10,7 @@ settings.disable_validate_slice_increment()
 
 
 # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-scans_dir_top = ("/deneb_disk/disc_mri/disc_mri/heart_scans_01_06_2026/unzipped")
+scans_dir_top = ("/home/ajoshi/project2_ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026")
 
 expmt_dir_all = glob.glob(scans_dir_top + "/vol*")
 
@@ -21,14 +21,14 @@ for phase, expmt_dir in product(range(25), expmt_dir_all):
     # stack_id =stack_dir.split('ssfp_')[-1][0:8]
     stack_dir_all = glob.glob(expmt_dir +"/dicom_recon_arrhythmia_reject/*")
     if len(stack_dir_all) == 0:
-        stack_dir_all = glob.glob(expmt_dir + "/vol*/*")
+        stack_dir_all = glob.glob(expmt_dir + "/vol*/dicom_recon_arrhythmia_reject/*")
     
     
 
     for stack_dir in stack_dir_all:
 
         inp_dir = expmt_dir + f'/phase_{phase+1:02d}'
-        out_expmt_dir = "/deneb_disk/disc_mri/heart_scans_01_06_2026/nifti_files/" + expmt_dir.split('/')[-1] 
+        out_expmt_dir = "/deneb_disk/disc_mri/disc_mri/heart_svr_acquisition_01_06_2026/nifti_files/" + expmt_dir.split('/')[-1] 
 
         if not os.path.isdir(out_expmt_dir):
             os.mkdir(out_expmt_dir)
