@@ -77,7 +77,7 @@ if __name__ == "__main__":
         )
 
         # if outsvr file already exists, skip
-        outsvr_fullpath = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expmt_dir.split('/')[-1]}/" + f"phase_{phase+1:02}_res_{res:.1f}.nii.gz"
+        outsvr_fullpath = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expmt_dir.split('/')[-1]}/phase_{phase+1:02}_allstacks/{outsvr}"
 
         if os.path.isfile(outsvr_fullpath):
             print("SVR output file already exists, skipping:", outsvr_fullpath)
