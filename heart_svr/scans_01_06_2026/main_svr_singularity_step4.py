@@ -76,6 +76,13 @@ if __name__ == "__main__":
             + f"_phase_{phase+1:02}_res_{res:.1f}.nii.gz"
         )
 
+        # if outsvr file already exists, skip
+        outsvr_fullpath = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expmt_dir.split('/')[-1]}/" + f"phase_{phase+1:02}_res_{res:.1f}.nii.gz"
+
+        if os.path.isfile(outsvr_fullpath):
+            print("SVR output file already exists, skipping:", outsvr_fullpath)
+            continue
+        
         expdir_prefix = expmt_dir.split("/")[-1]
         outsvr_dir = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
