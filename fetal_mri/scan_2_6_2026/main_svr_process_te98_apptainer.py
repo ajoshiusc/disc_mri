@@ -83,13 +83,13 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
 
 if __name__ == "__main__":
     subj = "_t2_haste"
-    subdir = "/project2/ajoshi_27/data/disc_mri/scan_12_03_2025/nifti_rot"
+    subdir = "/project2/ajoshi_27/data/disc_mri/scan_2_6_2026/nifti_rot"
     te = 98
 
     res = 1
     th = 3
     MAX_COMB = 20
-    outsvr_dir = "/project2/ajoshi_27/data/disc_mri/scan_12_03_2025/outsvr"
+    outsvr_dir = "/project2/ajoshi_27/data/disc_mri/scan_2_6_2026/outsvr"
 
     run_svr(subj, te, subdir, outsvr_dir, res=res, slice_thickness=th, MAX_COMB=MAX_COMB)
 
