@@ -5,8 +5,8 @@ import os
 import SimpleITK as sitk
 import glob
 
-subdir = '/deneb_disk/disc_mri/scan_12_03_2025/nifti' #'/deneb_disk/Lung_Volumes/nifti_files/Svr106/'
-outsubdir = '/deneb_disk/disc_mri/scan_12_03_2025/nifti_rot' #'/deneb_disk/Lung_Volumes/lung_stacks/Svr106_rot'
+subdir = '/deneb_disk/disc_mri/scan_2_6_2026/nifti' #'/deneb_disk/Lung_Volumes/nifti_files/Svr106/'
+outsubdir = '/deneb_disk/disc_mri/scan_2_6_2026/nifti_rot' #'/deneb_disk/Lung_Volumes/lung_stacks/Svr106_rot'
 
 if not os.path.isdir(outsubdir):
     os.makedirs(outsubdir)
