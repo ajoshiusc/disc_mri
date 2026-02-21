@@ -76,7 +76,7 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
             cmd += "; cp " + outsvr + " " + outsvr_final + " "
             #print(cmd)
             # os.system(cmd)
-            docker_cmd = f"apptainer run --bind /project2/ajoshi_27 /scratch1/ajoshi/svrtk_latest.sif /bin/bash -lic \\\"{cmd}\\\" "
+            docker_cmd = f"apptainer run --bind /project2/ajoshi_27 /project2/ajoshi_27/svrtk_latest.sif /bin/bash -lic \\\"{cmd}\\\" "
             #print(docker_cmd)
             full_cmd = 'sbatch '+ '/project2/ajoshi_27/GitHub/disc_mri/mycmd.sh "' + docker_cmd +"\""
             print(full_cmd)
