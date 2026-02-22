@@ -9,6 +9,7 @@
 #SBATCH --time=1:00:00
 
 module purge
+module load apptainer
 #singularity exec --bind $PWD,/project/ajoshi_27 /scratch1/ajoshi/svrtk_latest.sif Rscript script.R
 echo $@
 eval $@
