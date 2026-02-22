@@ -45,7 +45,7 @@ def svr(subdir, template, mask, outsvr_dir, outsvr, res=1.0, slice_thickness=6.0
     # os.system(cmd)
     docker_cmd = f"apptainer run --bind /project2/ajoshi_27 /project2/ajoshi_27/svrtk_latest.sif /bin/bash -lic \\\"{cmd}\\\" "
     #print(docker_cmd)
-    full_cmd = 'sbatch '+ '/project2/ajoshi_27/GitHub/disc_mri/heart_svr/scans_12_17_2025/mycmd.sh "' + docker_cmd +"\""
+    full_cmd = 'sbatch '+ '/project2/ajoshi_27/GitHub/disc_mri/heart_svr/scan_12_17_2025/mycmd.sh "' + docker_cmd +"\""
     print(full_cmd)
     os.system(full_cmd)
 
