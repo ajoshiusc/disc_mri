@@ -45,8 +45,8 @@ def make_slices(subdir, outsubdir):
 def main():
  
     # scans_dir = '/deneb_disk/fetal_scan_8_3_2022/data'
-    scans_dir_top =  '/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files'
-    expmt_dir_all = glob.glob(scans_dir_top + "/vol1046*")
+    scans_dir_top =  '/deneb_disk/disc_mri/disc_mri/heart_svr_acquisition_12_17_2025/nifti_files'
+    expmt_dir_all = glob.glob(scans_dir_top + "/vol1406_20251217*")
 
 
     for phase, expmt_dir in product(range(25),expmt_dir_all):
@@ -57,20 +57,20 @@ def main():
         for stack_dir in stack_dir_all:
 
             inp_dir = expmt_dir + f'/phase_{phase+1:02d}'
-            out_expmt_dir = "/deneb_disk/disc_mri/for_Ye_12_11_2024_4subjects/nifti_files/" + expmt_dir.split('/')[-1] 
+            out_expmt_dir = "/deneb_disk/disc_mri/disc_mri/heart_svr_acquisition_12_17_2025/nifti_files/" + expmt_dir.split('/')[-1] 
 
             if not os.path.isdir(out_expmt_dir):
-                os.mkdir(out_expmt_dir)
+                os.makedirs(out_expmt_dir)
             
             out_stack_dir = out_expmt_dir #+ '/' + stack_dir.split('/')[-1]
 
             if not os.path.isdir(out_stack_dir):
-                os.mkdir(out_stack_dir)
+                os.makedirs(out_stack_dir)
 
             out_dir = out_stack_dir + f'/phase_{phase+1:02d}_rot'
 
             if not os.path.isdir(out_dir):
-                os.mkdir(out_dir)
+                os.makedirs(out_dir)
 
             phase_dir = stack_dir + f'/phase_{phase+1:02d}'        
 
