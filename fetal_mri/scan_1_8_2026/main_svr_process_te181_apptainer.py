@@ -63,11 +63,11 @@ def run_svr(subj, te, subdir,  outsvr_dir, res=1.0, slice_thickness=3.0, MAX_COM
                 + " "
                 + str(num_stacks)
                 + str_stacks
-                + " --resolution "
+                + " -resolution "
                 + str(res)
             )
 
-            cmd += " --thickness " + str_th + " --template " + template + " --mask " + mask
+            cmd += " -thickness " + str_th + " -template " + template + " -mask " + mask
 
             cmd += "; cp " + outsvr + " " + outsvr_final + " "
             #print(cmd)
