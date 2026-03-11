@@ -329,7 +329,7 @@ def create_publication_figure():
     print(f"High-resolution PNG saved: {png_file}")
     
     # PDF version for publication
-    pdf_file = os.path.join(output_dir, "publication_figure_x_preserved.pdf")
+    pdf_file = os.path.join(output_dir, "publication_figure_x_10subjects.pdf")
     plt.savefig(pdf_file, bbox_inches='tight', facecolor='white')
     print(f"Publication PDF saved: {pdf_file}")
     
