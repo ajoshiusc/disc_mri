@@ -87,7 +87,7 @@ def get_tissue_mask_in_native_space(subj_name, te, ref_path):
         
     return nib.load(out_tissue).get_fdata()
 
-def calculate_ssim_mse(img_data, ref_data):
+def calculate_ssim_nmse(img_data, ref_data):
     if img_data.shape != ref_data.shape:
         return np.nan, np.nan
         
@@ -111,9 +111,10 @@ def calculate_ssim_mse(img_data, ref_data):
     ssim_loss = SSIMLoss(spatial_dims=3)(t_img_norm, t_ref_norm)
     ssim = 1 - ssim_loss.item()
     
-    mse_loss = MSELoss()(t_img_norm, t_ref_norm)
-    mse = mse_loss.item()
-    return ssim, mse
+    nmse_loss = MSELoss()(t_img_norm, t_ref_norm) / (t_ref_norm ** 2).mean()
+    nmse = nmse_loss.item()
+     
+    return ssim, nmse
 
 def calculate_tissue_metrics(img_data, tissue_data):
     GM_LABELS = [112, 113]
@@ -159,21 +160,21 @@ def main():
                 
             for stacks, fpath_list in stack_files.items():
                 if stacks not in all_subject_data[te]:
-                    all_subject_data[te][stacks] = {'cr':[], 'cnr':[], 'snr_gm':[], 'snr_wm':[], 'ssim':[], 'mse':[]}
+                    all_subject_data[te][stacks] = {'cr':[], 'cnr':[], 'snr_gm':[], 'snr_wm':[], 'ssim':[], 'nmse':[]}
                 
                 print(f"Processing TE {te}, Stacks {stacks}, Combinations: {len(fpath_list)}")
                 for fpath in fpath_list:
                     try:
                         img_data = nib.load(fpath).get_fdata()
                         cr, cnr, s_gm, s_wm = calculate_tissue_metrics(img_data, tissue_mask)
-                        ssim, mse = calculate_ssim_mse(img_data, ref_data)
+                        ssim, nmse = calculate_ssim_nmse(img_data, ref_data)
                         
                         all_subject_data[te][stacks]['cr'].append(cr)
                         all_subject_data[te][stacks]['cnr'].append(cnr)
                         all_subject_data[te][stacks]['snr_gm'].append(s_gm)
                         all_subject_data[te][stacks]['snr_wm'].append(s_wm)
                         all_subject_data[te][stacks]['ssim'].append(ssim)
-                        all_subject_data[te][stacks]['mse'].append(mse)
+                        all_subject_data[te][stacks]['nmse'].append(nmse)
                     except Exception as e:
                         pass
                     
@@ -189,7 +190,7 @@ def main():
         ('ssim', 'Structural Similarity Index (SSIM)', axes[0,2], False),
         ('snr_gm', 'SNR Gray Matter', axes[1,0], False),
         ('snr_wm', 'SNR White Matter', axes[1,1], False),
-        ('mse', 'Mean Squared Error (MSE)', axes[1,2], True)
+        ('nmse', 'Mean Squared Error (NMSE)', axes[1,2], True)
     ]
     
     for ax in axes.flat:
@@ -218,7 +219,7 @@ def main():
         ax.legend(loc='best')
         ax.set_xticks(range(1, 13))
         
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    plt.tight_layout(rect=(0, 0, 1, 0.96))
     fig_path = os.path.join("/home/ajoshi/Projects/disc_mri/fetal_mri", "comprehensive_te_analysis_10subjects.png")
     plt.savefig(fig_path, dpi=300, bbox_inches='tight')
     
@@ -235,11 +236,11 @@ def save_outputs(all_subject_data):
         f.write("- Contrast-to-Noise Ratio (CNR): tissue contrast relative to noise\n")
         f.write("- SNR GM/WM: signal-to-noise ratios for gray/white matter\n")
         f.write("- SSIM: structural similarity index (vs. maximum stacks)\n")
-        f.write("- MSE: mean squared error (vs. maximum stacks)\n\n")
+        f.write("- NMSE: mean squared error (vs. maximum stacks)\n\n")
         
         for te in [98, 140, 181, 272]:
             f.write(f"TE {te} ms:\n")
-            f.write("Stack\tCR\tCNR\tSNR_GM\tSNR_WM\tSSIM\tMSE\n")
+            f.write("Stack\tCR\tCNR\tSNR_GM\tSNR_WM\tSSIM\tNMSE\n")
             f.write("-" * 60 + "\n")
             
             valid_stacks = sorted([s for s in all_subject_data[te].keys() if 1 <= s <= 12])
@@ -249,8 +250,8 @@ def save_outputs(all_subject_data):
                 mean_snr_gm = np.nanmean(all_subject_data[te][s]['snr_gm'])
                 mean_snr_wm = np.nanmean(all_subject_data[te][s]['snr_wm'])
                 mean_ssim = np.nanmean(all_subject_data[te][s]['ssim'])
-                mean_mse = np.nanmean(all_subject_data[te][s]['mse'])
-                f.write(f"{s}\t{mean_cr:.3f}\t{mean_cnr:.3f}\t{mean_snr_gm:.3f}\t{mean_snr_wm:.3f}\t{mean_ssim:.3f}\t{mean_mse:.2e}\n")
+                mean_nmse = np.nanmean(all_subject_data[te][s]['nmse'])
+                f.write(f"{s}\t{mean_cr:.3f}\t{mean_cnr:.3f}\t{mean_snr_gm:.3f}\t{mean_snr_wm:.3f}\t{mean_ssim:.3f}\t{mean_nmse:.2e}\n")
             f.write("\n")
             
     json_data = {}
@@ -263,7 +264,7 @@ def save_outputs(all_subject_data):
             snr_gm = all_subject_data[te][s]['snr_gm']
             snr_wm = all_subject_data[te][s]['snr_wm']
             ssim = [val for val in all_subject_data[te][s]['ssim'] if not np.isnan(val)]
-            mse = [val for val in all_subject_data[te][s]['mse'] if not np.isnan(val)]
+            nmse = [val for val in all_subject_data[te][s]['nmse'] if not np.isnan(val)]
             
             json_data[str(te)][str(s)] = {
                 "cr_mean": float(np.nanmean(cr)), "cr_std": float(np.nanstd(cr)),
@@ -271,7 +272,7 @@ def save_outputs(all_subject_data):
                 "snr_gm_mean": float(np.nanmean(snr_gm)), "snr_gm_std": float(np.nanstd(snr_gm)),
                 "snr_wm_mean": float(np.nanmean(snr_wm)), "snr_wm_std": float(np.nanstd(snr_wm)),
                 "ssim_mean": float(np.nanmean(ssim)) if ssim else 1.0, "ssim_std": float(np.nanstd(ssim)) if ssim else 0.0,
-                "mse_mean": float(np.nanmean(mse)) if mse else 0.0, "mse_std": float(np.nanstd(mse)) if mse else 0.0
+                "nmse_mean": float(np.nanmean(nmse)) if nmse else 0.0, "nmse_std": float(np.nanstd(nmse)) if nmse else 0.0
             }
             
     with open("real_error_bar_data.json", "w") as f:
