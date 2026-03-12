@@ -34,14 +34,26 @@ SUBJECTS = {
     "subj_11_3_2023_babyb": ("/deneb_disk/disc_mri/scan_11_3_2023_twins_nii_rot/outsvr", "svr_te{te}_babyb*numstacks_*"),
     "subj_3_20_2024": ("/deneb_disk/disc_mri/scan_3_20_2024/outsvr", "svr_te{te}*numstacks_*"),
     "subj_10_23_2025": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_10_23_2025/outsvr", "svr_te{te}*numstacks_*"),
-    #"subj_12_03_2025": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_12_03_2025/outsvr", "svr_te{te}*numstacks_*"),
+    "subj_12_03_2025": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_12_03_2025/outsvr", "svr_te{te}*numstacks_*"),
     "subj_1_8_2026": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_1_8_2026/outsvr", "svr_te{te}*numstacks_*"),
-    #"subj_2_6_2026": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_2_6_2026/outsvr", "svr_te{te}*numstacks_*"),
-    #"subj_2_9_2026": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_2_9_2026/outsvr", "svr_te{te}*numstacks_*"),
+    "subj_2_6_2026": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_2_6_2026/outsvr", "svr_te{te}*numstacks_*"),
+    "subj_2_9_2026": ("/home/ajoshi/project2_ajoshi_27/data/disc_mri/scan_2_9_2026/outsvr", "svr_te{te}*numstacks_*"),
 }
 
-FETAL_ATLAS = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
-FETAL_ATLAS_TISSUE = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30_tissue.nii.gz"
+SUBJECT_GA = {
+    "subj_8_11_2023": 30,         # TODO: Update with actual gestational age
+    "subj_9_12_2023": 30,         # TODO: Update with actual gestational age
+    "subj_11_3_2023_babya": 30,   # TODO: Update with actual gestational age
+    "subj_11_3_2023_babyb": 30,   # TODO: Update with actual gestational age
+    "subj_3_20_2024": 30,         # TODO: Update with actual gestational age
+    "subj_10_23_2025": 30,        # TODO: Update with actual gestational age
+    "subj_12_03_2025": 30,        # TODO: Update with actual gestational age
+    "subj_1_8_2026": 30,          # TODO: Update with actual gestational age
+    "subj_2_6_2026": 30,          # TODO: Update with actual gestational age
+    "subj_2_9_2026": 30,          # TODO: Update with actual gestational age
+}
+
+FETAL_ATLAS_DIR = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3"
 CACHE_DIR = "/home/ajoshi/Projects/disc_mri/fetal_mri/atlas_registrations"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
@@ -73,19 +85,17 @@ def get_subject_files(d, pat_template, te):
         
     return final_dict
 
-def get_tissue_mask_in_native_space(subj_name, te, ref_path):
-    out_tissue = os.path.join(CACHE_DIR, f"{subj_name}_te{te}_tissue_reg.nii.gz")
-    out_mat = os.path.join(CACHE_DIR, f"{subj_name}_te{te}_reg.mat")
-    atlas_reg = os.path.join(CACHE_DIR, f"{subj_name}_te{te}_atlas_reg.nii.gz")
+def get_tissue_mask_for_subject(subj_name):
+    # Retrieve the GA for the subject, default to 30 if not found
+    ga = SUBJECT_GA.get(subj_name, 30)
     
-    if not os.path.exists(out_tissue):
-        print(f"  [FLIRT] Registering atlas to native SVR for {subj_name} TE {te}...")
-        cmd1 = f"flirt -in {FETAL_ATLAS} -ref {ref_path} -omat {out_mat} -out {atlas_reg} -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12"
-        subprocess.run(cmd1, shell=True, check=True, stdout=subprocess.DEVNULL, )
-        cmd2 = f"flirt -in {FETAL_ATLAS_TISSUE} -ref {ref_path} -applyxfm -init {out_mat} -interp nearestneighbour -out {out_tissue}"
-        subprocess.run(cmd2, shell=True, check=True, stdout=subprocess.DEVNULL, )
+    # Construct the path to the tissue atlas for this gestational age
+    tissue_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga}_tissue.nii.gz")
+    
+    if not os.path.exists(tissue_path):
+        raise FileNotFoundError(f"Missing tissue atlas for GA {ga}: {tissue_path}")
         
-    return nib.load(out_tissue).get_fdata()
+    return nib.load(tissue_path).get_fdata()
 
 def calculate_ssim_nmse(img_data, ref_data):
     if img_data.shape != ref_data.shape:
@@ -143,6 +153,9 @@ def main():
     all_subject_data = {te: {} for te in TE_VALUES}
     
     for subj_name, (d, pat) in tqdm(SUBJECTS.items(), desc="Subjects"):
+        ga = SUBJECT_GA.get(subj_name, 30)
+        atlas_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga}.nii.gz")
+        
         for te in TE_VALUES:
             stack_files = get_subject_files(d, pat, te)
             if not stack_files:
@@ -152,8 +165,19 @@ def main():
             # stack_files contains lists now, use the first one from max_stacks as reference geometric target
             ref_path = stack_files[max_stacks][0]
             try:
-                ref_data = nib.load(ref_path).get_fdata()
-                tissue_mask = get_tissue_mask_in_native_space(subj_name, te, ref_path)
+                ref_aligned_name = f"{subj_name}_te{te}_ref_aligned.nii.gz"
+                ref_mat_name = f"{subj_name}_te{te}_ref.mat"
+                
+                ref_aligned_path = os.path.join(CACHE_DIR, ref_aligned_name)
+                ref_mat_path = os.path.join(CACHE_DIR, ref_mat_name)
+                
+                if not os.path.exists(ref_aligned_path):
+                    print(f"  [FLIRT] Computing base alignment for {subj_name} TE {te}...")
+                    cmd = f"flirt -in {ref_path} -ref {atlas_path} -omat {ref_mat_path} -out {ref_aligned_path} -dof 6 -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost mutualinfo"
+                    subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+                
+                ref_data = nib.load(ref_aligned_path).get_fdata()
+                tissue_mask = get_tissue_mask_for_subject(subj_name)
             except Exception as e:
                 print(f"Skipping {subj_name} TE {te} due to error: {e}")
                 continue
@@ -165,7 +189,15 @@ def main():
                 print(f"Processing TE {te}, Stacks {stacks}, Combinations: {len(fpath_list)}")
                 for fpath in fpath_list:
                     try:
-                        img_data = nib.load(fpath).get_fdata()
+                        bname = os.path.basename(fpath).replace(".nii.gz", "")
+                        out_aligned = os.path.join(CACHE_DIR, f"{subj_name}_{bname}_aligned.nii.gz")
+                        
+                        if not os.path.exists(out_aligned):
+                            cmd = f"flirt -in {fpath} -ref {atlas_path} -out {out_aligned} -applyxfm -init {ref_mat_path}"
+                            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+                            
+                        img_data = nib.load(out_aligned).get_fdata()
+                        
                         cr, cnr, s_gm, s_wm = calculate_tissue_metrics(img_data, tissue_mask)
                         ssim, nmse = calculate_ssim_nmse(img_data, ref_data)
                         
