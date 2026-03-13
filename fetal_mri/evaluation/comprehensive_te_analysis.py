@@ -173,7 +173,7 @@ def main():
                 
                 if not os.path.exists(ref_aligned_path):
                     print(f"  [FLIRT] Computing base alignment for {subj_name} TE {te}...")
-                    cmd = f"flirt -in {ref_path} -ref {atlas_path} -omat {ref_mat_path} -out {ref_aligned_path} -dof 6 -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost mutualinfo"
+                    cmd = f"flirt -in {ref_path} -ref {atlas_path} -omat {ref_mat_path} -out {ref_aligned_path} -dof 6 -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost normmi"
                     subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
                 
                 ref_data = nib.load(ref_aligned_path).get_fdata()
