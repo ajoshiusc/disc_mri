@@ -134,7 +134,7 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             cr_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
                     real_error_data[te_value][stack_count]['cr_std'] is not None):
                     cr_errors.append(real_error_data[te_value][stack_count]['cr_std'])
@@ -166,7 +166,7 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             cnr_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
                     real_error_data[te_value][stack_count]['cnr_std'] is not None):
                     cnr_errors.append(real_error_data[te_value][stack_count]['cnr_std'])
@@ -198,7 +198,7 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             ssim_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
                     real_error_data[te_value][stack_count]['ssim_std'] is not None):
                     ssim_errors.append(real_error_data[te_value][stack_count]['ssim_std'])
@@ -230,7 +230,7 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             snr_gm_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
                     real_error_data[te_value][stack_count]['snr_gm_std'] is not None):
                     snr_gm_errors.append(real_error_data[te_value][stack_count]['snr_gm_std'])
@@ -262,7 +262,7 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             snr_wm_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
                     real_error_data[te_value][stack_count]['snr_wm_std'] is not None):
                     snr_wm_errors.append(real_error_data[te_value][stack_count]['snr_wm_std'])
@@ -294,8 +294,9 @@ def create_publication_figure():
             # Create error array - use real error bars where available, zero elsewhere
             mse_errors = []
             for stack_count in stacks:
-                if (te_value in real_error_data and 
+                if stack_count in TARGET_STACKS and (te_value in real_error_data and 
                     stack_count in real_error_data[te_value] and 
+                    'nmse_std' in real_error_data[te_value][stack_count] and
                     real_error_data[te_value][stack_count]['nmse_std'] is not None and
                     real_error_data[te_value][stack_count]['nmse_mean'] is not None and
                     real_error_data[te_value][stack_count]['nmse_mean'] > 0):

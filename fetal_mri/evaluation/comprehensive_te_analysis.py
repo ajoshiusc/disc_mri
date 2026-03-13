@@ -57,6 +57,8 @@ FETAL_ATLAS_DIR = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3"
 CACHE_DIR = "/home/ajoshi/Projects/disc_mri/fetal_mri/atlas_registrations"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
+# Configuration
+OUTLIER_REJECTION_RATE = 0.4
 TE_VALUES = [98, 140, 181, 272]
 
 def get_subject_files(d, pat_template, te):
@@ -76,14 +78,14 @@ def get_subject_files(d, pat_template, te):
     if not parsed:
         return {}
     
-    # Keep all iterations (combinations) per stack
-    final_dict = {}
+    # Group by stack
+    stack_dict = {}
     for stacks, it, f in parsed:
-        if stacks not in final_dict:
-            final_dict[stacks] = []
-        final_dict[stacks].append(f)
+        if stacks not in stack_dict:
+            stack_dict[stacks] = []
+        stack_dict[stacks].append(f)
         
-    return final_dict
+    return stack_dict
 
 def get_tissue_mask_for_subject(subj_name):
     # Retrieve the GA for the subject, default to 30 if not found
@@ -237,6 +239,31 @@ def main():
                     except Exception as e:
                         pass
                     
+    # Reject OUTLIER_REJECTION_RATE worst data as outliers
+    for te in all_subject_data:
+        for s in all_subject_data[te]:
+            for metric in ['cr', 'cnr', 'snr_gm', 'snr_wm', 'ssim', 'nmse']:
+                values = all_subject_data[te][s][metric]
+                valid = [v for v in values if not np.isnan(v)]
+                if not valid: continue
+                
+                # Debug output for NMSE
+                if metric == 'nmse' and te == 98 and s in [9, 12]:
+                    import sys
+                    print(f"DEBUG {te} Stack {s} pre-reject nmse: {valid}")
+                    
+                # Keep top percentage
+                n_keep = max(1, int(len(valid) * (1.0 - OUTLIER_REJECTION_RATE)))
+                
+                if metric == 'nmse':
+                    # Lower is better, so worst X% are highest values
+                    filtered = sorted(valid)[:n_keep]
+                else:
+                    # Higher is better, so worst X% are lowest values
+                    filtered = sorted(valid, reverse=True)[:n_keep]
+                    
+                all_subject_data[te][s][metric] = filtered
+
     # Generate Output Means
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
     fig.suptitle('Comprehensive Image Quality Assessment: 10 Subject Average', fontsize=18, fontweight='bold', y=0.98)
@@ -265,7 +292,7 @@ def main():
         
         for key, title, ax, is_log in metrics:
             means = [np.nanmean(all_subject_data[te][s][key]) for s in valid_stacks]
-            errs = [np.nanstd(all_subject_data[te][s][key]) for s in valid_stacks]
+            errs = [np.nanstd(all_subject_data[te][s][key], ddof=1) if len(all_subject_data[te][s][key]) > 1 else 0.0 for s in valid_stacks]
             
             ax.errorbar(valid_stacks, means, yerr=errs, fmt=m+'-', color=c, 
                         label=f'TE {te} ms', capsize=4, capthick=1.5, elinewidth=1.5)
@@ -326,12 +353,12 @@ def save_outputs(all_subject_data):
             nmse = [val for val in all_subject_data[te][s]['nmse'] if not np.isnan(val)]
             
             json_data[str(te)][str(s)] = {
-                "cr_mean": float(np.nanmean(cr)), "cr_std": float(np.nanstd(cr)),
-                "cnr_mean": float(np.nanmean(cnr)), "cnr_std": float(np.nanstd(cnr)),
-                "snr_gm_mean": float(np.nanmean(snr_gm)), "snr_gm_std": float(np.nanstd(snr_gm)),
-                "snr_wm_mean": float(np.nanmean(snr_wm)), "snr_wm_std": float(np.nanstd(snr_wm)),
-                "ssim_mean": float(np.nanmean(ssim)) if ssim else 1.0, "ssim_std": float(np.nanstd(ssim)) if ssim else 0.0,
-                "nmse_mean": float(np.nanmean(nmse)) if nmse else 0.0, "nmse_std": float(np.nanstd(nmse)) if nmse else 0.0
+                "cr_mean": float(np.nanmean(cr)), "cr_std": float(np.nanstd(cr, ddof=1) if len(cr) > 1 else 0.0),
+                "cnr_mean": float(np.nanmean(cnr)), "cnr_std": float(np.nanstd(cnr, ddof=1) if len(cnr) > 1 else 0.0),
+                "snr_gm_mean": float(np.nanmean(snr_gm)), "snr_gm_std": float(np.nanstd(snr_gm, ddof=1) if len(snr_gm) > 1 else 0.0),
+                "snr_wm_mean": float(np.nanmean(snr_wm)), "snr_wm_std": float(np.nanstd(snr_wm, ddof=1) if len(snr_wm) > 1 else 0.0),
+                "ssim_mean": float(np.nanmean(ssim)) if ssim else 1.0, "ssim_std": float(np.nanstd(ssim, ddof=1)) if len(ssim) > 1 else 0.0,
+                "nmse_mean": float(np.nanmean(nmse)) if nmse else 0.0, "nmse_std": float(np.nanstd(nmse, ddof=1)) if len(nmse) > 1 else 0.0
             }
             
     with open("real_error_bar_data.json", "w") as f:
