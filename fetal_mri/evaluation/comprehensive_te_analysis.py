@@ -41,16 +41,16 @@ SUBJECTS = {
 }
 
 SUBJECT_GA = {
-    "subj_8_11_2023": 30,         # TODO: Update with actual gestational age
-    "subj_9_12_2023": 30,         # TODO: Update with actual gestational age
-    "subj_11_3_2023_babya": 30,   # TODO: Update with actual gestational age
-    "subj_11_3_2023_babyb": 30,   # TODO: Update with actual gestational age
-    "subj_3_20_2024": 30,         # TODO: Update with actual gestational age
-    "subj_10_23_2025": 30,        # TODO: Update with actual gestational age
-    "subj_12_03_2025": 30,        # TODO: Update with actual gestational age
-    "subj_1_8_2026": 30,          # TODO: Update with actual gestational age
-    "subj_2_6_2026": 30,          # TODO: Update with actual gestational age
-    "subj_2_9_2026": 30,          # TODO: Update with actual gestational age
+    "subj_8_11_2023": 30,         
+    "subj_9_12_2023": 37,         
+    "subj_11_3_2023_babya": 30,   
+    "subj_11_3_2023_babyb": 30,   
+    "subj_3_20_2024": 24,         
+    "subj_10_23_2025": 38,        
+    "subj_12_03_2025": 29,        
+    "subj_1_8_2026": 36,          
+    "subj_2_6_2026": 37,          
+    "subj_2_9_2026": 35,          
 }
 
 FETAL_ATLAS_DIR = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3"
@@ -88,9 +88,10 @@ def get_subject_files(d, pat_template, te):
 def get_tissue_mask_for_subject(subj_name):
     # Retrieve the GA for the subject, default to 30 if not found
     ga = SUBJECT_GA.get(subj_name, 30)
+    ga_str = f"{ga}exp" if ga >= 36 else str(ga)
     
     # Construct the path to the tissue atlas for this gestational age
-    tissue_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga}_tissue.nii.gz")
+    tissue_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga_str}_tissue.nii.gz")
     
     if not os.path.exists(tissue_path):
         raise FileNotFoundError(f"Missing tissue atlas for GA {ga}: {tissue_path}")
@@ -152,9 +153,12 @@ def main():
     print("Starting Comprehensive Inter-Subject Analysis...")
     all_subject_data = {te: {} for te in TE_VALUES}
     
-    for subj_name, (d, pat) in tqdm(SUBJECTS.items(), desc="Subjects"):
+    # --- PHASE 1: Registrations ---
+    print("Phase 1: Computing all registrations...")
+    for subj_name, (d, pat) in tqdm(SUBJECTS.items(), desc="Registrations"):
         ga = SUBJECT_GA.get(subj_name, 30)
-        atlas_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga}.nii.gz")
+        ga_str = f"{ga}exp" if ga >= 36 else str(ga)
+        atlas_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga_str}.nii.gz")
         
         for te in TE_VALUES:
             stack_files = get_subject_files(d, pat, te)
@@ -164,18 +168,41 @@ def main():
             max_stacks = max(stack_files.keys())
             # stack_files contains lists now, use the first one from max_stacks as reference geometric target
             ref_path = stack_files[max_stacks][0]
+            
+            ref_aligned_name = f"{subj_name}_te{te}_ref_aligned.nii.gz"
+            ref_mat_name = f"{subj_name}_te{te}_ref.mat"
+            
+            ref_aligned_path = os.path.join(CACHE_DIR, ref_aligned_name)
+            ref_mat_path = os.path.join(CACHE_DIR, ref_mat_name)
+            
+            if not os.path.exists(ref_aligned_path):
+                print(f"  [FLIRT] Computing base alignment for {subj_name} TE {te}...")
+                cmd = f"flirt -in {ref_path} -ref {atlas_path} -omat {ref_mat_path} -out {ref_aligned_path} -dof 6 -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost mutualinfo"
+                subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+
+
+    # --- PHASE 2: Apply XFM and Extract Metrics ---
+    print("Phase 2: Applying registrations and extracting metrics...")
+    for subj_name, (d, pat) in tqdm(SUBJECTS.items(), desc="Metrics"):
+        ga = SUBJECT_GA.get(subj_name, 30)
+        ga_str = f"{ga}exp" if ga >= 36 else str(ga)
+        atlas_path = os.path.join(FETAL_ATLAS_DIR, f"STA{ga_str}.nii.gz")
+        
+        for te in TE_VALUES:
+            stack_files = get_subject_files(d, pat, te)
+            if not stack_files:
+                continue
+                
+            ref_aligned_name = f"{subj_name}_te{te}_ref_aligned.nii.gz"
+            ref_mat_name = f"{subj_name}_te{te}_ref.mat"
+            
+            ref_aligned_path = os.path.join(CACHE_DIR, ref_aligned_name)
+            ref_mat_path = os.path.join(CACHE_DIR, ref_mat_name)
+            
+            if not os.path.exists(ref_aligned_path):
+                continue
+                
             try:
-                ref_aligned_name = f"{subj_name}_te{te}_ref_aligned.nii.gz"
-                ref_mat_name = f"{subj_name}_te{te}_ref.mat"
-                
-                ref_aligned_path = os.path.join(CACHE_DIR, ref_aligned_name)
-                ref_mat_path = os.path.join(CACHE_DIR, ref_mat_name)
-                
-                if not os.path.exists(ref_aligned_path):
-                    print(f"  [FLIRT] Computing base alignment for {subj_name} TE {te}...")
-                    cmd = f"flirt -in {ref_path} -ref {atlas_path} -omat {ref_mat_path} -out {ref_aligned_path} -dof 6 -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -cost normmi"
-                    subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-                
                 ref_data = nib.load(ref_aligned_path).get_fdata()
                 tissue_mask = get_tissue_mask_for_subject(subj_name)
             except Exception as e:
