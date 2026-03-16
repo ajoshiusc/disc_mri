@@ -152,7 +152,7 @@ def create_publication_figure():
     ax1.set_title('A. Tissue Contrast Ratio', fontweight='bold', pad=10)
     ax1.legend(fontsize=7, frameon=True)
     ax1.grid(True, alpha=0.3)
-    # ax1.set_ylim(1.0, 1.5)
+    ax1.set_ylim(bottom=0.0)
     ax1.set_xlim(0.5, 12.5)
     ax1.set_xticks([1, 3, 6, 9, 12])
     
@@ -184,7 +184,7 @@ def create_publication_figure():
     ax2.set_title('B. Contrast-to-Noise Ratio', fontweight='bold', pad=10)
     ax2.legend(fontsize=7, frameon=True)
     ax2.grid(True, alpha=0.3)
-    # ax2.set_ylim(0.2, 0.65)
+    ax2.set_ylim(bottom=0.0)
     ax2.set_xlim(0.5, 12.5)
     ax2.set_xticks([1, 3, 6, 9, 12])
     
@@ -216,7 +216,7 @@ def create_publication_figure():
     ax3.set_title('C. Structural Similarity (SSIM)', fontweight='bold', pad=10)
     ax3.legend(fontsize=7, frameon=True)
     ax3.grid(True, alpha=0.3)
-    # ax3.set_ylim(0.5, 1.05)
+    ax3.set_ylim(bottom=0.0)
     ax3.set_xlim(0.5, 12.5)
     ax3.set_xticks([1, 3, 6, 9, 12])
     
@@ -248,7 +248,7 @@ def create_publication_figure():
     ax4.set_title('D. Gray Matter SNR', fontweight='bold', pad=10)
     ax4.legend(fontsize=7, frameon=True)
     ax4.grid(True, alpha=0.3)
-    # ax4.set_ylim(1.5, 3.0)
+    ax4.set_ylim(bottom=0.0)
     ax4.set_xlim(0.5, 12.5)
     ax4.set_xticks([1, 3, 6, 9, 12])
     
@@ -280,7 +280,7 @@ def create_publication_figure():
     ax5.set_title('E. White Matter SNR', fontweight='bold', pad=10)
     ax5.legend(fontsize=7, frameon=True)
     ax5.grid(True, alpha=0.3)
-    # ax5.set_ylim(2.0, 5.0)
+    ax5.set_ylim(bottom=0.0)
     ax5.set_xlim(0.5, 12.5)
     ax5.set_xticks([1, 3, 6, 9, 12])
     
@@ -300,13 +300,10 @@ def create_publication_figure():
                     'nmse_std' in real_error_data[te_value][stack_count] and
                     real_error_data[te_value][stack_count]['nmse_std'] is not None and
                     real_error_data[te_value][stack_count]['nmse_mean'] is not None and
-                    real_error_data[te_value][stack_count]['nmse_mean'] >= 0):  # Allow 0 values for NMSE
+                    real_error_data[te_value][stack_count]['nmse_mean'] > 0):
                     mse_errors.append(real_error_data[te_value][stack_count]['nmse_std'])
                 else:
                     mse_errors.append(0.0)
-            
-            # Avoid math domain error with log scales and 0 by enforcing a small minimum cap epsilon for purely zero NMSEs natively derived
-            mse_values = [m if m is not None and m > 1e-10 else 1e-10 for m in mse_values]
             
             # Plot with error bars for all points
             ax6.errorbar(stacks, mse_values, yerr=mse_errors,
@@ -318,8 +315,8 @@ def create_publication_figure():
     ax6.set_title('F. Reconstruction Error (NMSE)', fontweight='bold', pad=10)
     ax6.legend(fontsize=7, frameon=True)
     ax6.grid(True, alpha=0.3)
-    ax6.set_yscale('symlog', linthresh=1e-3)
-    # ax6.set_ylim(400, 50000)
+    ax6.set_yscale('log')
+    ax6.set_ylim(bottom=1e-4)
     ax6.set_xlim(0.5, 12.5)
     ax6.set_xticks([1, 3, 6, 9, 12])
     
