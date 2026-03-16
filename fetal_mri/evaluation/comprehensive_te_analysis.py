@@ -356,6 +356,15 @@ import json
 from typing import Dict, List
 
 def save_outputs(final_data: Dict[int, Dict[int, Dict[str, List[float]]]]):
+    """
+    Save the final_data results to disk for future analyses.
+    """
+    # Save the final_data as a pickle file for easy loading in future analyses
+    import pickle
+    with open("comprehensive_te_analysis_results.pkl", "wb") as f:
+        pickle.dump(final_data, f)
+    
+    
     with open("comprehensive_te_analysis_results.txt", "w") as f:
         f.write("COMPREHENSIVE FETAL MRI IMAGE QUALITY ANALYSIS (10 SUBJECT AVERAGE)\n")
         f.write("="*60 + "\n\n")
@@ -368,7 +377,7 @@ def save_outputs(final_data: Dict[int, Dict[int, Dict[str, List[float]]]]):
         
         for te in [98, 140, 181, 272]:
             f.write(f"TE {te} ms:\n")
-            f.write("Stack\tCR\tCNR\tSNR_GM\tSNR_WM\tSSIM\tNMSE\n")
+            f.write("Stack\tCR_mean\tCR_std\tCNR_mean\tCNR_std\tSNR_GM_mean\tSNR_GM_std\tSNR_WM_mean\tSNR_WM_std\tSSIM_mean\tSSIM_std\tNMSE_mean\tNMSE_std\n")
             f.write("-" * 60 + "\n")
             
             valid_stacks = sorted([s for s in final_data[te].keys() if 1 <= s <= 12])
@@ -380,13 +389,35 @@ def save_outputs(final_data: Dict[int, Dict[int, Dict[str, List[float]]]]):
                 ssim_vals = [v for v in final_data[te][s]['ssim'] if not np.isnan(v)]
                 nmse_vals = [v for v in final_data[te][s]['nmse'] if not np.isnan(v)]
                 
-                mean_cr = np.nanmean(cr_vals) if cr_vals else np.nan
-                mean_cnr = np.nanmean(cnr_vals) if cnr_vals else np.nan
-                mean_snr_gm = np.nanmean(snr_gm_vals) if snr_gm_vals else np.nan
-                mean_snr_wm = np.nanmean(snr_wm_vals) if snr_wm_vals else np.nan
-                mean_ssim = np.nanmean(ssim_vals) if ssim_vals else np.nan
-                mean_nmse = np.nanmean(nmse_vals) if nmse_vals else np.nan
-                f.write(f"{s}\t{mean_cr:.3f}\t{mean_cnr:.3f}\t{mean_snr_gm:.3f}\t{mean_snr_wm:.3f}\t{mean_ssim:.3f}\t{mean_nmse:.2e}\n")
+                def mean_std(values):
+                    vals = [v for v in values if not np.isnan(v)]
+                    if not vals:
+                        return np.nan, np.nan
+                    m = np.nanmean(vals)
+                    if len(vals) > 1:
+                        s = np.nanstd(vals, ddof=1)
+                    else:
+                        s = 0.0
+                    return m, s
+
+                mean_cr, std_cr = mean_std(cr_vals)
+                mean_cnr, std_cnr = mean_std(cnr_vals)
+                mean_snr_gm, std_snr_gm = mean_std(snr_gm_vals)
+                mean_snr_wm, std_snr_wm = mean_std(snr_wm_vals)
+                mean_ssim, std_ssim = mean_std(ssim_vals)
+                mean_nmse, std_nmse = mean_std(nmse_vals)
+
+                # Format numbers; handle nan gracefully
+                def fmt(x, precision=3, sci=False):
+                    if np.isnan(x):
+                        return 'nan'
+                    if sci:
+                        return f"{x:.2e}"
+                    return f"{x:.{precision}f}"
+
+                f.write(
+                    f"{s}\t{fmt(mean_cr)}\t{fmt(std_cr)}\t{fmt(mean_cnr)}\t{fmt(std_cnr)}\t{fmt(mean_snr_gm)}\t{fmt(std_snr_gm)}\t{fmt(mean_snr_wm)}\t{fmt(std_snr_wm)}\t{fmt(mean_ssim)}\t{fmt(std_ssim)}\t{fmt(mean_nmse, sci=True)}\t{fmt(std_nmse, sci=True)}\n"
+                )
             f.write("\n")
             
     json_data = {}

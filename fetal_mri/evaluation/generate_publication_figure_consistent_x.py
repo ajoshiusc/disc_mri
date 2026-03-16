@@ -84,14 +84,16 @@ def load_comprehensive_results():
         if current_te is not None and '\t' in line:
             try:
                 parts = line.split('\t')
-                if len(parts) >= 6:
+                # The format is: Stack, N_subj, CR, CNR, SNR_GM, SNR_WM, SSIM, NMSE
+                if len(parts) >= 8:
                     stack = int(parts[0])
-                    cr = float(parts[1])
-                    cnr = float(parts[2]) 
-                    snr_gm = float(parts[3])
-                    snr_wm = float(parts[4])
-                    ssim = float(parts[5])
-                    nmse = float(parts[6])
+                    # Parse the mean value out of "mean±std" strings
+                    cr = float(parts[2].split('±')[0])
+                    cnr = float(parts[3].split('±')[0]) 
+                    snr_gm = float(parts[4].split('±')[0])
+                    snr_wm = float(parts[5].split('±')[0])
+                    ssim = float(parts[6].split('±')[0])
+                    nmse = float(parts[7].split('±')[0])
                     
                     data[current_te]['stacks'].append(stack)
                     data[current_te]['cr'].append(cr)

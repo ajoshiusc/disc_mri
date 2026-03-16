@@ -17,6 +17,7 @@ Prerequisites: run step1_register.py first.
 import json
 import os
 import subprocess
+import pickle
 
 import nibabel as nib
 import numpy as np
@@ -150,7 +151,7 @@ def save_final_data_json(final_data: dict) -> None:
     """Persist final_data so step3_plot.py can load it without re-computing."""
     serialisable = {
         str(te): {
-            str(s): {metric: vals for metric, vals in md.items()}
+            str(s): {metric: [float(v) if not np.isnan(float(v)) else None for v in vals] for metric, vals in md.items()}
             for s, md in sd.items()
         }
         for te, sd in final_data.items()
@@ -160,16 +161,36 @@ def save_final_data_json(final_data: dict) -> None:
     print(f"  Saved aggregated data → {FINAL_DATA_JSON}")
 
 
+def save_all_data_pickle(all_data: dict) -> None:
+    """Persist raw per-subject metrics structure to a pickle file for exact restoration."""
+    out_path = os.path.join(
+        os.path.dirname(FINAL_DATA_JSON),
+        "all_data_raw.pkl",
+    )
+    with open(out_path, "wb") as f:
+        pickle.dump(all_data, f)
+    print(f"  Saved raw all-data pickle  → {out_path}")
+
+
 def save_all_data_json(all_data: dict) -> None:
     """Persist raw per-subject metrics structure for full traceability."""
     out_path = os.path.join(
         os.path.dirname(FINAL_DATA_JSON),
         "all_data_raw.json",
     )
+    
+    def _clean_val(v):
+        if v is None:
+            return None
+        v = float(v)
+        if np.isnan(v) or np.isinf(v):
+            return None
+        return v
+        
     serialisable = {
         str(te): {
             str(s): {
-                subj: {metric: vals for metric, vals in subj_metrics.items()}
+                subj: {metric: [_clean_val(v) for v in vals] for metric, vals in subj_metrics.items()}
                 for subj, subj_metrics in subj_dict.items()
             }
             for s, subj_dict in te_dict.items()
@@ -331,8 +352,45 @@ def save_error_bar_json(final_data: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    print("Step 2: Applying transforms and extracting metrics ...")
-    all_data   = extract_metrics_for_all_subjects()
+    raw_json_path = os.path.join(
+        os.path.dirname(FINAL_DATA_JSON),
+        "all_data_raw.json",
+    )
+    raw_pkl_path = os.path.join(
+        os.path.dirname(FINAL_DATA_JSON),
+        "all_data_raw.pkl",
+    )
+    
+    all_data = None
+    if os.path.exists(raw_pkl_path):
+        print(f"Step 2: Found {raw_pkl_path}. Reading data from Pickle instead of NIfTI files ...")
+        try:
+            with open(raw_pkl_path, "rb") as f:
+                all_data = pickle.load(f)
+        except Exception as e:
+            print(f"  [WARNING] Could not read Pickle ({e}). Falling back ...")
+            all_data = None
+            
+    if all_data is None and os.path.exists(raw_json_path):
+        print(f"Step 2: Found {raw_json_path}. Reading data from JSON instead of NIfTI files ...")
+        with open(raw_json_path, "r", encoding="utf-8") as f:
+            serialisable = json.load(f)
+        
+        # Convert string keys back to integers format matching extract_metrics_for_all_subjects()
+        all_data = {}
+        for te_str, te_dict in serialisable.items():
+            te = int(te_str)
+            all_data[te] = {}
+            for s_str, subj_dict in te_dict.items():
+                s = int(s_str)
+                # Convert None (null) back to np.nan so downstream functions don't crash computing means
+                for subj, dict_subj in subj_dict.items():
+                    for metric, vals in dict_subj.items():
+                        dict_subj[metric] = [v if v is not None else np.nan for v in vals]
+                all_data[te][s] = subj_dict
+    else:
+        print("Step 2: Applying transforms and extracting metrics ...")
+        all_data   = extract_metrics_for_all_subjects()
 
     print("Step 2: Aggregating per-subject metrics (outlier rejection) ...")
     final_data = aggregate(all_data)
@@ -357,6 +415,7 @@ def main() -> None:
 
     print("Step 2: Saving outputs ...")
     # Save both structures: raw all_data and aggregated final_data.
+    save_all_data_pickle(all_data)
     save_all_data_json(all_data)
     save_final_data_json(final_data)
     save_summary_text(final_data)
