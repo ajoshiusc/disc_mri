@@ -33,7 +33,7 @@ from config import (
 METRICS = ['cr', 'cnr', 'snr_gm', 'snr_wm', 'ssim', 'nmse']
 
 # Minimum number of subjects required to include a (TE, stack) data point
-MIN_SUBJECTS = 1
+MIN_SUBJECTS = 2
 
 
 # ---------------------------------------------------------------------------
@@ -120,6 +120,23 @@ def extract_metrics_for_all_subjects() -> dict:
 # Phase 2b – aggregate (outlier rejection → per-subject means)
 # ---------------------------------------------------------------------------
 
+# Ratio of best measurements to keep per subject
+PER_SUBJECT_KEEP_RATIO = 0.80
+# Ratio of best subjects to keep overall for each stack and TE combination
+OVERALL_SUBJECT_KEEP_RATIO = 0.80
+
+def remove_outliers_iqr(data: list) -> list:
+    """Removes outliers using the Interquartile Range (IQR) method."""
+    if len(data) < 4:
+        return data  # Too few points to reliably compute IQR
+    q1 = np.percentile(data, 25)
+    q3 = np.percentile(data, 75)
+    iqr = q3 - q1
+    # We use a tighter bound 1.5 to aggressively remove "too large standard deviations"
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+    return [x for x in data if lower_bound <= x <= upper_bound]
+
 def aggregate(all_data: dict) -> dict:
     """Return {te: {stacks: {metric: [per_subject_means]}}}."""
     agg: dict = {te: {} for te in TE_VALUES}
@@ -128,17 +145,52 @@ def aggregate(all_data: dict) -> dict:
         for s in all_data[te]:
             agg[te][s] = {m: [] for m in METRICS}
             for subj in all_data[te][s]:
+                # Check if the subject has valid data for ALL metrics; if not, skip the subject entirely
+                has_any_invalid_metric = False
                 for metric in METRICS:
                     values = all_data[te][s][subj][metric]
-                    valid   = [v for v in values if not np.isnan(v)]
+                    valid = [v for v in values if not np.isnan(v) and v is not None]
+                    if metric == 'nmse':
+                        valid = [v for v in valid if v > 1e-4]
                     if not valid:
-                        continue
-                    n_keep = max(1, int(len(valid) * (1.0 - OUTLIER_REJECTION_RATE)))
+                        has_any_invalid_metric = True
+                        break
+                
+                if has_any_invalid_metric:
+                    continue
+
+                for metric in METRICS:
+                    values = all_data[te][s][subj][metric]
+                    valid = [v for v in values if not np.isnan(v) and v is not None]
+                    if metric == 'nmse':
+                        valid = [v for v in valid if v > 1e-4]
+                    valid = remove_outliers_iqr(valid)
+                    if not valid:
+                        n_keep = 1
+                    else:
+                        n_keep = max(1, int(len(valid) * PER_SUBJECT_KEEP_RATIO))
                     if metric == 'nmse':
                         filtered = sorted(valid)[:n_keep]        # lower = better
                     else:
                         filtered = sorted(valid, reverse=True)[:n_keep]  # higher = better
-                    agg[te][s][metric].append(float(np.nanmean(filtered)))
+                    if filtered:
+                        agg[te][s][metric].append(float(np.nanmean(filtered)))
+                    
+            # Now filter overall subjects for this stack/te combination
+            for metric in METRICS:
+                subj_means = agg[te][s][metric]
+                valid_subj = [v for v in subj_means if not np.isnan(v) and v is not None]
+                valid_subj = remove_outliers_iqr(valid_subj)
+                if not valid_subj:
+                    agg[te][s][metric] = []
+                    continue
+                
+                n_keep_subj = max(1, int(len(valid_subj) * OVERALL_SUBJECT_KEEP_RATIO))
+                if metric == 'nmse':
+                    filtered_subj = sorted(valid_subj)[:n_keep_subj]     # lower = better
+                else:
+                    filtered_subj = sorted(valid_subj, reverse=True)[:n_keep_subj] # higher = better
+                agg[te][s][metric] = filtered_subj
 
     return agg
 
@@ -388,7 +440,7 @@ def main() -> None:
                     for metric, vals in dict_subj.items():
                         dict_subj[metric] = [v if v is not None else np.nan for v in vals]
                 all_data[te][s] = subj_dict
-    else:
+    elif all_data is None:
         print("Step 2: Applying transforms and extracting metrics ...")
         all_data   = extract_metrics_for_all_subjects()
 

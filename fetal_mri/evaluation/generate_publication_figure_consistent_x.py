@@ -116,7 +116,6 @@ def create_publication_figure():
     
     # Configuration
     TE_VALUES = [98, 140, 181, 272]
-    TARGET_STACKS = [3, 6, 9, 12]  # Stack numbers with error bars
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']  # Professional colors
     markers = ['o', 's', '^', 'D']
     
@@ -301,10 +300,13 @@ def create_publication_figure():
                     'nmse_std' in real_error_data[te_value][stack_count] and
                     real_error_data[te_value][stack_count]['nmse_std'] is not None and
                     real_error_data[te_value][stack_count]['nmse_mean'] is not None and
-                    real_error_data[te_value][stack_count]['nmse_mean'] > 0):
+                    real_error_data[te_value][stack_count]['nmse_mean'] >= 0):  # Allow 0 values for NMSE
                     mse_errors.append(real_error_data[te_value][stack_count]['nmse_std'])
                 else:
                     mse_errors.append(0.0)
+            
+            # Avoid math domain error with log scales and 0 by enforcing a small minimum cap epsilon for purely zero NMSEs natively derived
+            mse_values = [m if m is not None and m > 1e-10 else 1e-10 for m in mse_values]
             
             # Plot with error bars for all points
             ax6.errorbar(stacks, mse_values, yerr=mse_errors,
@@ -316,7 +318,7 @@ def create_publication_figure():
     ax6.set_title('F. Reconstruction Error (NMSE)', fontweight='bold', pad=10)
     ax6.legend(fontsize=7, frameon=True)
     ax6.grid(True, alpha=0.3)
-    ax6.set_yscale('log')
+    ax6.set_yscale('symlog', linthresh=1e-3)
     # ax6.set_ylim(400, 50000)
     ax6.set_xlim(0.5, 12.5)
     ax6.set_xticks([1, 3, 6, 9, 12])

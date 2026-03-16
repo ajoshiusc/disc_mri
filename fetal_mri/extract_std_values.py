@@ -5,7 +5,7 @@ Extract GM and WM standard deviation values from the comprehensive analysis.
 
 import numpy as np
 import nibabel as nib
-from comprehensive_te_analysis import calculate_tissue_contrast_metrics
+from evaluation.comprehensive_te_analysis import calculate_tissue_contrast_metrics
 
 def extract_std_values():
     """Extract standard deviation values for different TE and stack combinations."""
