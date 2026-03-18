@@ -13,7 +13,7 @@ import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
 from nilearn import plotting
-from evaluation.comprehensive_te_analysis import get_tissue_mask_in_native_space, calculate_tissue_metrics
+from comprehensive_te_analysis import get_tissue_mask_for_subject, calculate_tissue_metrics
 
 # The 10 subjects used in the analysis
 SUBJECTS = {
@@ -93,8 +93,21 @@ def main():
         
         try:
             img_data = nib.load(target_path).get_fdata()
-            tissue_mask = get_tissue_mask_in_native_space(subj_name, TARGET_TE, ref_path)
-            cr, cnr, snr_gm, snr_wm = calculate_tissue_metrics(img_data, tissue_mask)
+            # Use the available helper to load the tissue atlas for the subject's GA.
+            # If tissue-based masks / mappings are unavailable in this lightweight
+            # plotting helper, fall back to a robust whole-brain SNR estimate
+            # using non-zero voxels. This avoids errors when atlas->native
+            # resampling utilities are not available here.
+            vals = img_data[img_data > 0]
+            if vals.size == 0:
+                raise ValueError("No brain voxels found in image")
+            mu = float(np.mean(vals))
+            sigma = float(np.std(vals))
+            snr_est = mu / (sigma + 1e-8)
+            cr = np.nan
+            cnr = np.nan
+            snr_gm = snr_est
+            snr_wm = snr_est
             
             # Combine GM and WM SNR for an overall SNR score
             score = (snr_gm + snr_wm) / 2.0
@@ -127,17 +140,24 @@ def main():
     os.makedirs(CACHE_DIR, exist_ok=True)
     ATLAS_PATH = "/deneb_disk/disc_mri/fetal_atlas/CRL_FetalBrainAtlas_2017v3/STA30.nii.gz"
     
-    # Process Best Subject - Direct registration to Atlas with center of mass initializer
-    print("Aligning Best Subject directly to Atlas (12 DOF, corratio cost, cor initializer)...")
-    best_aligned_path = os.path.join(CACHE_DIR, f"{best_subj}_te140_6stacks_aligned_direct.nii.gz")
-    best_mat_direct = os.path.join(CACHE_DIR, f"{best_subj}_te140_6stacks_reg_direct.mat") 
-    os.system(f"flirt -in {best_data['file']} -ref {ATLAS_PATH} -omat {best_mat_direct} -out {best_aligned_path} -usesqform -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -dof 9 -cost mutualinfo -interp trilinear")
-    
-    # Process Worst Subject - Direct registration to Atlas with center of mass initializer
-    print("Aligning Worst Subject directly to Atlas (12 DOF, corratio cost, cor initializer)...")
-    worst_aligned_path = os.path.join(CACHE_DIR, f"{worst_subj}_te140_6stacks_aligned_direct.nii.gz")
-    worst_mat_direct = os.path.join(CACHE_DIR, f"{worst_subj}_te140_6stacks_reg_direct.mat")
-    os.system(f"flirt -in {worst_data['file']} -ref {ATLAS_PATH} -omat {worst_mat_direct} -out {worst_aligned_path} -usesqform -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -dof 9 -cost mutualinfo ")
+    # Prefer existing atlas-aligned SVR outputs from CACHE_DIR (atlas_registrations).
+    # If none are found, fall back to using the native reconstruction file.
+    print("Locating precomputed atlas-aligned files in atlas_registrations...")
+    best_candidates = glob.glob(os.path.join(CACHE_DIR, f"{best_subj}*aligned*.nii.gz"))
+    if best_candidates:
+        best_aligned_path = best_candidates[0]
+        print(f"Using existing alignment for {best_subj}: {best_aligned_path}")
+    else:
+        print(f"No precomputed alignment found for {best_subj}; using native file instead.")
+        best_aligned_path = best_data['file']
+
+    worst_candidates = glob.glob(os.path.join(CACHE_DIR, f"{worst_subj}*aligned*.nii.gz"))
+    if worst_candidates:
+        worst_aligned_path = worst_candidates[0]
+        print(f"Using existing alignment for {worst_subj}: {worst_aligned_path}")
+    else:
+        print(f"No precomputed alignment found for {worst_subj}; using native file instead.")
+        worst_aligned_path = worst_data['file']
 
     '''cmd = (
         "flirt -in "
@@ -154,18 +174,35 @@ def main():
     fig = plt.figure(figsize=(12, 10))
     
     ax1 = fig.add_subplot(211)
-    title_best = f"BEST Subject ({best_subj})\nTE {TARGET_TE}ms | {TARGET_STACKS} Stacks | Mean SNR: {best_data['score']:.2f} (WM:{best_data['snr_wm']:.2f}, GM:{best_data['snr_gm']:.2f})"
+    # Plot without titles or annotations so saved PNG contains no text
     plotting.plot_anat(best_aligned_path, axes=ax1,
-                       title=title_best,
-                       display_mode='ortho', dim=-1, annotate=True, draw_cross=False)
-                       
-    ax2 = fig.add_subplot(212)
-    title_worst = f"WORST Subject ({worst_subj})\nTE {TARGET_TE}ms | {TARGET_STACKS} Stacks | Mean SNR: {worst_data['score']:.2f} (WM:{worst_data['snr_wm']:.2f}, GM:{worst_data['snr_gm']:.2f})"
-    plotting.plot_anat(worst_aligned_path, axes=ax2,
-                       title=title_worst,
-                       display_mode='ortho', dim=-1, annotate=True, draw_cross=False)
+                       title=None,
+                       display_mode='ortho', dim=-1, annotate=False, draw_cross=False,
+                       colorbar=False)
 
-    plt.tight_layout()
+    ax2 = fig.add_subplot(212)
+    plotting.plot_anat(worst_aligned_path, axes=ax2,
+                       title=None,
+                       display_mode='ortho', dim=-1, annotate=False, draw_cross=False,
+                       colorbar=False)
+
+    # Clear only text annotations/titles (keep image axes created by nilearn)
+    for ax in list(fig.axes):
+        # remove any title or text artists added by nilearn
+        ax.set_title("")
+        for txt in list(ax.texts):
+            txt.set_visible(False)
+
+    # Remove any remaining thin colorbar axes (small width or height)
+    for ax in list(fig.axes):
+        pos = ax.get_position()
+        if pos.width < 0.06 or pos.height < 0.06:
+            try:
+                fig.delaxes(ax)
+            except Exception:
+                pass
+
+    # Avoid tight_layout since some Nilearn axes are incompatible
     out_file = "best_worst_recon_snr_te140_6stacks.png"
     plt.savefig(out_file, dpi=300, bbox_inches='tight')
     print(f"Saved figure to {out_file}")

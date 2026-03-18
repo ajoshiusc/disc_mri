@@ -18,6 +18,7 @@ import json
 import os
 import subprocess
 import pickle
+import argparse
 
 import nibabel as nib
 import numpy as np
@@ -34,6 +35,19 @@ METRICS = ['cr', 'cnr', 'snr_gm', 'snr_wm', 'ssim', 'nmse']
 
 # Minimum number of subjects required to include a (TE, stack) data point
 MIN_SUBJECTS = 2
+
+# Defaults for NMSE filtering: global floor and optional TE-specific overrides
+# Some TE values (e.g., 181) contained unrealistically tiny NMSEs; allow
+# a higher per-TE floor to ignore those calculation artifacts.
+NMSE_MIN_GLOBAL = 1e-4
+NMSE_MIN_TE: dict = {
+    # TE -> min nmse (empirically 181 needed a slightly larger floor)
+    181: 1e-3,
+}
+
+# Control whether per-subject / per-overall percentage-based trimming is used.
+# If False, we keep all validated per-subject values (no ratio trimming).
+USE_PERCENTAGE_SELECTION = True
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +165,9 @@ def aggregate(all_data: dict) -> dict:
                     values = all_data[te][s][subj][metric]
                     valid = [v for v in values if not np.isnan(v) and v is not None]
                     if metric == 'nmse':
-                        valid = [v for v in valid if v > 1e-4]
+                        # Use per-TE override if present, otherwise global floor
+                        nmse_floor = NMSE_MIN_TE.get(te, NMSE_MIN_GLOBAL)
+                        valid = [v for v in valid if v > nmse_floor]
                     if not valid:
                         has_any_invalid_metric = True
                         break
@@ -163,16 +179,24 @@ def aggregate(all_data: dict) -> dict:
                     values = all_data[te][s][subj][metric]
                     valid = [v for v in values if not np.isnan(v) and v is not None]
                     if metric == 'nmse':
-                        valid = [v for v in valid if v > 1e-4]
+                        nmse_floor = NMSE_MIN_TE.get(te, NMSE_MIN_GLOBAL)
+                        valid = [v for v in valid if v > nmse_floor]
                     valid = remove_outliers_iqr(valid)
                     if not valid:
-                        n_keep = 1
-                    else:
+                        continue
+
+                    # Determine how many per-subject slices to keep. If percentage
+                    # selection is disabled, keep all validated slices.
+                    if USE_PERCENTAGE_SELECTION:
                         n_keep = max(1, int(len(valid) * PER_SUBJECT_KEEP_RATIO))
+                    else:
+                        n_keep = len(valid)
+
                     if metric == 'nmse':
                         filtered = sorted(valid)[:n_keep]        # lower = better
                     else:
                         filtered = sorted(valid, reverse=True)[:n_keep]  # higher = better
+
                     if filtered:
                         agg[te][s][metric].append(float(np.nanmean(filtered)))
                     
@@ -185,6 +209,11 @@ def aggregate(all_data: dict) -> dict:
                     agg[te][s][metric] = []
                     continue
                 
+                if not USE_PERCENTAGE_SELECTION:
+                    # keep all validated subjects (after IQR)
+                    agg[te][s][metric] = valid_subj
+                    continue
+
                 n_keep_subj = max(1, int(len(valid_subj) * OVERALL_SUBJECT_KEEP_RATIO))
                 if metric == 'nmse':
                     filtered_subj = sorted(valid_subj)[:n_keep_subj]     # lower = better
@@ -404,6 +433,38 @@ def save_error_bar_json(final_data: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    global NMSE_MIN_GLOBAL, NMSE_MIN_TE, USE_PERCENTAGE_SELECTION, PER_SUBJECT_KEEP_RATIO, OVERALL_SUBJECT_KEEP_RATIO, MIN_SUBJECTS
+    parser = argparse.ArgumentParser(description="Step 2: extract and aggregate metrics")
+    parser.add_argument("--nmse-min-global", type=float, default=NMSE_MIN_GLOBAL,
+                        help="Global minimum NMSE to accept (values <= this are dropped)")
+    parser.add_argument("--nmse-min-te", type=str, default=None,
+                        help="Comma-separated per-TE NMSE floors, e.g. '181:0.001,98:0.0005'")
+    parser.add_argument("--disable-percentage-selection", action="store_true",
+                        help="Disable percentage-based trimming (keep all validated slices/subjects)")
+    parser.add_argument("--per-subject-keep-ratio", type=float, default=PER_SUBJECT_KEEP_RATIO,
+                        help="Fraction of per-subject slices to keep when percentage selection enabled")
+    parser.add_argument("--overall-subject-keep-ratio", type=float, default=OVERALL_SUBJECT_KEEP_RATIO,
+                        help="Fraction of subjects to keep when percentage selection enabled")
+    parser.add_argument("--min-subjects", type=int, default=MIN_SUBJECTS,
+                        help="Minimum subjects required to report a stack/TE point")
+    args = parser.parse_args()
+
+    # Apply CLI overrides
+    NMSE_MIN_GLOBAL = float(args.nmse_min_global)
+    if args.nmse_min_te:
+        # parse '181:0.001,98:0.0005' into dict
+        tmp = {}
+        for token in args.nmse_min_te.split(','):
+            if not token.strip():
+                continue
+            k, v = token.split(':')
+            tmp[int(k.strip())] = float(v.strip())
+        NMSE_MIN_TE.update(tmp)
+    if args.disable_percentage_selection:
+        USE_PERCENTAGE_SELECTION = False
+    PER_SUBJECT_KEEP_RATIO = float(args.per_subject_keep_ratio)
+    OVERALL_SUBJECT_KEEP_RATIO = float(args.overall_subject_keep_ratio)
+    MIN_SUBJECTS = int(args.min_subjects)
     raw_json_path = os.path.join(
         os.path.dirname(FINAL_DATA_JSON),
         "all_data_raw.json",
