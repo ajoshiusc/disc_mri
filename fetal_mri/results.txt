@@ -1,0 +1,21 @@
+Ranking subjects at TE 98, Max Stacks...
+subj_8_11_2023: CR=1.036, CNR=0.062, Max_Stacks=12
+subj_9_12_2023: CR=0.947, CNR=0.112, Max_Stacks=12
+subj_11_3_2023_babya: CR=0.939, CNR=0.122, Max_Stacks=12
+subj_11_3_2023_babyb: CR=0.916, CNR=0.168, Max_Stacks=12
+subj_10_23_2025: CR=1.079, CNR=0.151, Max_Stacks=9
+subj_12_03_2025: CR=0.871, CNR=0.254, Max_Stacks=9
+subj_1_8_2026: CR=0.947, CNR=0.177, Max_Stacks=6
+subj_2_6_2026: CR=0.878, CNR=0.233, Max_Stacks=6
+subj_2_9_2026: CR=0.915, CNR=0.154, Max_Stacks=7
+
+--- Sorted by CR (Contrast Ratio) ---
+subj_10_23_2025: {'CR': np.float64(1.0793175459318167), 'CNR': np.float64(0.151444785323181), 'SNR_WM': np.float64(2.268791572290771), 'max_stacks': 9}
+subj_8_11_2023: {'CR': np.float64(1.0357162925163859), 'CNR': np.float64(0.06159531510555244), 'SNR_WM': np.float64(1.7655148176477609), 'max_stacks': 12}
+subj_1_8_2026: {'CR': np.float64(0.9472357023835202), 'CNR': np.float64(0.17731557281183988), 'SNR_WM': np.float64(3.8753256315021756), 'max_stacks': 6}
+subj_9_12_2023: {'CR': np.float64(0.9469303733789441), 'CNR': np.float64(0.11230987276065132), 'SNR_WM': np.float64(2.1739988917161557), 'max_stacks': 12}
+subj_11_3_2023_babya: {'CR': np.float64(0.9386327914003713), 'CNR': np.float64(0.12153659915766449), 'SNR_WM': np.float64(1.9628640539965754), 'max_stacks': 12}
+subj_11_3_2023_babyb: {'CR': np.float64(0.9155097704214362), 'CNR': np.float64(0.16770085590757253), 'SNR_WM': np.float64(2.126084188604321), 'max_stacks': 12}
+subj_2_9_2026: {'CR': np.float64(0.914678387866133), 'CNR': np.float64(0.15409676624818952), 'SNR_WM': np.float64(1.876878229595565), 'max_stacks': 7}
+subj_2_6_2026: {'CR': np.float64(0.8780489261672669), 'CNR': np.float64(0.23255990212056593), 'SNR_WM': np.float64(1.9099535966451284), 'max_stacks': 6}
+subj_12_03_2025: {'CR': np.float64(0.870661141462484), 'CNR': np.float64(0.2541191795365024), 'SNR_WM': np.float64(2.0616795746865195), 'max_stacks': 9}

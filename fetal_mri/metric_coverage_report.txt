@@ -1,0 +1,73 @@
+METRIC COVERAGE REPORT
+(Only stack counts with >= 2 subjects are shown)
+======================================================================
+
+TE 98 ms:
+  Metric      Valid stacks (N_subj)                             
+  ------------------------------------------------------------
+  cr          11 stack(s): stack=1(N=5), stack=2(N=7), stack=3(N=6), stack=4(N=6), stack=5(N=5), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+  cnr         11 stack(s): stack=1(N=7), stack=2(N=7), stack=3(N=5), stack=4(N=7), stack=5(N=7), stack=6(N=5), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  snr_gm      11 stack(s): stack=1(N=7), stack=2(N=7), stack=3(N=7), stack=4(N=7), stack=5(N=7), stack=6(N=5), stack=7(N=4), stack=8(N=4), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+  snr_wm      11 stack(s): stack=1(N=6), stack=2(N=5), stack=3(N=5), stack=4(N=5), stack=5(N=5), stack=6(N=4), stack=7(N=4), stack=8(N=3), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+  ssim        11 stack(s): stack=1(N=5), stack=2(N=4), stack=3(N=4), stack=4(N=5), stack=5(N=5), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  nmse        11 stack(s): stack=1(N=7), stack=2(N=7), stack=3(N=7), stack=4(N=7), stack=5(N=7), stack=6(N=5), stack=7(N=4), stack=8(N=4), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+
+TE 140 ms:
+  Metric      Valid stacks (N_subj)                             
+  ------------------------------------------------------------
+  cr          11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=5), stack=4(N=5), stack=5(N=5), stack=6(N=2), stack=7(N=2), stack=8(N=2), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+  cnr         11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  snr_gm      11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  snr_wm      11 stack(s): stack=1(N=5), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=4), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  ssim        11 stack(s): stack=1(N=6), stack=2(N=5), stack=3(N=5), stack=4(N=6), stack=5(N=6), stack=6(N=4), stack=7(N=4), stack=8(N=3), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  nmse        11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=5), stack=4(N=5), stack=5(N=5), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+
+TE 181 ms:
+  Metric      Valid stacks (N_subj)                             
+  ------------------------------------------------------------
+  cr          11 stack(s): stack=1(N=7), stack=2(N=7), stack=3(N=7), stack=4(N=7), stack=5(N=7), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  cnr         11 stack(s): stack=1(N=7), stack=2(N=7), stack=3(N=7), stack=4(N=7), stack=5(N=7), stack=6(N=4), stack=7(N=4), stack=8(N=3), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  snr_gm      11 stack(s): stack=1(N=7), stack=2(N=6), stack=3(N=7), stack=4(N=6), stack=5(N=6), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  snr_wm      11 stack(s): stack=1(N=7), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  ssim        11 stack(s): stack=1(N=7), stack=2(N=4), stack=3(N=4), stack=4(N=4), stack=5(N=6), stack=6(N=4), stack=7(N=4), stack=8(N=4), stack=9(N=3), stack=10(N=3), stack=11(N=3)
+  nmse        11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=5), stack=4(N=5), stack=5(N=5), stack=6(N=2), stack=7(N=3), stack=8(N=3), stack=9(N=2), stack=10(N=3), stack=11(N=3)
+
+TE 272 ms:
+  Metric      Valid stacks (N_subj)                             
+  ------------------------------------------------------------
+  cr          11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=2), stack=7(N=2), stack=8(N=2), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  cnr         11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  snr_gm      11 stack(s): stack=1(N=5), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  snr_wm      11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  ssim        11 stack(s): stack=1(N=6), stack=2(N=6), stack=3(N=6), stack=4(N=6), stack=5(N=6), stack=6(N=3), stack=7(N=3), stack=8(N=3), stack=9(N=3), stack=10(N=2), stack=11(N=2)
+  nmse        11 stack(s): stack=1(N=6), stack=2(N=4), stack=3(N=4), stack=4(N=4), stack=5(N=4), stack=6(N=2), stack=7(N=2), stack=8(N=2), stack=9(N=2), stack=10(N=2), stack=11(N=2)
+
+SUMMARY TABLE
+======================================================================
+    TE  Metric       #Stacks  Min N_subj  Max N_subj
+--------------------------------------------------
+    98  cr                11           2           7
+    98  cnr               11           2           7
+    98  snr_gm            11           2           7
+    98  snr_wm            11           2           6
+    98  ssim              11           3           5
+    98  nmse              11           2           7
+   140  cr                11           2           6
+   140  cnr               11           3           6
+   140  snr_gm            11           3           6
+   140  snr_wm            11           3           6
+   140  ssim              11           3           6
+   140  nmse              11           2           6
+   181  cr                11           3           7
+   181  cnr               11           3           7
+   181  snr_gm            11           3           7
+   181  snr_wm            11           3           7
+   181  ssim              11           3           7
+   181  nmse              11           2           6
+   272  cr                11           2           6
+   272  cnr               11           2           6
+   272  snr_gm            11           2           6
+   272  snr_wm            11           2           6
+   272  ssim              11           2           6
+   272  nmse              11           2           6
+
