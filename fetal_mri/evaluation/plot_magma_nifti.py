@@ -22,6 +22,7 @@ import nibabel as nib
 import numpy as np
 import matplotlib.pyplot as plt
 from nilearn import plotting, image
+from PIL import Image, ImageChops
 
 
 def find_nifti_files(root: Path, pattern: str | None = None, recursive: bool = True):
@@ -32,11 +33,15 @@ def find_nifti_files(root: Path, pattern: str | None = None, recursive: bool = T
                 if fn.endswith('.nii') or fn.endswith('.nii.gz'):
                     if pattern and pattern not in fn:
                         continue
+                    if 'mask' in fn.lower():
+                        continue
                     yield Path(dirpath) / fn
     else:
         for p in root.iterdir():
             if p.suffix in exts or p.name.endswith('.nii.gz'):
                 if pattern and pattern not in p.name:
+                    continue
+                if 'mask' in p.name.lower():
                     continue
                 yield p
 
@@ -66,23 +71,38 @@ def make_output_path(src_path: Path, src_root: Path, dst_root: Path) -> Path:
     return out
 
 
-def plot_file(img_input, out_path: Path, dpi: int = 300, display_mode: str = 'ortho') -> None:
+def plot_file(img_input, out_path: Path, dpi: int = 300, display_mode: str = 'ortho', cut_coords=None) -> None:
     fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
     try:
         # Crop the image to its non-zero bounds to zoom in on the content
-        cropped_img = image.crop_img(img_input)
-        
-        plotting.plot_anat(cropped_img, axes=ax,
-                           title=None,
-                           display_mode=display_mode, dim=-1, annotate=False, draw_cross=False,
-                           colorbar=False)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cropped_img = image.crop_img(img_input)
+            
+            plotting.plot_anat(cropped_img, axes=ax,
+                               title=None,
+                               display_mode=display_mode, dim=-1, annotate=False, draw_cross=False,
+                               colorbar=False, cut_coords=cut_coords)
 
         ax.set_title("")
         clean_figure(fig)
-        plt.savefig(str(out_path), dpi=dpi, bbox_inches='tight', pad_inches=0)
+        plt.savefig(str(out_path), dpi=dpi, bbox_inches='tight', pad_inches=0, facecolor='black')
     finally:
         plt.close(fig)
+
+    # Crop the saved PNG to content (remove black or white padding)
+    try:
+        img_pn = Image.open(str(out_path))
+        # find bounding box of non-black pixels
+        bg = Image.new("RGB", img_pn.size, (0, 0, 0))
+        diff = ImageChops.difference(img_pn.convert("RGB"), bg)
+        bbox = diff.getbbox()
+        if bbox:
+            img_cropped = img_pn.crop(bbox)
+            img_cropped.save(str(out_path))
+    except Exception as e:
+        warnings.warn(f"Failed to post-crop PNG {out_path}: {e}")
 
 
 def find_mask_for_image(img_path: Path) -> Path | None:
@@ -116,7 +136,10 @@ def find_mask_for_image(img_path: Path) -> Path | None:
 
 def apply_mask_to_image(img_path: Path, mask_path: Path):
     """Return a Nifti1Image with mask applied, handling potential affine differences."""
-    resampled_mask = image.resample_to_img(str(mask_path), str(img_path), interpolation='nearest')
+    try:
+        resampled_mask = image.resample_to_img(str(mask_path), str(img_path), interpolation='nearest', force_resample=True, copy_header=True)
+    except TypeError: # Older nilearn
+        resampled_mask = image.resample_to_img(str(mask_path), str(img_path), interpolation='nearest')
     return image.math_img("img * (mask > 0)", img=str(img_path), mask=resampled_mask)
 
 
@@ -145,29 +168,50 @@ def main(argv=None):
 
     print(f"Found {len(files)} files.\n")
 
-    for fp in files:
-        try:
-            outp = make_output_path(fp, src_root, dst_root)
-            mask = find_mask_for_image(fp)
-            if args.dry_run:
-                if mask:
-                    print(f"Would plot (with mask): {fp} + {mask} -> {outp}")
-                else:
-                    print(f"Would plot: {fp} -> {outp}")
-                continue
+    from collections import defaultdict
+    dirs_to_files = defaultdict(list)
+    for f in files:
+        dirs_to_files[f.parent].append(f)
 
-            print(f"Plotting: {fp} -> {outp}")
-            if mask:
-                try:
-                    masked_img = apply_mask_to_image(fp, mask)
-                    plot_file(masked_img, outp, dpi=args.dpi, display_mode=args.display_mode)
-                except Exception as e:
-                    warnings.warn(f"Failed applying mask {mask} to {fp}: {e}. Falling back to raw image.")
-                    plot_file(fp, outp, dpi=args.dpi, display_mode=args.display_mode)
-            else:
-                plot_file(fp, outp, dpi=args.dpi, display_mode=args.display_mode)
-        except Exception as e:
-            warnings.warn(f"Failed plotting {fp}: {e}")
+    for d, d_files in dirs_to_files.items():
+        # Find a common cut_coord for this directory to ensure same viewpoint
+        common_cut_coords = None
+        ref_mask = find_mask_for_image(d_files[0])
+        if ref_mask:
+            try:
+                common_cut_coords = plotting.find_cut_coords(str(ref_mask))
+            except Exception:
+                pass
+        
+        if common_cut_coords is None:
+            try:
+                common_cut_coords = plotting.find_cut_coords(str(d_files[0]))
+            except Exception:
+                pass
+
+        for fp in d_files:
+            try:
+                outp = make_output_path(fp, src_root, dst_root)
+                mask = find_mask_for_image(fp)
+                if args.dry_run:
+                    if mask:
+                        print(f"Would plot (with mask): {fp} + {mask} -> {outp}")
+                    else:
+                        print(f"Would plot: {fp} -> {outp}")
+                    continue
+
+                print(f"Plotting: {fp} -> {outp} (cut_coords: {common_cut_coords})")
+                if mask:
+                    try:
+                        masked_img = apply_mask_to_image(fp, mask)
+                        plot_file(masked_img, outp, dpi=args.dpi, display_mode=args.display_mode, cut_coords=common_cut_coords)
+                    except Exception as e:
+                        warnings.warn(f"Failed applying mask {mask} to {fp}: {e}. Falling back to raw image.")
+                        plot_file(fp, outp, dpi=args.dpi, display_mode=args.display_mode, cut_coords=common_cut_coords)
+                else:
+                    plot_file(fp, outp, dpi=args.dpi, display_mode=args.display_mode, cut_coords=common_cut_coords)
+            except Exception as e:
+                warnings.warn(f"Failed plotting {fp}: {e}")
 
     print("Done.")
     return 0
