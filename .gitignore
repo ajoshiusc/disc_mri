@@ -166,3 +166,5 @@ heart_svr/*/.vscode/*
 */*.png~
 *.png~
 *.pdf
+*.json
+*.pkl
