@@ -1,0 +1,32 @@
+case_id,svr_randomized_id,raw_dx,svr_dx,raw_category,svr_primary_category,raw_categories,svr_categories,normal_abnormal_agreement,broad_category_agreement,svr_nondiagnostic,raw_conf,svr_conf,raw_time,svr_time,raw_cc,svr_cc,raw_csp,svr_csp,raw_vent,svr_vent,raw_pf,svr_pf
+1,26,NL,NL,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,3.0,2.0,5,5,5,5,5,5,5,5
+2,7,"Abnl, bilateral lateral ventric",bilateral lateral ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,5,3.0,3.0,5,5,5,5,5,5,5,5
+3,13,"Abnl, bilateral lateral ventric","3rd and lateral ventriculomegaly, query aqueductal stenosis",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,5,3.0,2.0,5,5,5,5,5,5,5,5
+4,2,"CC agenesis,colpocephaly","cc agenesis, colpocephaly ",Callosal anomaly,Callosal anomaly,Callosal anomaly,Callosal anomaly,True,True,False,5,5,3.0,4.0,5,5,5,5,5,5,5,5
+5,30,"3rd and lateral ventriculomegaly, query aqueductal stenosis",BIlateral lateral ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,5,3.0,2.0,5,5,5,5,5,5,5,5
+6,20,NL,Nl,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,5.0,2.0,5,5,5,5,5,5,5,5
+7,18,"3rd and lateral ventriculomegaly, query aqueductal stenosis","Hindbrain herniation, ventriculomegaly",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly; Chiari II / hindbrain anomaly,True,True,False,4,5,3.0,2.0,5,5,5,5,5,5,4,5
+8,31,"bilateral lateral ventriculomegaly, gm hemorrhage?",BIlateral lateral ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly; Hemorrhage / porencephalic injury,Ventriculomegaly,True,True,False,5,5,3.0,2.0,5,5,5,5,5,5,5,5
+9,12,bilateral lateral ventriculomegaly,"3rd and lateral ventriculomegaly, query aqueductal stenosis",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,4,3.0,2.0,5,5,5,5,5,5,5,5
+10,17,NL,CSP abnormality or poorly visualized,Normal intracranial MRI,CSP anomaly,Normal intracranial MRI,CSP anomaly,False,False,True,4,3,4.0,2.0,5,5,5,2,5,5,5,5
+11,1,ventriculomegaly and large porencephalic cyst,"ventriculomegaly and left large porencephalic cyst, perforated CSP",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly; Hemorrhage / porencephalic injury,Ventriculomegaly; Hemorrhage / porencephalic injury,True,True,False,4,5,4.0,3.0,3,5,3,5,5,5,5,5
+12,14,"Chiari Ii, hindbrain herniation, ventriculomegaly","Hindbrain herniation, ventriculomegaly",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly; Chiari II / hindbrain anomaly,Ventriculomegaly; Chiari II / hindbrain anomaly,True,True,False,5,5,2.0,2.0,5,4,5,5,5,5,5,5
+13,9,"NL brain, left ear malformation","nl brain, left ear malformation",Extra-cranial finding with normal brain,Extra-cranial finding with normal brain,Extra-cranial finding with normal brain,Extra-cranial finding with normal brain,True,True,False,5,5,4.0,2.0,5,5,5,5,5,5,5,5
+14,21,right paramidline arachnoid cyst,right paramidline arachnoid cyst,Arachnoid cyst,Arachnoid cyst,Arachnoid cyst,Arachnoid cyst,True,True,False,5,5,2.0,2.0,5,5,5,5,5,5,5,5
+15,11,"3rd and lateral ventriculomegaly,   query aqueductal stenosis","3rd and lateral ventriculomegaly, query aqueductal stenosis",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,5,3.0,3.0,5,5,5,3,5,5,5,5
+16,25,NL,XXXX bilateral lateral ventriculomegaly ??,Normal intracranial MRI,Ventriculomegaly,Normal intracranial MRI,Ventriculomegaly,False,False,True,5,1,2.0,2.0,5,1,5,1,5,3,5,1
+17,3,Small cerebellum,"small cerebellum, PF cyst? Mega cisterna magna",Posterior fossa / cerebellar anomaly,Posterior fossa / cerebellar anomaly,Posterior fossa / cerebellar anomaly,Posterior fossa / cerebellar anomaly,True,True,False,5,4,2.0,4.0,5,5,5,5,5,5,5,5
+18,28,"gm hemorrhage, lateral ventriculomegaly","left lateral ventriculomegaly, gm hemorrhage?",Ventriculomegaly,Ventriculomegaly,Ventriculomegaly; Hemorrhage / porencephalic injury,Ventriculomegaly; Hemorrhage / porencephalic injury,True,True,False,5,4,2.0,2.0,5,5,5,5,5,5,5,5
+19,19,CSP leaflet abnormality?,"lateral ventriculomegaly, gm hemorrhage???",CSP anomaly,Ventriculomegaly,CSP anomaly,Ventriculomegaly; Hemorrhage / porencephalic injury,True,False,False,3,3,3.0,3.0,4,2,2,3,5,3,5,3
+20,15,NL,Nl,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,2.0,2.0,5,5,5,5,5,5,5,5
+21,8,NL,NL,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,4,2.0,3.0,5,5,5,5,5,5,5,5
+22,5,NL,NL,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,2.0,3.0,5,5,5,5,5,5,5,5
+23,24,"CC agenesis,colpocephaly","cc agenesis, colpocephaly ",Callosal anomaly,Callosal anomaly,Callosal anomaly,Callosal anomaly,True,True,False,5,5,2.0,2.0,5,5,5,5,5,5,5,5
+24,6,semilobar holoprosencephaly,semilobar holoprosencephaly,Holoprosencephaly,Holoprosencephaly,Holoprosencephaly,Holoprosencephaly,True,True,False,5,5,3.0,4.0,4,5,4,5,5,5,5,5
+25,29,NL,NL,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,2.0,2.0,5,5,5,5,5,5,5,5
+26,10,NL,Nl,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,4,4,4.0,2.0,3,5,3,3,5,5,5,5
+27,4,"Chiari Ii, hindbrain herniation, ventriculomegaly","NL where visualized, PF incomplete ",Ventriculomegaly,Normal intracranial MRI,Ventriculomegaly; Chiari II / hindbrain anomaly,Normal intracranial MRI; Posterior fossa / cerebellar anomaly,False,True,True,5,3,2.0,4.0,5,5,5,5,5,5,5,1
+28,23,Nl,Nl,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,5,5,2.0,2.0,5,5,5,4,5,5,5,5
+29,16,Nl,Nl,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,Normal intracranial MRI,True,True,False,4,4,3.0,2.0,4,5,4,3,5,5,5,5
+30,22,NL,XXXXXX,Normal intracranial MRI,Other,Normal intracranial MRI,Other,False,False,True,3,1,3.0,1.0,4,1,4,1,5,1,5,1
+31,27,bilateral lateral ventriculomegaly,BIlateral lateral ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,Ventriculomegaly,True,True,False,5,4,3.0,2.0,5,5,4,5,5,5,5,5

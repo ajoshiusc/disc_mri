@@ -1,0 +1,5 @@
+measure,count,proportion
+Normal/abnormal agreement,27,0.8709677419354839
+Broad category agreement,27,0.8709677419354839
+SVR limited/non-diagnostic cases,4,0.12903225806451613
+Cases retained after excluding limited SVR reconstructions,27,0.8709677419354839
