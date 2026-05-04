@@ -169,3 +169,4 @@ heart_svr/*/.vscode/*
 *.json
 *.pkl
 test_*.py
+.codex
