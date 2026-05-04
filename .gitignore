@@ -168,3 +168,4 @@ heart_svr/*/.vscode/*
 *.pdf
 *.json
 *.pkl
+test_*.py

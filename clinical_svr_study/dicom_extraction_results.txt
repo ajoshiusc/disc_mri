@@ -1,0 +1,113 @@
+=== Demographics ===
+  Subject   Age Sex  Weight
+0  SVR001  042Y   F    75.0
+1  SVR002  022Y   F    65.0
+2  SVR003  025Y   F    85.0
+3  SVR004  034Y   F    85.0
+4  SVR006  041Y   F    75.0
+
+Descriptive stats:
+       Subject   Age  Sex      Weight
+count       29    29   29   29.000000
+unique      29    17    1         NaN
+top     SVR001  034Y    F         NaN
+freq         1     5   29         NaN
+mean       NaN   NaN  NaN   73.793103
+std        NaN   NaN  NaN   13.270212
+min        NaN   NaN  NaN   50.000000
+25%        NaN   NaN  NaN   65.000000
+50%        NaN   NaN  NaN   75.000000
+75%        NaN   NaN  NaN   82.000000
+max        NaN   NaN  NaN  110.000000
+
+Unique Ages: Age
+034Y    5
+022Y    4
+033Y    3
+026Y    2
+032Y    2
+036Y    2
+042Y    1
+025Y    1
+041Y    1
+037Y    1
+020Y    1
+035Y    1
+019Y    1
+038Y    1
+039Y    1
+030Y    1
+040Y    1
+Name: count, dtype: int64
+
+Unique Sex: Sex
+F    29
+Name: count, dtype: int64
+
+=== Protocols ===
+Field Strengths:
+ FieldStrength
+1.5    922
+N/A     29
+Name: count, dtype: int64
+Manufacturers:
+ Manufacturer
+Philips Medical Systems               922
+FUJIFILM Medical Systems USA, Inc.     29
+Name: count, dtype: int64
+Models:
+ Model
+Achieva    922
+N/A         29
+Name: count, dtype: int64
+
+Top 15 Scans:
+SeriesDescription
+dADC                             62
+dsDTI_6d_SSh SENSE               62
+BRAIN SAG SSh_TSE_esp5.6         47
+WHOLE BODY COR T1W/FFE/IP        38
+MRCP WHOLE BODY COR MRCP_MS      36
+WHOLE BODY COR SSh_TSE_esp5.6    35
+WHOLE BODY SAG SSh_TSE_esp5.6    35
+BRAIN COR SSh_TSE_esp5.6         33
+WHOLE BODY AXIAL MRCP_MS         33
+BRAIN AXIAL SSh_TSE_esp5.6       32
+BRAIN AX SSh_TSE_esp5.6          32
+B-tfe ssh SAG BODY               32
+WHOLE BODY SAG MRCP_MS           32
+BRAIN AXIAL DWI 700              31
+BRAIN AXIAL MRCP_MS              31
+Name: count, dtype: int64
+
+Scan details for top 5 scans:
+
+dADC:
+  Field: 1.5T
+  TR mode: 3471.17407226562 ms
+  TE mode: 64 ms
+  Thickness mode: 4 mm
+
+dsDTI_6d_SSh SENSE:
+  Field: 1.5T
+  TR mode: 3471.17407226562 ms
+  TE mode: 64 ms
+  Thickness mode: 4 mm
+
+BRAIN SAG SSh_TSE_esp5.6:
+  Field: 1.5T
+  TR mode: 12500 ms
+  TE mode: 120 ms
+  Thickness mode: 3 mm
+
+WHOLE BODY COR T1W/FFE/IP:
+  Field: 1.5T
+  TR mode: 117.984497070312 ms
+  TE mode: 4.605 ms
+  Thickness mode: 5 mm
+
+MRCP WHOLE BODY COR MRCP_MS:
+  Field: 1.5T
+  TR mode: 8000 ms
+  TE mode: 171.704 ms
+  Thickness mode: 4 mm
