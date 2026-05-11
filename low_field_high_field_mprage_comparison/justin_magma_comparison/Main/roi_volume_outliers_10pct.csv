@@ -1,0 +1,89 @@
+figure,panel,software,comparison,label_id,region,mean_abs_percent,max_abs_percent,n_subject_points_over_10pct
+Figure 4,c,BrainSuite,0.55T vs 3T,167,L. middle orbito-frontal gyrus,14.654447342566304,22.466806653063816,3
+Figure 4,c,BrainSuite,0.55T vs 3T,168,R. anterior orbito-frontal gyrus,14.010235760982129,25.185574459699133,3
+Figure 4,c,BrainSuite,0.55T vs 3T,169,L. anterior orbito-frontal gyrus,19.25985227924003,33.389261612514396,4
+Figure 4,c,BrainSuite,0.55T vs 3T,186,R. subcallosal gyrus,28.092732125472104,44.44428279390826,5
+Figure 4,c,BrainSuite,0.55T vs 3T,187,L. subcallosal gyrus,24.056441616298095,40.26792498668627,4
+Figure 4,c,BrainSuite,0.55T vs 3T,311,L. temporal pole,12.865480328624418,14.617414248021099,5
+Figure 4,c,BrainSuite,0.55T vs 3T,631,L. claustrum,14.961755290859358,23.96056024498197,3
+Figure 4,c,BrainSuite,0.55T vs 3T,660,R. lateral geniculate nucleus,10.732750627430546,20.876826722338212,2
+Figure 4,c,BrainSuite,0.55T vs 3T,661,L. lateral geniculate nucleus,22.989360198064336,37.27714748784441,4
+Figure 4,c,BrainSuite,0.55T vs 3T,670,R. superior colliculus,10.831325770263444,23.97776551899033,3
+Figure 4,c,BrainSuite,0.55T vs 3T,671,L. superior colliculus,16.368494357983227,20.672525511834895,4
+Figure 4,c,BrainSuite,0.55T vs 3T,690,R. mamillary body,25.590145902936367,53.33384138119318,4
+Figure 4,c,BrainSuite,0.55T vs 3T,691,L. mamillary body,11.756022593480738,33.522194109240814,2
+Figure 4,d,FreeSurfer,0.55T vs 3T,5,Left-Inf-Lat-Vent,20.95166820853128,51.638269986893825,4
+Figure 4,d,FreeSurfer,0.55T vs 3T,7,Left-Cerebellum-White-Matter,21.84272872057626,55.43093113094445,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,14,3rd-Ventricle,11.912138774645246,19.57815035154139,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,15,4th-Ventricle,17.751459377835584,34.14504324683965,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,18,Left-Amygdala,11.096123688312689,12.95570955106959,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,24,CSF,11.180900694685192,19.63927855711424,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,26,Left-Accumbens-area,11.990439811906576,19.317356572258536,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,30,Left-vessel,97.49490565116488,200.0,5
+Figure 4,d,FreeSurfer,0.55T vs 3T,31,Left-choroid-plexus,21.65502055821317,34.154090548054015,5
+Figure 4,d,FreeSurfer,0.55T vs 3T,46,Right-Cerebellum-White-Matter,13.480635898655605,22.918953587330552,2
+Figure 4,d,FreeSurfer,0.55T vs 3T,51,Right-Putamen,10.147335386715884,17.10037174721189,2
+Figure 4,d,FreeSurfer,0.55T vs 3T,58,Right-Accumbens-area,13.479301674756591,22.242731887401956,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,62,Right-vessel,163.03030303030303,200.0,5
+Figure 4,d,FreeSurfer,0.55T vs 3T,63,Right-choroid-plexus,17.922011410704744,26.075268817204293,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,77,WM-hypointensities,95.07179675093127,131.66368515205724,5
+Figure 4,d,FreeSurfer,0.55T vs 3T,85,Optic-Chiasm,24.754755566179114,45.82043343653252,4
+Figure 4,d,FreeSurfer,0.55T vs 3T,1002,ctx-lh-caudalanteriorcingulate,10.121702755892015,13.275568621383254,2
+Figure 4,d,FreeSurfer,0.55T vs 3T,1014,ctx-lh-medialorbitofrontal,10.906339790074885,16.635310426774925,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,1032,ctx-lh-frontalpole,15.731110254442173,23.45191040843216,4
+Figure 4,d,FreeSurfer,0.55T vs 3T,1033,ctx-lh-temporalpole,10.272419402930781,16.009019165727185,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,2001,ctx-rh-bankssts,14.454313277879965,18.240316792476182,4
+Figure 4,d,FreeSurfer,0.55T vs 3T,2006,ctx-rh-entorhinal,13.89645026599991,30.20886398369842,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,2021,ctx-rh-pericalcarine,13.055423450466359,25.764359728796205,3
+Figure 4,d,FreeSurfer,0.55T vs 3T,2032,ctx-rh-frontalpole,17.093766459907375,32.06106870229008,4
+Figure 4,d,FreeSurfer,0.55T vs 3T,2033,ctx-rh-temporalpole,10.72721221326251,20.37492899072146,3
+Figure 5,a,BrainSuite,0.55T test-retest,162,R. transvers frontal gyrus,10.177945357661445,34.412526853073935,1
+Figure 5,a,BrainSuite,0.55T test-retest,168,R. anterior orbito-frontal gyrus,10.291800626728028,24.796702978812156,2
+Figure 5,a,BrainSuite,0.55T test-retest,169,L. anterior orbito-frontal gyrus,13.563457313817972,23.96807759912898,4
+Figure 5,a,BrainSuite,0.55T test-retest,186,R. subcallosal gyrus,12.278461022076225,43.377001455604066,2
+Figure 5,a,BrainSuite,0.55T test-retest,187,L. subcallosal gyrus,18.451491509041457,37.58573388203018,4
+Figure 5,a,BrainSuite,0.55T test-retest,311,L. temporal pole,11.738807479071907,25.859681254143858,3
+Figure 5,a,BrainSuite,0.55T test-retest,325,L. transverse temporal gyrus,12.55334014872101,33.47204052455954,1
+Figure 5,a,BrainSuite,0.55T test-retest,342,R. parahippocampal gyrus,10.420451941123305,27.033622559652926,1
+Figure 5,a,BrainSuite,0.55T test-retest,343,L. parahippocampal gyrus,21.800915310327152,69.28646343749489,2
+Figure 5,a,BrainSuite,0.55T test-retest,347,L. amygdala,10.188017879434941,21.672841245910277,2
+Figure 5,a,BrainSuite,0.55T test-retest,422,R. superior occipital gyrus,10.923966001905065,27.99080097858927,1
+Figure 5,a,BrainSuite,0.55T test-retest,423,L. superior occipital gyrus,10.658873755875312,17.055432621698756,3
+Figure 5,a,BrainSuite,0.55T test-retest,631,L. claustrum,15.750903804313529,28.22084721212651,4
+Figure 5,a,BrainSuite,0.55T test-retest,663,L. medial geniculate nucleus,10.037236998014368,15.384627235006947,2
+Figure 5,a,BrainSuite,0.55T test-retest,670,R. superior colliculus,16.53245633130523,30.303030303030297,3
+Figure 5,a,BrainSuite,0.55T test-retest,671,L. superior colliculus,14.023255430803728,39.65142184818774,1
+Figure 5,a,BrainSuite,0.55T test-retest,690,R. mamillary body,48.14636003296493,130.0699335093883,3
+Figure 5,a,BrainSuite,0.55T test-retest,691,L. mamillary body,16.856651754721014,38.91403288413738,3
+Figure 5,b,BrainSuite,3T test-retest,163,L. transvers frontal gyrus,12.189231419467546,18.83770180696023,2
+Figure 5,b,BrainSuite,3T test-retest,167,L. middle orbito-frontal gyrus,12.531403590081142,28.796966382511723,3
+Figure 5,b,BrainSuite,3T test-retest,187,L. subcallosal gyrus,12.906834284532248,17.140857309962072,4
+Figure 5,b,BrainSuite,3T test-retest,311,L. temporal pole,11.292656077915982,17.90509074346723,3
+Figure 5,b,BrainSuite,3T test-retest,324,R. transverse temporal gyrus,11.297786085670465,27.573994434606636,2
+Figure 5,b,BrainSuite,3T test-retest,631,L. claustrum,10.94820396674457,28.195763330898476,2
+Figure 5,b,BrainSuite,3T test-retest,663,L. medial geniculate nucleus,12.350257185471737,21.01495676507493,4
+Figure 5,b,BrainSuite,3T test-retest,671,L. superior colliculus,21.67324002857062,36.997388112434884,4
+Figure 5,b,BrainSuite,3T test-retest,690,R. mamillary body,13.982532090140248,26.522946154327805,3
+Figure 5,b,BrainSuite,3T test-retest,691,L. mamillary body,15.088442313766354,19.935337245317232,4
+Figure 5,c,FreeSurfer,0.55T test-retest,5,Left-Inf-Lat-Vent,18.51375182582831,34.999999999999986,4
+Figure 5,c,FreeSurfer,0.55T test-retest,7,Left-Cerebellum-White-Matter,35.03214991571373,60.36964412365972,4
+Figure 5,c,FreeSurfer,0.55T test-retest,8,Left-Cerebellum-Cortex,10.840805912715048,21.070253645052652,2
+Figure 5,c,FreeSurfer,0.55T test-retest,26,Left-Accumbens-area,21.17288434541648,46.97193500738551,3
+Figure 5,c,FreeSurfer,0.55T test-retest,30,Left-vessel,41.09803921568627,120.0,3
+Figure 5,c,FreeSurfer,0.55T test-retest,46,Right-Cerebellum-White-Matter,31.127675644342574,44.37854107648725,5
+Figure 5,c,FreeSurfer,0.55T test-retest,62,Right-vessel,33.23076923076923,120.0,2
+Figure 5,c,FreeSurfer,0.55T test-retest,77,WM-hypointensities,28.85489355331707,49.62243797195254,5
+Figure 5,c,FreeSurfer,0.55T test-retest,85,Optic-Chiasm,12.762819185487212,25.25252525252526,3
+Figure 5,c,FreeSurfer,0.55T test-retest,1006,ctx-lh-entorhinal,10.661230046640743,39.271781534460345,1
+Figure 5,c,FreeSurfer,0.55T test-retest,1016,ctx-lh-parahippocampal,10.099672184879813,29.556074766355138,2
+Figure 5,c,FreeSurfer,0.55T test-retest,2006,ctx-rh-entorhinal,16.166680653549992,35.89289665855277,3
+Figure 5,c,FreeSurfer,0.55T test-retest,2032,ctx-rh-frontalpole,13.00450855252799,28.39335180055401,3
+Figure 5,c,FreeSurfer,0.55T test-retest,2033,ctx-rh-temporalpole,10.452200451756388,21.16097159324824,2
+Figure 5,d,FreeSurfer,3T test-retest,26,Left-Accumbens-area,14.809182587389241,25.32981530343007,3
+Figure 5,d,FreeSurfer,3T test-retest,30,Left-vessel,29.379953379953385,100.0,4
+Figure 5,d,FreeSurfer,3T test-retest,31,Left-choroid-plexus,11.835064005060296,30.651340996168575,3
+Figure 5,d,FreeSurfer,3T test-retest,44,Right-Inf-Lat-Vent,10.459188628923123,24.434389140271488,2
+Figure 5,d,FreeSurfer,3T test-retest,58,Right-Accumbens-area,10.193835280221029,15.410668924640131,3
+Figure 5,d,FreeSurfer,3T test-retest,62,Right-vessel,74.86082949308755,200.0,5
+Figure 5,d,FreeSurfer,3T test-retest,63,Right-choroid-plexus,13.691834923898693,23.183925811437405,4
+Figure 5,d,FreeSurfer,3T test-retest,85,Optic-Chiasm,15.95883414382926,34.53815261044176,4

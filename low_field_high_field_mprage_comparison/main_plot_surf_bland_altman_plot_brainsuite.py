@@ -41,14 +41,14 @@ plt.rcParams.update({'font.size': 16})
 plt.figure(figsize=(9, 6))
 plt.scatter(mean_0_55T, diff_0_55T, c='blue', marker='.')#, label='0.55T')
 plt.axhline(np.mean(diff_0_55T), color='red', linestyle='--')#, label='Bias')
-plt.axhline(np.mean(diff_0_55T) + 1.96 * np.std(diff_0_55T), color='gray', linestyle='--')#, label='Upper LoA')
-plt.axhline(np.mean(diff_0_55T) - 1.96 * np.std(diff_0_55T), color='gray', linestyle='--')#, label='Lower LoA')
+plt.axhline(np.mean(diff_0_55T) + 1.96 * np.std(diff_0_55T, ddof=1), color='gray', linestyle='--')#, label='Upper LoA')
+plt.axhline(np.mean(diff_0_55T) - 1.96 * np.std(diff_0_55T, ddof=1), color='gray', linestyle='--')#, label='Lower LoA')
 plt.xlabel('Mean of 1st and 2nd Repetitions (0.55T) in mm')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm')
 plt.ylim(-1, 1)
 plt.legend()
 #plt.title('Bland-Altman Plot (thickness) for 0.55T')
-print("mean",np.mean(diff_0_55T), "1.96 * std dev", 1.96 * np.std(diff_0_55T))
+print("mean",np.mean(diff_0_55T), "1.96 * std dev", 1.96 * np.std(diff_0_55T, ddof=1))
 # add mean and std dev to the plot in a box at the top center
 #plt.text(0.5, 0.95, f'Mean: {np.mean(diff_0_55T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_0_55T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
@@ -62,14 +62,14 @@ plt.savefig('Bland-Altman_Plot_thickness_for_0.55T_BrainSuite.png')
 plt.figure(figsize=(9, 6))
 plt.scatter(mean_3T, diff_3T, c='green', marker='.')#, label='3T')
 plt.axhline(np.mean(diff_3T), color='red', linestyle='--')#, label='Bias')
-plt.axhline(np.mean(diff_3T) + 1.96 * np.std(diff_3T), color='gray', linestyle='--')#, label='Upper LoA')
-plt.axhline(np.mean(diff_3T) - 1.96 * np.std(diff_3T), color='gray', linestyle='--')#, label='Lower LoA')
+plt.axhline(np.mean(diff_3T) + 1.96 * np.std(diff_3T, ddof=1), color='gray', linestyle='--')#, label='Upper LoA')
+plt.axhline(np.mean(diff_3T) - 1.96 * np.std(diff_3T, ddof=1), color='gray', linestyle='--')#, label='Lower LoA')
 plt.xlabel('Mean of 1st and 2nd Repetitions (3T) in mm')
 plt.ylabel('Difference (1st - 2nd Repetition) in mm')
 plt.ylim(-1, 1)
 plt.legend()
 #plt.title('Bland-Altman Plot (thickness) for 3T')
-print("mean",np.mean(diff_3T), "1.96 * std dev", 1.96 * np.std(diff_3T))
+print("mean",np.mean(diff_3T), "1.96 * std dev", 1.96 * np.std(diff_3T, ddof=1))
 # add mean and std dev to the plot in a box at the top center
 #plt.text(0.5, 0.95, f'Mean: {np.mean(diff_3T):.2f}, 1.96 * Std Dev: {1.96 * np.std(diff_3T):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
@@ -85,19 +85,20 @@ mean_3T = (np.array(data_3T['First Repetition']) + np.array(data_3T['Second Repe
 
 # Calculate the differences between means
 diff_means = mean_0_55T - mean_3T
+mean_between_fields = (mean_0_55T + mean_3T) / 2.0
 
 # Bland-Altman Plot (thickness) comparing averages of repetitions for 0.55T and 3T
 plt.figure(figsize=(9, 6))
-plt.scatter(mean_0_55T, diff_means, c='purple', marker='.')#, label='0.55T vs. 3T')
+plt.scatter(mean_between_fields, diff_means, c='purple', marker='.')#, label='0.55T vs. 3T')
 plt.axhline(np.mean(diff_means), color='red', linestyle='--')#, label='Bias')
-plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means), color='gray', linestyle='--')#, label='Upper LoA')
-plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means), color='gray', linestyle='--')#, label='Lower LoA')
+plt.axhline(np.mean(diff_means) + 1.96 * np.std(diff_means, ddof=1), color='gray', linestyle='--')#, label='Upper LoA')
+plt.axhline(np.mean(diff_means) - 1.96 * np.std(diff_means, ddof=1), color='gray', linestyle='--')#, label='Lower LoA')
 plt.xlabel('Mean of Means of 0.55T and 3T in mm')
 plt.ylabel('Difference in Means (0.55T - 3T) in mm')
 plt.ylim(-1, 1)
 plt.legend()
 
-print("mean",np.mean(diff_means), "1.96 * std dev", 1.96 * np.std(diff_means))
+print("mean",np.mean(diff_means), "1.96 * std dev", 1.96 * np.std(diff_means, ddof=1))
 # Add mean and std dev to the plot in a box at the top center
 #plt.text(0.5, 0.95, f'Mean: {np.mean(diff_means):.2f}, Std Dev: {np.std(diff_means):.2f}', horizontalalignment='center', verticalalignment='top', transform=plt.gca().transAxes)
 
