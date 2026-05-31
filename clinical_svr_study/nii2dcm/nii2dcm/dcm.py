@@ -277,7 +277,7 @@ class DicomMRI(Dicom):
         self.ds.TriggerWindow = ''
 
         # nb: PresentationLUTShape dependent on PhotometricInterpretation value
-        self.ds.PhotometricInterpretation = 'MONOCHROME'
+        self.ds.PhotometricInterpretation = 'MONOCHROME2'
         self.ds.PresentationLUTShape = 'IDENTITY'
 
         # self.ds.BitsAllocated = ''

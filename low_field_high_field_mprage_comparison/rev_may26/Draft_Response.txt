@@ -1,0 +1,25 @@
+Reviewer #1: Thanks for carefully commenting on the points raised.
+The point remains that the Bland-Altman plots are appropriate for the measurements in a limited range
+(like cortical thickness), but not meaningful when dealing with an x-scale that varies orders of
+magnitude. The visualisation of the Bland-Altman plots of the volume measurements in log scale is
+very helpful to clarify the reader that the confidence intervals reported for volume measurements has
+little to do with the errors obtained for each region, but that it is increasing with structure size
+(suggesting that reporting a coefficient of variation could have been more informative, as there will be
+many regions on the shaded >10% measurement to measurement error).
+
+These figures make it clear that the "excellent correlation between field strengths for regional brain
+volume measures (R2 > 0.99)" is a slightly misleading statement that should be removed from the
+abstract (or re-written to avoid misinterpretation).
+For most neuroscience researchers reading the abstract this would be interpreted as: if in a population
+study we measure brain volumes of, for example, the hippocampus at 0.5 and 3T and the volumes
+obtained will perfectly match.
+The authors probably agree that this is not the case and the R2>0.99 is only obtained thanks to the
+range in which the correlation were measured.
+
+Our Response:
+We sincerely thank the reviewer for these insightful points. We agree that stating $R^2 > 0.99$ for regional volumes without the context that it is driven by the massive scale differences between varying anatomical structures can give the wrong impression in the abstract. We also agree that reporting a within-subject coefficient of variation (wCV) for the regional volume repeatability provides a much more intuitive metric for expected measurement-to-measurement error on an individual structure basis.
+
+To address this, we have made the following changes to the manuscript (marked with R1.1 in blue font for the annotated version):
+1. Abstract: We have rewritten the Results portion of the abstract to remove the potentially misleading "$R^2 > 0.99$" statement. Instead, we now explicitly report the more informative within-subject coefficient of variation (wCV) metrics to quantify the repeatability.
+2. Results (Volume Correlation): In the Results section where the $R^2 > 0.99$ metric remains detailed, we added a direct clarification that this high value is computed across varying anatomy structure sizes that span orders of magnitude.
+3. Results (Test-Retest Reproducibility): We have computed the repeatability coefficient of variation (CV) for the volume measures and added these metrics to the text covering the volume Bland-Altman test-retest results. Specifically, we note that the mean volume repeatability CV was 4.29% at 0.55T versus 3.09% at 3T for BrainSuite, and 4.40% at 0.55T versus 2.95% at 3T for FreeSurfer.
