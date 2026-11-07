@@ -170,3 +170,9 @@ heart_svr/*/.vscode/*
 *.pkl
 test_*.py
 .codex
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/results/svr_gpu_compare/REPORT.html
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/results/svr_gpu_compare/summary.csv
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/run_svr_gpu_compare.sh
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/README.md
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/run_svr_gpu_compare.py
+heart_svr/scan_09_03_2026_vol1549_id8_24cm/results/svr_gpu_compare/gpu.txt
