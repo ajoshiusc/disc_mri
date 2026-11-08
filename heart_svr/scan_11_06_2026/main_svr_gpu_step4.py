@@ -12,7 +12,7 @@ Examples (from heart_svr):
 
 Auto mode submits on the server and runs sequentially on the local machine.
 Default output: ACQUISITION_ROOT/outsvr_gpu/test*/phase_XX_allstacks/.
-The physical slice thickness is 6 mm, distinct from the average slice spacing.
+The default slice thickness is 1.5 mm.
 """
 
 import argparse
@@ -53,7 +53,7 @@ def parse_args(argv=None):
     parser.add_argument("--mode", choices=("auto", "local", "slurm"), default="auto")
     parser.add_argument("--device", type=int, default=0, help="CUDA device visible within the process (default: 0)")
     parser.add_argument("--resolution", type=float, default=1.0, help="Output spacing in mm (default: 1)")
-    parser.add_argument("--slice-thickness", type=float, default=6.0, help="Physical slice thickness in mm (default: 6)")
+    parser.add_argument("--slice-thickness", type=float, default=1.5, help="Slice thickness in mm (default: 1.5)")
     parser.add_argument("--partition", default="gpu")
     parser.add_argument("--account", default="ajoshi_27")
     parser.add_argument("--cpus", type=int, default=8)
