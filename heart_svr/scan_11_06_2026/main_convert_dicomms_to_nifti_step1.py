@@ -25,9 +25,15 @@ import numpy as np
 import pydicom
 
 
-DEFAULT_INPUT = Path(
-    "/home/ajoshi/project2_ajoshi_27/data/heart_svr/"
-    "heart_svr_acquisition_11_06_2026"
+ACQUISITION_NAME = "heart_svr_acquisition_11_06_2026"
+DATA_ROOT_CANDIDATES = (
+    Path("/project2/ajoshi_27/data/heart_svr"),
+    Path("/home/ajoshi/project2_ajoshi_27/data/heart_svr"),
+)
+DEFAULT_INPUT = next(
+    (root / ACQUISITION_NAME for root in DATA_ROOT_CANDIDATES
+     if (root / ACQUISITION_NAME / "test_data_24cm").is_dir()),
+    DATA_ROOT_CANDIDATES[0] / ACQUISITION_NAME,
 )
 scans_dir_top = str(DEFAULT_INPUT)
 
@@ -143,6 +149,12 @@ def convert_stack(stack_dir, output_dir, *, strict_geometry=False):
 def main(scans_dir_top=scans_dir_top, nifti_dir_top=None, *, phases=None, strict_geometry=False):
     input_root = Path(scans_dir_top)
     output_root = Path(nifti_dir_top) if nifti_dir_top is not None else input_root / "nifti_files"
+    if not input_root.is_dir():
+        raise FileNotFoundError(
+            f"Input root not found: {input_root}. It must contain test*/phase_*/stack_* DICOM folders. "
+            "On the cluster use /project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026; "
+            "nifti_files/test_data_24cm is an output folder, not the DICOM input root."
+        )
     experiments = sorted(path for path in input_root.glob("test*") if path.is_dir())
     if not experiments:
         raise FileNotFoundError(f"No test* experiment directories in {input_root}")
@@ -184,7 +196,7 @@ def cli():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input-root", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output-root", type=Path,
-                        help="Default: INPUT_ROOT/nifti_files_jan_style; existing files are preserved")
+                        help="Default: INPUT_ROOT/nifti_files; existing matching files are skipped and differing files are preserved")
     parser.add_argument("--phases", nargs="+", help="For example: phase_01 phase_16; default: all phases")
     parser.add_argument("--strict-geometry", action="store_true",
                         help="Reject irregular/repeated positions instead of the January-style approximation")
