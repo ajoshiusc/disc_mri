@@ -40,11 +40,11 @@ def pad_nifti(input_file, output_file, pad_width):
 
 
 # Define the path to the template and mask images
-template = "/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/vol1408_20251219_template/p55_cardiac_svr_sweep_1_res_15.nii.gz"
-mask = "/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/vol1408_20251219_template/p55_cardiac_svr_sweep_1_res_15.mask.nii.gz"
+template = "/home/ajoshi/project2_ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/template/p8213_id8_stack_2_phase_13_24cm.nii.gz"
+mask = "/home/ajoshi/project2_ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/template/p8213_id8_stack_2_phase_13_24cm.mask.nii.gz"
 
-padded_template_filename = "/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/vol1408_20251219_template/p55_cardiac_svr_sweep_1_res_15.pad.nii.gz"
-padded_mask_filename = "/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/vol1408_20251219_template/p55_cardiac_svr_sweep_1_res_15.pad.mask.nii.gz"
+padded_template_filename = "/home/ajoshi/project2_ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/template/p8213_id8_stack_2_phase_13_24cm.pad.nii.gz"
+padded_mask_filename = "/home/ajoshi/project2_ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/template/p8213_id8_stack_2_phase_13_24cm.pad.mask.nii.gz"
 
 pad_width = 20
 
