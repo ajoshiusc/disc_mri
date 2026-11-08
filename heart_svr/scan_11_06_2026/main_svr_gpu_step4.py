@@ -12,7 +12,8 @@ Examples (from heart_svr):
 
 Auto mode submits on the server and runs sequentially on the local machine.
 Default output: ACQUISITION_ROOT/outsvr_gpu/test*/phase_XX_allstacks/.
-The default slice thickness is 1.5 mm.
+The default slice thickness and output spacing are both 1.5 mm. Use
+--resolution 1.0 for a 1 mm output grid on a GPU with more memory.
 """
 
 import argparse
@@ -52,7 +53,8 @@ def parse_args(argv=None):
     parser.add_argument("--phases", nargs="+", type=int, help="Phase numbers, e.g. --phases 1 2 23; default: all")
     parser.add_argument("--mode", choices=("auto", "local", "slurm"), default="auto")
     parser.add_argument("--device", type=int, default=0, help="CUDA device visible within the process (default: 0)")
-    parser.add_argument("--resolution", type=float, default=1.0, help="Output spacing in mm (default: 1)")
+    parser.add_argument("--resolution", type=float, default=1.5,
+                        help="Output spacing in mm (default: 1.5 for 6 GB GPUs; use 1.0 with more GPU memory)")
     parser.add_argument("--slice-thickness", type=float, default=1.5, help="Slice thickness in mm (default: 1.5)")
     parser.add_argument("--partition", default="gpu")
     parser.add_argument("--account", default="ajoshi_27")
@@ -178,21 +180,30 @@ def run_phase(args, job):
     command = cli_command(args, job, prepared)
     manifest = dict(experiment=job["experiment"], phase=job["phase"],
                     mask=str(job["mask"]), output=str(job["output"]),
-                    thickness_mm=args.slice_thickness, command=command, stacks=geometry,
+                    thickness_mm=args.slice_thickness, output_resolution_mm=args.resolution,
+                    command=command, stacks=geometry,
                     status="running")
     metadata = output_dir / "run.json"
     metadata.write_text(json.dumps(manifest, indent=2) + "\n")
     log_path = output_dir / "svr_gpu.log"
     print(f"Running {job['experiment']}/phase_{job['phase']:02d}; log: {log_path}", flush=True)
+    environment = os.environ.copy()
+    environment["SVR_TEMP_DIR"] = str(output_dir / "solver_work")
+    environment.setdefault("OMP_NUM_THREADS", str(args.cpus))
     with log_path.open("w") as log:
         log.write("COMMAND: " + shlex.join(command) + "\n\n")
         log.flush()
-        result = subprocess.run(command, cwd=args.svr_repo, stdout=log, stderr=subprocess.STDOUT)
+        result = subprocess.run(command, cwd=args.svr_repo, env=environment,
+                                stdout=log, stderr=subprocess.STDOUT)
     manifest["returncode"] = result.returncode
     manifest["status"] = "complete" if result.returncode == 0 and job["output"].is_file() else "failed"
     metadata.write_text(json.dumps(manifest, indent=2) + "\n")
     if manifest["status"] != "complete":
-        raise RuntimeError(f"SVR-GPU failed for phase {job['phase']:02d}; see {log_path}")
+        tail = "\n".join(log_path.read_text(errors="replace").splitlines()[-24:])
+        hint = ("\nGPU memory exhausted. Increase --resolution (for example, 2.0 mm) "
+                "or use a GPU with more memory. Slice thickness is a separate setting."
+                if "out of memory" in tail.lower() else "")
+        raise RuntimeError(f"SVR-GPU failed for phase {job['phase']:02d}; see {log_path}\n{tail}{hint}")
     print(f"Created {job['output']}", flush=True)
 
 
@@ -229,7 +240,13 @@ def main(argv=None):
             continue
         if args.mode == "slurm":
             job["output"].parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(command, check=True)
+        result = subprocess.run(command)
+        if result.returncode:
+            action = "Slurm submission" if args.mode == "slurm" else "SVR-GPU worker"
+            raise RuntimeError(
+                f"{action} failed for {job['experiment']}/phase_{job['phase']:02d} "
+                f"(exit {result.returncode}); see the error above."
+            )
     action = "planned" if args.dry_run else ("submitted" if args.mode == "slurm" else "completed")
     print(f"{len(jobs)} phase(s) {action} using {args.mode} mode.")
 
