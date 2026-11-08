@@ -16,7 +16,7 @@ DEFAULT_ACQUISITION = next(
      if (root / ACQUISITION_NAME / "nifti_files").is_dir()),
     DATA_ROOT_CANDIDATES[0] / ACQUISITION_NAME,
 )
-DEFAULT_CONTAINER = Path("/scratch1/ajoshi/svrtk_latest.sif")
+DEFAULT_CONTAINER = Path("/project2/ajoshi_27/svrtk_latest.sif")
 DEFAULT_SBATCH_SCRIPT = Path(__file__).with_name("mycmd.sh")
 DEFAULT_THICKNESS_MM = 1.5
 DEFAULT_RESOLUTION_MM = 1.0
