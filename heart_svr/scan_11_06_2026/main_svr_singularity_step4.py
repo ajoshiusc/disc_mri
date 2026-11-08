@@ -65,7 +65,7 @@ if __name__ == "__main__":
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
 
-        tname = glob.glob(f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/{expt_name}_template/p*_*.pad.nii.gz")[0]
+        tname = glob.glob(f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/{expt_name}_template/p*_*.pad.nii.gz")
         template =  tname
         mask = tname[:-7] + ".dilated.mask.nii.gz"
         #"/project2/ajoshi_27/data/heart_svr/{expt_name}_template/p59_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
