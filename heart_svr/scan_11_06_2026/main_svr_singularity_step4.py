@@ -18,7 +18,7 @@ DEFAULT_ACQUISITION = next(
 )
 DEFAULT_CONTAINER = Path("/project2/ajoshi_27/svrtk_latest.sif")
 DEFAULT_SBATCH_SCRIPT = Path(__file__).with_name("mycmd.sh")
-DEFAULT_THICKNESS_MM = 6
+DEFAULT_THICKNESS_MM = 3
 DEFAULT_RESOLUTION_MM = 1.0
 
 
