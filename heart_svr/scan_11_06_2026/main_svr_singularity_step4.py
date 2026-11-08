@@ -65,7 +65,7 @@ if __name__ == "__main__":
         res = 1.0
         subdir = expmt_dir + f"/phase_{phase+1:02}_rot"
 
-        tname = glob.glob(f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/{expt_name}_template/p*_cardiac_svr_sweep_1_res_*.pad.nii.gz")[0]
+        tname = glob.glob(f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/{expt_name}_template/p*_*.pad.nii.gz")[0]
         template =  tname
         mask = tname[:-7] + ".dilated.mask.nii.gz"
         #"/project2/ajoshi_27/data/heart_svr/{expt_name}_template/p59_cardiac_svr_sweep_1_res_15.pad.dilated.mask.nii.gz"
@@ -77,18 +77,18 @@ if __name__ == "__main__":
         )
 
         # if outsvr file already exists, skip
-        outsvr_fullpath = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expmt_dir.split('/')[-1]}/phase_{phase+1:02}_allstacks/{outsvr}"
+        outsvr_fullpath = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/outsvr_pad/{expmt_dir.split('/')[-1]}/phase_{phase+1:02}_allstacks/{outsvr}"
 
         if os.path.isfile(outsvr_fullpath):
             print("SVR output file already exists, skipping:", outsvr_fullpath)
             continue
         
         expdir_prefix = expmt_dir.split("/")[-1]
-        outsvr_dir = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_01_06_2026/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
+        outsvr_dir = f"/project2/ajoshi_27/data/heart_svr/heart_svr_acquisition_11_06_2026/outsvr_pad/{expdir_prefix}/" + f"phase_{phase+1:02}_allstacks"
 
         os.makedirs(outsvr_dir)
 
-        thickness = 6.0
+        thickness = 1.5
 
         # convert thickness to float
         thickness = float(thickness)
