@@ -1,0 +1,6 @@
+torch==2.6.0+cu124
+numpy==2.5.3
+scipy==1.18.1
+nibabel==5.4.2
+pydicom==3.0.2
+matplotlib==3.11.2
